@@ -29,7 +29,7 @@
         information:</p>
         <source><![CDATA[<plugin>
   <groupId>de.smartics.maven.plugin</groupId>
-  <artifactId>maven-buildmetadata-plugin</artifactId>
+  <artifactId>buildmetadata-maven-plugin</artifactId>
   <executions>
     <execution>
       <phase>initialize</phase>
@@ -59,7 +59,7 @@
         </p>
         <source><![CDATA[<plugin>
   <groupId>de.smartics.maven.plugin</groupId>
-  <artifactId>maven-buildmetadata-plugin</artifactId>
+  <artifactId>buildmetadata-maven-plugin</artifactId>
   <configuration>
     <addProjectInfo>true</addProjectInfo>
     <propertyOutputFileMapping>
@@ -188,7 +188,7 @@
     ...
     <plugin>
       <groupId>de.smartics.maven.plugin</groupId>
-      <artifactId>maven-buildmetadata-plugin</artifactId>
+      <artifactId>buildmetadata-maven-plugin</artifactId>
     </plugin>
   </plugins>
 </reporting>]]></source>
@@ -449,7 +449,7 @@
           <a href="provide-buildmetadata-mojo.html#validateCheckout">validateCheckout</a> set to <code>true</code>
           (the default). This will provide the names of the changed files to the build properties.
         </p>
-        <source><![CDATA[#Created by maven-buildmetadata-plugin.build.date=17.07.2010 19\:13\:00
+        <source><![CDATA[#Created by buildmetadata-maven-plugin.build.date=17.07.2010 19\:13\:00
 ...
 
 build.version=0.7.0-SNAPSHOT

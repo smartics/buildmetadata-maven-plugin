@@ -29,7 +29,7 @@
       <meta name="description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
       <meta name="author" content="smartics"/>
 
-      <meta name="DC.title" content="maven-buildmetadata-plugin"/>
+      <meta name="DC.title" content="buildmetadata-maven-plugin"/>
       <meta name="DC.creator" content="smartics"/>
       <meta name="DC.subject" content="Homepage of the Maven buildmetadata plugin"/>
       <meta name="DC.description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
@@ -143,7 +143,7 @@
           folder of the archive and can be easily accessed at runtime.
           It contains the following information:
         </p>
-        <source><![CDATA[#Created by maven-buildmetadata-plugin.build.date=17.07.2010 19\:13\:00
+        <source><![CDATA[#Created by buildmetadata-maven-plugin.build.date=17.07.2010 19\:13\:00
 build.copyright.year=2008-2010
 build.date.pattern=dd.MM.yyyy HH\:mm\:ss
 build.timestamp.millis=1279386780654
@@ -167,7 +167,7 @@ build.maven.version=2.2.1
 build.scmLocallyModified=false
 build.scmRevision.date=16.07.2010 18\:12\:57
 build.scmRevision.id=4223
-build.scmRevision.url=scm\:svn\:https\://smartics.info/svn/smartics/maven/maven-buildmetadata-plugin/trunk]]></source>
+build.scmRevision.url=scm\:svn\:https\://smartics.info/svn/smartics/maven/buildmetadata-maven-plugin/trunk]]></source>
       </subsection>
 
       <subsection name="Manifest File">
@@ -188,15 +188,15 @@ Java-Version: 1.6.0_20
 Maven-Version: 2.2.1
 
 Specification-Vendor: smartics
-Specification-Title: maven-buildmetadata-plugin
+Specification-Title: buildmetadata-maven-plugin
 Specification-Version: 0.7.0
 
 Implementation-Vendor: smartics
 Implementation-Vendor-Id: de.smartics.maven.plugin
-Implementation-Title: maven-buildmetadata-plugin
+Implementation-Title: buildmetadata-maven-plugin
 Implementation-Version: 0.7.0
 Implementation-URL: http://project.smartics.de/public/de.smartics.mave
- n.plugin/maven-buildmetadata-plugin/0.7.0
+ n.plugin/buildmetadata-maven-plugin/0.7.0
 
 Implementation-Date: 17.07.2010 19:13:00
 Implementation-DatePattern: dd.MM.yyyy HH:mm:ss

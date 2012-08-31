@@ -53,9 +53,9 @@
       </question>
       <answer>
         The <a href="http://mojo.codehaus.org/buildnumber-maven-plugin/">buildnumber-maven-plugin</a>
-        provides a build number, too. While the maven-buildmetadata-plugin aims to make it easy to
+        provides a build number, too. While the buildmetadata-maven-plugin aims to make it easy to
         include any meta data within the generated artifact, the buildnumber-maven-plugin focuses on
-        handling build numbers. If the way the maven-buildmetadata-plugin deals with build numbers
+        handling build numbers. If the way the buildmetadata-maven-plugin deals with build numbers
         does not meet your needs, we recommend to have a look at the buildnumber-maven-plugin.
       </answer>
     </faq>

@@ -39,12 +39,12 @@
 
       <subsection name="Configuration">
         <p>
-          The maven-buildmetadata-plugin is configured to run
+          The buildmetadata-maven-plugin is configured to run
           in the <code>initialize</code> phase.
         </p>
         <source><![CDATA[<plugin>
   <groupId>de.smartics.maven.plugin</groupId>
-  <artifactId>maven-buildmetadata-plugin</artifactId>
+  <artifactId>buildmetadata-maven-plugin</artifactId>
   <version>${project.version}</version>
   <executions>
     <execution>
