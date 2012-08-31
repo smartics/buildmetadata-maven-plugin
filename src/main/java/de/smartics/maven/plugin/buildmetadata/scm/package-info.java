@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 /**
- * Provides implementation independent interfaces and classes to access SCM
+ * Provides implementation independent interfaces and classes to access SCM 
  * systems.
- *
+ * 
  * @since 1.0
  */
 package de.smartics.maven.plugin.buildmetadata.scm;

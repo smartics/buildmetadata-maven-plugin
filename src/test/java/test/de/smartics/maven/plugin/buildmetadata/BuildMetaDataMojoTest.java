@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,27 +23,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.Date;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import de.smartics.maven.plugin.buildmetadata.BuildMetaDataMojo;
-import de.smartics.maven.plugin.buildmetadata.common.Constant;
+import de.smartics.maven.plugin.buildmetadata.Constant;
 import de.smartics.maven.plugin.buildmetadata.stub.BuildMetaDataProjectStub;
 
 /**
  * Tests {@link BuildMetaDataMojo}.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision$
  */
@@ -117,10 +112,9 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
 
   /**
    * {@inheritDoc}
-   *
+   * 
    * @throws Exception {@inheritDoc}
    */
-  @Before
   protected void setUp() throws Exception
   {
     super.setUp();
@@ -138,10 +132,9 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
 
   /**
    * {@inheritDoc}
-   *
+   * 
    * @throws Exception {@inheritDoc}
    */
-  @After
   protected void tearDown() throws Exception
   {
     final File rootDir = new File(getBasedir(), ROOT_DIR_SUFFIX);
@@ -161,7 +154,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
 
   /**
    * Creates the maven project.
-   *
+   * 
    * @return the created project.
    * @throws IOException never.
    */
@@ -172,11 +165,8 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
     project.setFile(testPomFile);
     project.setBasedir(targetDir.getParentFile());
     project.setModel(model);
-    project.setGroupId(model.getGroupId());
-    project.setArtifactId(model.getArtifactId());
     final Build build = new Build();
-    build.setDirectory(targetDir.getAbsolutePath());
-    build.setOutputDirectory(new File(targetDir, "classes").getAbsolutePath());
+    build.setOutputDirectory(targetDir.getAbsolutePath());
     model.setBuild(build);
     Writer writer = null;
     try
@@ -193,7 +183,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
 
   /**
    * Creates the model used in this test.
-   *
+   * 
    * @return the model used in this test.
    */
   protected Model createModel()
@@ -202,8 +192,6 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
     final Properties parentProperties = new Properties();
     parentProperties.setProperty("PARENT", "parentValue");
     model.setProperties(new Properties(parentProperties));
-    model.setGroupId("test.group");
-    model.setArtifactId("test.artifact");
     model.setVersion("1.0.0");
     return model;
   }
@@ -211,7 +199,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
   /**
    * Provides the given directory within the base director. If the directoy
    * exists, it will be removed.
-   *
+   * 
    * @param fileSuffix the suffix to append to the base directory.
    * @return reference to the created directory.
    * @throws IOException on any problem generating the directory.
@@ -227,7 +215,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
     if (!dirCreated)
     {
       throw new IOException("Cannot create directory '" + dir.getAbsolutePath()
-                            + "'.");
+          + "'.");
     }
     return dir;
   }
@@ -235,16 +223,16 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
   /**
    * Loads the properties from the file. Check that the file exists with an
    * assert.
-   *
+   * 
    * @return the read properties.
    * @throws IOException in any problem reading the properties.
    */
   final Properties loadProperties() throws IOException
   {
     final File buildPropertiesFile =
-        new File(targetDir, "META-INF/buildmetadata.properties");
-    assertTrue("Build properties does not exists.",
-        buildPropertiesFile.exists());
+        new File(targetDir, Constant.PROPERTY_FILE_DEFAULT_NAME);
+    assertTrue("Build properties does not exists.", buildPropertiesFile
+        .exists());
 
     final Properties buildProperties = new Properties();
     InputStream in = null;
@@ -264,18 +252,11 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
 
   /**
    * Simple test on the build.
-   *
+   * 
    * @throws Exception never.
    */
-  @Test
   public void testBuild() throws Exception
   {
-    uut.setPropertiesOutputFile(new File(targetDir,
-        "META-INF/buildmetadata.properties"));
-    final MavenSession session =
-        new MavenSession(null, null, null, null, null, null, null, null,
-            new Date());
-    uut.setSession(session);
     uut.execute();
     final Properties buildProperties = loadProperties();
 
