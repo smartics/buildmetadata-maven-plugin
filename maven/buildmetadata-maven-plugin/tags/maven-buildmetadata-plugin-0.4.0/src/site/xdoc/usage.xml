@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document>
+  <properties>
+    <author email="robert.reiner@smartics.de">Robert Reiner</author>
+    <title>Usage</title>
+  </properties>
+
+  <meta
+    name="keyword"
+    content="maven m2 maven2 plugin build version number date" />
+  <body>
+    <section name="POM configuration">
+      <p>Use the following to add the plugin to your POM:</p>
+      <source>
+        <![CDATA[ 
+      <plugin>
+        <groupId>de.smartics.maven.plugin</groupId>
+        <artifactId>maven-buildmetadata-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>provide-buildmetadata</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>]]>
+      </source>
+    </section>
+
+    <section name="Use with JAR plugin">
+      <p>
+        To use the build information with the JAR plugin that writes it
+        to the manifest file, you may use the following code:
+      </p>
+      <source>
+        <![CDATA[ 
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+              <manifestEntries>
+                <Implementation-Build>${build.number}</Implementation-Build>
+                <Implementation-Date>${build.date}</Implementation-Date>
+                <Implementation-Timestamp>${build.timestamp.millis}</Implementation-Timestamp>
+                <Implementation-DatePattern>${build.date.pattern}</Implementation-DatePattern>
+                <Implementation-Full-Version>${build.version.full}</Implementation-Full-Version>
+                <Built-OS>${os.name} / ${os.arch} / ${os.version}</Built-OS>
+                <Built-By>${build.user}</Built-By>
+                <SCM-Revision-Number>${build.scmRevision.id}</SCM-Revision-Number>
+                <SCM-Revision-Date>${build.scmRevision.date}</SCM-Revision-Date>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>]]>
+      </source>
+      <p>
+        We add the build date pattern here to be able to parse the date
+        found in the manifest to present it localized to the user.
+      </p>
+    </section>
+
+    <section name="POM modifications">
+      <p>
+        Upon each run the properties of the POM will have these to
+        values added, if the property <code>writeToPom</code> is <code>true</code>.
+        It is not recommended to change the content of the POM on each build.
+      </p>
+      <source>
+        <![CDATA[ 
+    <build.number.current>7</build.number.current>
+    <build.date.current>04.08.2006</build.date.current>]]>
+      </source>
+      <p>
+        Please not that you specify <code>build.number</code> if you want to
+        use the generated build number of the current build, but the property
+        is stored by the name <code>build.number.current</code>. The information
+        in the properties section of the POM refers to the number that is
+        currently latest. The same goes with the <code>build.date</code> and
+        <code>build.date.current</code>.
+      </p>
+    </section>
+  </body>
+</document>

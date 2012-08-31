@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Usage</title>
+	</properties>
+	<body>
+    <section name="Usage">
+      <subsection name="POM configuration">
+        <p>Use the following to add the plugin to your POM:</p>
+        <source>
+          <![CDATA[ 
+        <plugin>
+          <groupId>de.smartics.maven.plugin</groupId>
+          <artifactId>maven-buildmetadata-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>provide-buildmetadata</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>]]>
+        </source>
+      </subsection>
+  
+      <subsection name="Use with JAR plugin">
+        <p>
+          To use the build information with the JAR plugin that writes it
+          to the manifest file, you may use the following code:
+        </p>
+        <source>
+          <![CDATA[ 
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+              <archive>
+                <manifest>
+                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                  <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                </manifest>
+                <manifestEntries>
+                  <Implementation-SCM-Revision-Number>${build.scmRevision.id}</Implementation-SCM-Revision-Number>
+                  <Implementation-SCM-Revision-Date>${build.scmRevision.date}</Implementation-SCM-Revision-Date>
+                  <Implementation-Date>${build.date}</Implementation-Date>
+                  <Implementation-Timestamp>${build.timestamp.millis}</Implementation-Timestamp>
+                  <Implementation-DatePattern>${build.date.pattern}</Implementation-DatePattern>
+                  <Implementation-Full-Version>${build.version.full}</Implementation-Full-Version>
+                  <Built-OS>${os.name} / ${os.arch} / ${os.version}</Built-OS>
+                  <Built-By>${build.user}</Built-By>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>]]>
+        </source>
+        <p>
+          We add the build date pattern here to be able to parse the date
+          found in the manifest to present it localized to the user.
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>

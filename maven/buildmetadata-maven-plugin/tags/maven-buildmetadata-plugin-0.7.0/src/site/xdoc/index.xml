@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>maven-buildmetadata-plugin</title>
+	</properties>
+	<body>
+    <section name="maven-buildmetadata-plugin">
+      <p>
+        This plugin generates build meta data. The key benefit is the <em>revision
+        number</em> fetch from the SCM that references the sources used to build the
+        artifact. Also a build timestamp is generated.
+      </p>
+
+      <subsection name="Properties File">
+        <p>
+          The generated properties file contains the following information.
+        </p>
+        <source><![CDATA[#Created by maven-buildmetadata-plugin.build.date=17.07.2010 19\:13\:00
+build.date.pattern=dd.MM.yyyy HH\:mm\:ss
+build.timestamp.millis=1279386780654
+build.year=2010
+
+build.version=0.7.0-SNAPSHOT
+build.version.full=0.7.0-20100717r8971-locally-modified-SNAPSHOT
+
+build.host.name=DevBox001
+build.user=john.doe
+
+build.maven.execution.cmdline=clean package
+build.maven.execution.goals=clean, package
+build.maven.execution.isRoot=true
+build.maven.execution.opts=-Xmx2048M -XX\:MaxPermSize\=256m
+build.maven.execution.profile.active.basic=settings.xml
+build.maven.execution.profile.active.nexus=settings.xml
+build.maven.execution.profiles.active=nexus, basic
+build.maven.version=2.2.1
+
+build.scmLocallyModified=true
+build.scmLocallyModified.files=[pom.xml\:modified]
+build.scmRevision.date=16.07.2010 18\:12\:57
+build.scmRevision.id=8971]]></source>
+      </subsection>
+
+      <subsection name="Manifest File">
+        <p>
+          The generated information can be used in the Manifest file, using
+          the <a href="http://maven.apache.org/plugins/maven-jar-plugin/">maven-jar-plugin</a>.
+        </p>
+        <source><![CDATA[Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+
+Build-Jdk: 1.6.0_20
+Built-By: john.doe
+Built-OS: Windows 7 / amd64 / 6.1
+Built-Host: DevBox001
+Java-Vendor: Sun Microsystems Inc.
+Java-Version: 1.6.0_20
+Maven-Version: 2.2.1
+
+Specification-Vendor: smartics
+Specification-Title: maven-buildmetadata-plugin
+Specification-Version: 0.7.0-SNAPSHOT
+
+Implementation-Vendor: smartics
+Implementation-Vendor-Id: de.smartics.maven.plugin
+Implementation-Title: maven-projectdoc-plugin
+Implementation-Version: 0.7.0-SNAPSHOT
+Implementation-URL: http://project.smartics.de/public/de.smartics.mave
+ n.plugin/maven-buildmetadata-plugin/0.7.0-SNAPSHOT
+
+Implementation-Date: 17.07.2010 19:13:00
+Implementation-DatePattern: dd.MM.yyyy HH:mm:ss
+Implementation-Timestamp: 1279386780654
+
+Implementation-Full-Version: 0.7.0-20100717r8971-locally-modified-SNAP
+ SHOT
+
+Implementation-SCM-Revision-Date: 16.07.2010 18:12:57
+Implementation-SCM-Revision-Number: 8971]]></source>
+      </subsection>
+      <subsection name="Report">
+        <p>
+          To map a site documentation to an artifact (and vice versa), a build
+          report can be integrated into the site documentation. This report
+          contains build information like the revision and revision date.
+        </p>
+        <p>
+          The <a href="build-report.html">Build Report</a> of this project may
+          serve as an example.
+        </p>
+       </subsection>
+    </section>
+    <section name="Getting Started">
+      <p>
+        Please have a look at the sample <a href="usage.html">usage patterns</a>
+        and consult the listing of the <a href="build-properties.html">build properties</a>
+        to see which properties are supported.
+      </p>
+      <p>
+        The <a href="provide-buildmetadata-mojo.html">buildmetadata:provide-buildmetadata documentation</a>
+        details the configurable options.
+      </p>
+    </section>
+
+    <section name="Accessing Artifacts">
+      <p>
+        Please note that the SVN repository is password protected and the
+        artifacts of this project are currently not available on the
+        Maven Central Repository.
+      </p>
+      <p>
+        If you want to integrate this plugin into your Maven build, please
+        add the following repository to the profiles section of your
+        <code>settings.xml</code>.
+      </p>
+      <source><![CDATA[<profile>
+  <id>smartics-repositories</id>
+  <repositories>
+    <repository>
+      <id>smartics</id>
+      <url>http://www.smartics.de/nexus/content/groups/public-group</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>smartics</id>
+      <url>http://www.smartics.de/nexus/content/groups/public-group</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+</profile>]]></source>
+      <p>
+        To authenticate use the anonymous login:
+      </p>
+      <source><![CDATA[<server>
+  <id>smartics</id>
+  <username>anonymous</username>
+  <password>anonymous</password>
+</server>]]></source>
+    </section>
+  </body>
+</document>

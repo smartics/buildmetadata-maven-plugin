@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+
+    Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<faqs title="Frequently Asked Questions">
+  <part id="general">
+    <title>General</title>
+   
+    <faq id="aim">
+      <question>
+        What does this project aim at?
+      </question>
+      <answer>
+        This project's aim is to provide build meta data to a Maven project.
+      </answer>
+    </faq>        
+  </part>  
+
+  <part id="user">
+    <title>User FAQ</title>
+   
+    <faq id="propertyNameConfusion">
+      <question>
+        Do I have to specify <code>${build.number}</code> or 
+        <code>${build.number.current}</code> if I want to reference the new
+        generated build number of the build.
+      </question>
+      <answer>
+        <p>
+          Use <code>${build.number}</code>.
+        </p>
+        <p>
+          <code>build.number.current</code> is only used to store the current
+          build number in the POM. This is for the build process to increment
+          it.
+        </p>
+      </answer>
+    </faq>        
+
+    <faq id="supportedScmProviders">
+      <question>
+        What SCM providers are supported?
+      </question>
+      <answer>
+        <p>
+          Currently only the SVN provider has been tested. The implementation 
+          uses the mechanisms implemented by the
+          <a href="http://maven.apache.org/plugins/maven-changelog-plugin/">maven-changelog-plugin</a>.
+          It is expected that the revision returned by the SCM on the latest file
+          change is a revision number suitable to fetch the whole project.          
+        </p>
+      </answer>
+    </faq>        
+  </part>  
+</faqs>
