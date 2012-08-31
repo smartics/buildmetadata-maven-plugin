@@ -124,7 +124,7 @@ public class MavenPropertyHelperProjectPropertyTest
   @Test
   public void nestedPropertyFoundSincePropertyIsSet()
   {
-    final String finalName = "maven-buildmetadata-plugin-1.0.0.jar";
+    final String finalName = "buildmetadata-maven-plugin-1.0.0.jar";
     final Build build = new Build();
     build.setFinalName(finalName);
     projectModel.setBuild(build);

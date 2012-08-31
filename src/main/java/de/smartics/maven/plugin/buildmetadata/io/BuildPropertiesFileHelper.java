@@ -108,7 +108,7 @@ public final class BuildPropertiesFileHelper
     try
     {
       out = new BufferedOutputStream(new FileOutputStream(buildMetaDataFile));
-      final String comments = "Created by maven-buildmetadata-plugin.";
+      final String comments = "Created by buildmetadata-maven-plugin.";
       final Properties sortedBuildMetaDataProperties =
           SortedProperties.createSorted(buildMetaDataProperties);
       sortedBuildMetaDataProperties.store(out, comments);

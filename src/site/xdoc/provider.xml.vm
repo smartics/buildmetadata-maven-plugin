@@ -85,7 +85,7 @@
       <source><![CDATA[<dependencies>
   <dependency>
     <groupId>de.smartics.maven.plugin</groupId>
-    <artifactId>maven-buildmetadata-plugin</artifactId>
+    <artifactId>buildmetadata-maven-plugin</artifactId>
     <version>${project.version}</version>
     <scope>provided</scope>
   </dependency>
@@ -99,7 +99,7 @@
         </p>
         <source><![CDATA[      <plugin>
         <groupId>de.smartics.maven.plugin</groupId>
-        <artifactId>maven-buildmetadata-plugin</artifactId>
+        <artifactId>buildmetadata-maven-plugin</artifactId>
         <configuration>
           <providers>
             <provider>
