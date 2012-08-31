@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 		<title>Revision Algorithm</title>
 	</properties>
 	<body>
-    <section name="Revision Algorithm">
+    <section name="SCM Algorithm">
       <p>
         This is a look behind the scene to show how the revision number is calculated.
       </p>

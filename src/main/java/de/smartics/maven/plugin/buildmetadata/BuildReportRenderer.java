@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.io.IOUtils;
@@ -35,7 +31,6 @@ import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
 
 /**
@@ -44,11 +39,18 @@ import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class BuildReportRenderer
-{ // NOPMD
+public class BuildReportRenderer
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
+
+  /**
+   * The class version identifier.
+   * <p>
+   * The value of this constant is {@value}.
+   */
+  private static final long serialVersionUID = 1L;
 
   // --- members --------------------------------------------------------------
 
@@ -67,30 +69,6 @@ public final class BuildReportRenderer
    */
   private final File buildMetaDataPropertiesFile;
 
-  /**
-   * The list of a system properties or environment variables to be selected by
-   * the user to include into the build meta data properties.
-   * <p>
-   * The name is the name of the property, the section is relevant for placing
-   * the property in one of the following sections:
-   * </p>
-   * <ul>
-   * <li><code>build.scm</code></li>
-   * <li><code>build.dateAndVersion</code></li>
-   * <li><code>build.runtime</code></li>
-   * <li><code>build.java</code></li>
-   * <li><code>build.maven</code></li>
-   * <li><code>build.misc</code></li>
-   * </ul>
-   * <p>
-   * If no valid section is given, the property is silently rendered in the
-   * <code>build.misc</code> section.
-   * </p>
-   *
-   * @parameter
-   */
-  private final List<Property> properties;
-
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
@@ -102,17 +80,13 @@ public final class BuildReportRenderer
    * @param sink the sink to write to.
    * @param buildMetaDataPropertiesFile the properties file to read the build
    *          information from.
-   * @param properties the list of a system properties or environment variables
-   *          to be selected by the user to include into the build meta data
-   *          properties.
    */
   public BuildReportRenderer(final ResourceBundle messages, final Sink sink,
-      final File buildMetaDataPropertiesFile, final List<Property> properties)
+      final File buildMetaDataPropertiesFile)
   {
     this.sink = sink;
     this.messages = messages;
     this.buildMetaDataPropertiesFile = buildMetaDataPropertiesFile;
-    this.properties = properties;
   }
 
   // ****************************** Inner Classes *****************************
@@ -174,104 +148,16 @@ public final class BuildReportRenderer
   {
     for (final Section section : Constant.REPORT_PROPERTIES)
     {
-      final List<String> properties = section.getProperties();
-      if (hasPropertiesProvided(buildMetaDataProperties, properties))
-      {
-        final String sectionKey = section.getTitleKey();
-        sink.sectionTitle2();
-        sink.text(messages.getString(sectionKey));
-        sink.sectionTitle2_();
-        renderTableStart();
-        for (final String key : properties)
-        {
-          renderCell(buildMetaDataProperties, key);
-        }
-        renderSelectedPropertiesForSection(buildMetaDataProperties, sectionKey);
-        renderTableEnd();
-      }
-    }
-
-    renderNonStandardProperties(buildMetaDataProperties);
-  }
-
-  private boolean hasPropertiesProvided(
-      final Properties buildMetaDataProperties, final List<String> properties)
-  {
-    for (final String key : properties)
-    {
-      final Object value = buildMetaDataProperties.get(key);
-      if (value != null && StringUtils.isNotBlank(String.valueOf(value)))
-      {
-        return true;
-      }
-    }
-
-    final Set<String> selectedProperties = createSelectedProperties();
-    for (final String key : selectedProperties)
-    {
-      final Object value = buildMetaDataProperties.get(key);
-      if (value != null && StringUtils.isNotBlank(String.valueOf(value)))
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private void renderSelectedPropertiesForSection(
-      final Properties buildMetaDataProperties, final String sectionKey)
-  {
-    if (properties != null && !properties.isEmpty())
-    {
-      for (final Property property : properties)
-      {
-        if (sectionKey.equals(property.getSection()))
-        {
-          final String key = property.getName();
-          renderCell(buildMetaDataProperties, key);
-        }
-      }
-    }
-  }
-
-  private void renderNonStandardProperties(
-      final Properties buildMetaDataProperties)
-  {
-    final Properties nonStandardProperties =
-        Constant.calcNonStandardProperties(buildMetaDataProperties, properties);
-    if (!nonStandardProperties.isEmpty())
-    {
       sink.sectionTitle2();
-      sink.text(messages.getString(Constant.SECTION_BUILD_MISC));
+      sink.text(messages.getString(section.getTitleKey()));
       sink.sectionTitle2_();
       renderTableStart();
-      for (final Enumeration<Object> en = nonStandardProperties.keys(); en
-          .hasMoreElements();)
+      for (final String key : section.getProperties())
       {
-        final String key = String.valueOf(en.nextElement());
-        if (Constant.isIntendedForMiscSection(key))
-        {
-          renderCell(nonStandardProperties, key);
-        }
+        renderCell(buildMetaDataProperties, key);
       }
       renderTableEnd();
     }
-  }
-
-  private Set<String> createSelectedProperties()
-  {
-    final Set<String> selectedProperties = new HashSet<String>();
-
-    if (properties != null)
-    {
-      for (final Property property : properties)
-      {
-        selectedProperties.add(property.getName());
-      }
-    }
-
-    return selectedProperties;
   }
 
   private void renderTableEnd()
@@ -319,8 +205,7 @@ public final class BuildReportRenderer
       }
       else if (Constant.PROP_NAME_SCM_LOCALLY_MODIFIED_FILES.equals(key))
       {
-        final String filesValue = Constant.prettifyFilesValue(value);
-        renderMultiValue(filesValue);
+        renderMultiValue(value);
       }
       else if (Constant.PROP_NAME_MAVEN_GOALS.equals(key))
       {
@@ -332,37 +217,18 @@ public final class BuildReportRenderer
       }
       else
       {
-        renderSingleValue(value);
+        sink.text(String.valueOf(value));
       }
       sink.tableCell_();
       sink.tableRow_();
     }
   }
 
-  private void renderSingleValue(final Object value)
+  private void renderMultiTupleValue(
+      final Properties buildMetaDataProperties, final Object value,
+      final String subKeyPrefix)
   {
-    final String stringValue = String.valueOf(value);
-    if (stringValue != null && !isLink(stringValue))
-    {
-      sink.text(stringValue);
-    }
-    else
-    {
-      sink.link(stringValue);
-      sink.text(stringValue);
-      sink.link_();
-    }
-  }
-
-  private boolean isLink(final String input)
-  {
-    return (input.startsWith("http://") || input.startsWith("https://"));
-  }
-
-  private void renderMultiTupleValue(final Properties buildMetaDataProperties,
-      final Object value, final String subKeyPrefix)
-  {
-    final String stringValue = Constant.prettify((String) value);
+    final String stringValue = prettify((String) value);
     if (hasMultipleValues(stringValue))
     {
       final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
@@ -387,7 +253,7 @@ public final class BuildReportRenderer
 
   private void renderMultiValue(final Object value)
   {
-    final String stringValue = Constant.prettify((String) value);
+    final String stringValue = prettify((String) value);
     if (hasMultipleValues(stringValue))
     {
       final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
@@ -407,6 +273,17 @@ public final class BuildReportRenderer
     }
   }
 
+  private String prettify(final String string)
+  {
+    final String trimmed = string.trim();
+    final int end = trimmed.length() - 1;
+    if (trimmed.charAt(0) == '[' && trimmed.charAt(end) == ']')
+    {
+      return trimmed.substring(1, end);
+    }
+    return trimmed;
+  }
+
   private boolean hasMultipleValues(final String stringValue)
   {
     return stringValue.indexOf(',') != -1;
@@ -420,18 +297,6 @@ public final class BuildReportRenderer
     }
     catch (final MissingResourceException e)
     {
-      if (properties != null)
-      {
-        for (final Property property : properties)
-        {
-          final String label = property.getLabel();
-          if (StringUtils.isNotBlank(label)
-              && key.equals(property.getMappedName()))
-          {
-            return label;
-          }
-        }
-      }
       return key;
     }
   }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,33 +19,13 @@
 <document xmlns="http://maven.apache.org/XDOC/2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-    <head profile="http://dublincore.org/documents/dcq-html/">
-      <title>Home</title>
-
-      <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"/>
-      <link rel="DC.rights copyright" href="license.html" />
-
-      <meta name="keywords" content="build, meta data, metadata, maven plugin, build number, build version, scm revision, build information, maven"/>
-      <meta name="description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
-      <meta name="author" content="smartics"/>
-
-      <meta name="DC.title" content="maven-buildmetadata-plugin"/>
-      <meta name="DC.creator" content="smartics"/>
-      <meta name="DC.subject" content="Homepage of the Maven buildmetadata plugin"/>
-      <meta name="DC.description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
-      <meta name="DC.publisher" content="smartics"/>
-      <meta name="DC.rights" content="Copyright 2006-2012 smartics"/>
-    </head>
+	<properties>
+		<title>maven-buildmetadata-plugin</title>
+	</properties>
 	<body>
-    <section name="Introduction">
+    <section name="maven-buildmetadata-plugin">
       <p>
-        This <a href="http://maven.apache.org/">Maven</a> plugin generates build meta data
-        and provides it as Maven build properties.
-        The properties are written to a <a href="#Properties_File"
-        title="Link to an example of a properties file containing build meta data.">properties file</a>
-        that can be included in the generated artifact. The information can also be
-        added to the <a href="#Manifest_File"
-        title="Link to an example of a manifest file containing build meta data.">manifest file</a>.
+        This plugin generates build meta data.
       </p>
       <p>
         The meta data includes
@@ -56,52 +36,21 @@
             <li>revision number</li>
             <li>revision date</li>
             <li>locally modified files</li>
-            <li>URL of SCM server</li>
           </ul>
         </li>
         <li>build time</li>
-        <li>operating system
-          <ul>
-            <li>name</li>
-            <li>architecture</li>
-            <li>version</li>
-          </ul>
-        </li>
-        <li>Java runtime
-          <ul>
-            <li>vendor</li>
-            <li>name</li>
-            <li>version</li>
-            <li>virtual machine</li>
-            <li>compiler</li>
-            <li><code>JAVA_OPTS</code></li>
-          </ul>
-        </li>
         <li>Maven execution information
           <ul>
             <li>Maven version</li>
             <li>active profiles</li>
             <li>environment properties</li>
             <li>command line and executed goals</li>
-            <li><code>MAVEN_OPTS</code></li>
+            <li><code>MAVEN_OPTS</code> and <code>JAVA_OPTS</code></li>
           </ul>
         </li>
         <li>build user</li>
         <li>build host name</li>
-        <li>Artifact and version
-          <ul>
-            <li>group ID</li>
-            <li>artifact ID</li>
-            <li>build version</li>
-          </ul>
-        </li>
-        <li>project info
-          <ul>
-            <li>home page URL</li>
-            <li>categories</li>
-            <li>tags</li>
-          </ul>
-        </li>
+        <li>build version</li>
       </ol>
       <p>
         For detailed information about the collected meta data and the properties
@@ -110,11 +59,10 @@
       <p>
         If your desired meta data is not included in the list, this is no show stopper!
         The <a href="provider.html">Provider SPI</a> allows you to add own implementations
-        to provide additional meta data from any source and even export build information to
-        remote systems.
+        to provide additional meta data from any source.
       </p>
 
-      <subsection name="Why add Meta Data to the Artifact?">
+      <subsection name="A Use Case">
         <p>
           Imagine the product is running on an application server.
           The product manager want to know,
@@ -166,8 +114,7 @@ build.maven.version=2.2.1
 
 build.scmLocallyModified=false
 build.scmRevision.date=16.07.2010 18\:12\:57
-build.scmRevision.id=4223
-build.scmRevision.url=scm\:svn\:https\://smartics.info/svn/smartics/maven/maven-buildmetadata-plugin/trunk]]></source>
+build.scmRevision.id=4223]]></source>
       </subsection>
 
       <subsection name="Manifest File">
@@ -193,7 +140,7 @@ Specification-Version: 0.7.0
 
 Implementation-Vendor: smartics
 Implementation-Vendor-Id: de.smartics.maven.plugin
-Implementation-Title: maven-buildmetadata-plugin
+Implementation-Title: maven-projectdoc-plugin
 Implementation-Version: 0.7.0
 Implementation-URL: http://project.smartics.de/public/de.smartics.mave
  n.plugin/maven-buildmetadata-plugin/0.7.0
@@ -206,12 +153,6 @@ Implementation-Full-Version: 0.7.0-20100717r4223
 
 Implementation-SCM-Revision-Date: 16.07.2010 18:12:57
 Implementation-SCM-Revision-Number: 4223]]></source>
-        <p>
-          The information is not added automatically, but requires to be edited
-          manually. Please refer to <a href="usage.html#Use_with_JAR_plugin"
-          title="Configuration of the maven-jar-plugin to include meta data to the manifest file within a Java archive.">Use with JAR plugin</a>
-          for details.
-        </p>
         <p>
           Please note that other archive type can be configured similarly
           with e.g. the

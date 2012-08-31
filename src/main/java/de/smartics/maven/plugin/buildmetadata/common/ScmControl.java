@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.common;
 
 /**
@@ -21,7 +22,7 @@ package de.smartics.maven.plugin.buildmetadata.common;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class ScmControl
+public class ScmControl
 {
   // ********************************* Fields *********************************
 
@@ -66,23 +67,9 @@ public final class ScmControl
    */
   private final boolean validateCheckout;
 
-  /**
-   * Fail if revision is requested to be retrieved, access to SCM is provided,
-   * system is online, nothing should prevent the build from fetching the
-   * information.
-   * <p>
-   * If set to <code>true</code> the build will fail, if revision cannot be
-   * fetched, <code>false</code> will continue so that the meta data do not
-   * contain the revision.
-   * </p>
-   */
-  private final boolean failOnMissingRevision;
-
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
-
-  // CHECKSTYLE:OFF
 
   /**
    * Default constructor.
@@ -93,23 +80,17 @@ public final class ScmControl
    * @param offline the value for offline.
    * @param addScmInfo the value for addScmInfo.
    * @param validateCheckout the value for validateCheckout.
-   * @param failOnMissingRevision the value for failOnMissingRevision.
    */
-  public ScmControl(// NOPMD
-      final boolean failOnLocalModifications,
+  public ScmControl(final boolean failOnLocalModifications,
       final boolean ignoreDotFilesInBaseDir, final boolean offline,
-      final boolean addScmInfo, final boolean validateCheckout,
-      final boolean failOnMissingRevision)
+      final boolean addScmInfo, final boolean validateCheckout)
   {
     this.failOnLocalModifications = failOnLocalModifications;
     this.ignoreDotFilesInBaseDir = ignoreDotFilesInBaseDir;
     this.offline = offline;
     this.addScmInfo = addScmInfo;
     this.validateCheckout = validateCheckout;
-    this.failOnMissingRevision = failOnMissingRevision;
   }
-
-  // CHECKSTYLE:ON
 
   // ****************************** Inner Classes *****************************
 
@@ -192,26 +173,6 @@ public final class ScmControl
   public boolean isValidateCheckout()
   {
     return validateCheckout;
-  }
-
-  /**
-   * Returns the value for failOnMissingRevision.
-   * <p>
-   * Fail if revision is requested to be retrieved, access to SCM is provided,
-   * system is online, nothing should prevent the build from fetching the
-   * information.
-   * </p>
-   * <p>
-   * If set to <code>true</code> the build will fail, if revision cannot be
-   * fetched, <code>false</code> will continue so that the meta data do not
-   * contain the revision.
-   * </p>
-   *
-   * @return the value for failOnMissingRevision.
-   */
-  public boolean isFailOnMissingRevision()
-  {
-    return failOnMissingRevision;
   }
 
   // --- business -------------------------------------------------------------

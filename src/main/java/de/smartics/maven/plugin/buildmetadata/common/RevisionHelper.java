@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import de.smartics.maven.plugin.buildmetadata.scm.LocallyModifiedInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.Revision;
 import de.smartics.maven.plugin.buildmetadata.scm.RevisionNumberFetcher;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
-import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
 import de.smartics.maven.plugin.buildmetadata.scm.maven.MavenScmRevisionNumberFetcher;
 import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmConnectionInfo;
@@ -41,7 +40,7 @@ import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmConnectionInfo;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class RevisionHelper
+public class RevisionHelper
 {
   // ********************************* Fields *********************************
 
@@ -111,14 +110,15 @@ public final class RevisionHelper
    * Fetches the revision information and adds it to the property sets.
    *
    * @param buildMetaDataProperties the build meta data properties.
-   * @param scmControl the properties to control the gathering of SCM info.
+   * @param validateCheckout if it should be checked if the local files are
+   *          up-to-date with the remote files in the SCM repository. If the
+   *          value is <code>true</code> the result of the check, including the
+   *          list of changed files, is added to the build meta data.
    * @throws ScmException if the creation of the SCM information failed.
    */
   public void provideScmBuildInfo(final Properties buildMetaDataProperties,
-      final ScmControl scmControl) throws ScmException
+      final boolean validateCheckout) throws ScmException
   {
-    final boolean failOnMissingRevision = scmControl.isFailOnMissingRevision();
-
     final RevisionNumberFetcher revisionFetcher =
         new MavenScmRevisionNumberFetcher(scmManager, scmConnectionInfo,
             scmAccessInfo);
@@ -137,16 +137,10 @@ public final class RevisionHelper
       buildMetaDataProperties.setProperty(Constant.PROP_NAME_SCM_REVISION_DATE,
           revisionDateString);
 
-      final boolean validateCheckout = scmControl.isValidateCheckout();
       if (validateCheckout)
       {
         provideLocallyModifiedInfo(buildMetaDataProperties, revisionFetcher);
       }
-    }
-    else if (failOnMissingRevision)
-    {
-      throw new ScmNoRevisionException("Cannot fetch SCM revision. "
-                                       + scmConnectionInfo);
     }
   }
 

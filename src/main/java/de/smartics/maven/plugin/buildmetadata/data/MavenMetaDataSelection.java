@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.data;
-
-import java.util.List;
-
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 
 /**
  * Defines the Maven information to be included in the build meta data.
@@ -25,7 +22,7 @@ import de.smartics.maven.plugin.buildmetadata.common.Property;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenMetaDataSelection
+public class MavenMetaDataSelection
 {
   // ********************************* Fields *********************************
 
@@ -41,30 +38,11 @@ public final class MavenMetaDataSelection
   private boolean addEnvInfo;
 
   /**
-   * Add information about the Java runtime running the build if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   */
-  private boolean addJavaRuntimeInfo;
-
-  /**
-   * Add information about the operating system the build is run in if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   */
-  private boolean addOsInfo;
-
-  /**
    * Add Maven execution information (commandline, goals, profiles, etc.) if set
    * to <code>true</code>, skip it, if set to <code>false</code>. If you are not
    * interested in execution information, set this to <code>false</code>.
    */
   private boolean addMavenExecutionInfo;
-
-  /**
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   */
-  private boolean addProjectInfo;
 
   /**
    * While the command line may be useful to refer to for a couple of reasons,
@@ -93,28 +71,6 @@ public final class MavenMetaDataSelection
    * </p>
    */
   private boolean hideJavaOptsInfo;
-
-  /**
-   * The list of a system properties or environment variables to be selected by
-   * the user to include into the build meta data properties.
-   * <p>
-   * The name is the name of the property, the section is relevant for placing
-   * the property in one of the following sections:
-   * </p>
-   * <ul>
-   * <li><code>build.scm</code></li>
-   * <li><code>build.dateAndVersion</code></li>
-   * <li><code>build.runtime</code></li>
-   * <li><code>build.java</code></li>
-   * <li><code>build.maven</code></li>
-   * <li><code>build.misc</code></li>
-   * </ul>
-   * <p>
-   * If no valid section is given, the property is silently rendered in the
-   * <code>build.misc</code> section.
-   * </p>
-   */
-  private List<Property> selectedSystemProperties;
 
   // ****************************** Initializer *******************************
 
@@ -280,144 +236,6 @@ public final class MavenMetaDataSelection
   public boolean isAddEnvInfo()
   {
     return addEnvInfo;
-  }
-
-  /**
-   * Returns the value for addJavaRuntimeInfo.
-   * <p>
-   * Add information about the Java runtime running the build if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   *
-   * @return the value for addJavaRuntimeInfo.
-   */
-  public boolean isAddJavaRuntimeInfo()
-  {
-    return addJavaRuntimeInfo;
-  }
-
-  /**
-   * Sets the value for addJavaRuntimeInfo.
-   * <p>
-   * Add information about the Java runtime running the build if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   *
-   * @param addJavaRuntimeInfo the value for addJavaRuntimeInfo.
-   */
-  public void setAddJavaRuntimeInfo(final boolean addJavaRuntimeInfo)
-  {
-    this.addJavaRuntimeInfo = addJavaRuntimeInfo;
-  }
-
-  /**
-   * Sets the value for addProjectInfo.
-   * <p>
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   *
-   * @param addProjectInfo the value for addProjectInfo.
-   */
-  public void setAddProjectInfo(final boolean addProjectInfo)
-  {
-    this.addProjectInfo = addProjectInfo;
-  }
-
-  /**
-   * Returns the value for addProjectInfo.
-   * <p>
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   *
-   * @return the value for addProjectInfo.
-   */
-  public boolean isAddProjectInfo()
-  {
-    return addProjectInfo;
-  }
-
-  /**
-   * Returns the value for addOsInfo.
-   * <p>
-   * Add information about the operating system the build is run in if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   *
-   * @return the value for addOsInfo.
-   */
-  public boolean isAddOsInfo()
-  {
-    return addOsInfo;
-  }
-
-  /**
-   * Sets the value for addOsInfo.
-   * <p>
-   * Add information about the operating system the build is run in if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   *
-   * @param addOsInfo the value for addOsInfo.
-   */
-  public void setAddOsInfo(final boolean addOsInfo)
-  {
-    this.addOsInfo = addOsInfo;
-  }
-
-  /**
-   * Returns the list of a system properties or environment variables to be
-   * selected by the user to include into the build meta data properties.
-   * <p>
-   * The name is the name of the property, the section is relevant for placing
-   * the property in one of the following sections:
-   * </p>
-   * <ul>
-   * <li><code>build.scm</code></li>
-   * <li><code>build.dateAndVersion</code></li>
-   * <li><code>build.runtime</code></li>
-   * <li><code>build.java</code></li>
-   * <li><code>build.maven</code></li>
-   * <li><code>build.misc</code></li>
-   * </ul>
-   * <p>
-   * If no valid section is given, the property is silently rendered in the
-   * <code>build.misc</code> section.
-   * </p>
-   *
-   * @return the list of a system properties to be selected by the user to
-   *         include into the build meta data properties.
-   */
-  public List<Property> getSelectedSystemProperties()
-  {
-    return selectedSystemProperties;
-  }
-
-  /**
-   * Sets the list of a system properties or environment variables to be
-   * selected by the user to include into the build meta data properties.
-   * <p>
-   * The name is the name of the property, the section is relevant for placing
-   * the property in one of the following sections:
-   * </p>
-   * <ul>
-   * <li><code>build.scm</code></li>
-   * <li><code>build.dateAndVersion</code></li>
-   * <li><code>build.runtime</code></li>
-   * <li><code>build.java</code></li>
-   * <li><code>build.maven</code></li>
-   * <li><code>build.misc</code></li>
-   * </ul>
-   * <p>
-   * If no valid section is given, the property is silently rendered in the
-   * <code>build.misc</code> section.
-   * </p>
-   *
-   * @param selectedSystemProperties the list of a system properties to be
-   *          selected by the user to include into the build meta data
-   *          properties.
-   */
-  public void setSelectedSystemProperties(
-      final List<Property> selectedSystemProperties)
-  {
-    this.selectedSystemProperties = selectedSystemProperties;
   }
 
   // --- business -------------------------------------------------------------

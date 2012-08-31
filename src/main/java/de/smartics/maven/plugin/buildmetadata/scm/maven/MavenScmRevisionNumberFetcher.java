@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetcher
+public class MavenScmRevisionNumberFetcher implements RevisionNumberFetcher
 {
   // ********************************* Fields *********************************
 
@@ -256,10 +256,6 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
       final ScmVersion endVersion = changeLogSet.getEndVersion();
       if (endVersion != null)
       {
-        if(LOG.isDebugEnabled())
-        {
-          LOG.debug("End version found.");
-        }
         return new MavenRevision(endVersion, changeLogSet.getEndDate());
       }
 
@@ -280,28 +276,7 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
               return new StringRevision(revision, set.getDate());
             }
           }
-          else
-          {
-            if(LOG.isDebugEnabled())
-            {
-              LOG.debug("No change files found.");
-            }
-          }
         }
-      }
-      else
-      {
-        if(LOG.isDebugEnabled())
-        {
-          LOG.debug("No change set found.");
-        }
-      }
-    }
-    else
-    {
-      if(LOG.isDebugEnabled())
-      {
-        LOG.debug("No change log set found.");
       }
     }
 
