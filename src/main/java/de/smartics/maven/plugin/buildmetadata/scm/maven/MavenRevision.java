@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import org.apache.maven.scm.ScmVersion;
 
 /**
  * The revision implementation for the Maven SCM.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenRevision extends StringRevision
+public class MavenRevision extends StringRevision
 {
   // ********************************* Fields *********************************
 
@@ -51,7 +51,7 @@ public final class MavenRevision extends StringRevision
 
   /**
    * Default constructor.
-   *
+   * 
    * @param version the SCM version provided by Maven.
    * @param date the revision date.
    * @see de.smartics.maven.plugin.buildmetadata.scm.maven.StringRevision#StringRevision(java.lang.String,
@@ -73,7 +73,7 @@ public final class MavenRevision extends StringRevision
 
   /**
    * Returns the type of the revision. May be for instance trunk, branch or tag.
-   *
+   * 
    * @return the type of the revision.
    */
   public String getType()

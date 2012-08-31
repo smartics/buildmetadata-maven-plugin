@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package de.smartics.maven.plugin.buildmetadata.scm.maven;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -23,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.scm.ChangeFile;
 import org.apache.maven.scm.ChangeSet;
-import org.apache.maven.scm.ScmFile;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.command.changelog.ChangeLogScmResult;
@@ -46,7 +44,7 @@ import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetcher
+public class MavenScmRevisionNumberFetcher implements RevisionNumberFetcher
 {
   // ********************************* Fields *********************************
 
@@ -55,8 +53,8 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
   /**
    * Reference to the logger for this class.
    */
-  private static final Log LOG = LogFactory
-      .getLog(MavenScmRevisionNumberFetcher.class);
+  private static final Log LOG =
+      LogFactory.getLog(MavenScmRevisionNumberFetcher.class);
 
   // --- members --------------------------------------------------------------
 
@@ -113,12 +111,6 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
    */
   public Revision fetchLatestRevisionNumber() throws ScmException
   {
-    if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  Fetching latest revision number.\n    "
-                + this.scmConnectionInfo + "\n    " + this.scmAccessInfo);
-    }
-
     final ScmRepository repository =
         scmConnectionInfo.createRepository(scmManager);
     final ScmProvider provider = createScmProvider(repository);
@@ -129,15 +121,7 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
     {
       final ChangeLogSet changeLogSet = result.getChangeLog();
       final Revision revision = findEndVersion(changeLogSet);
-      if (LOG.isDebugEnabled())
-      {
-        LOG.debug("  Found revision '" + revision + "'.");
-      }
       return revision;
-    }
-    else if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  No revision information found.");
     }
     return null;
   }
@@ -148,14 +132,8 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
    * @see de.smartics.maven.plugin.buildmetadata.scm.RevisionNumberFetcher#containsModifications(org.apache.maven.scm.ScmFileSet)
    */
   public LocallyModifiedInfo containsModifications(final ScmFileSet fileSet)
-    throws ScmException
+      throws ScmException
   {
-    if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  Fetching modification information.\n    "
-                + this.scmConnectionInfo + "\n    " + this.scmAccessInfo);
-    }
-
     try
     {
       final ScmRepository repository =
@@ -165,7 +143,10 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
 
       if (result.isSuccess())
       {
-        return createLocallyModifiedInfo(result);
+        final List<?> changedFiles = result.getChangedFiles();
+        final boolean locallyModified = !changedFiles.isEmpty();
+        return new LocallyModifiedInfo(locallyModified, locallyModified
+            ? toString(changedFiles) : null);
       }
       else
       {
@@ -182,43 +163,6 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
     catch (final org.apache.maven.scm.ScmException e)
     {
       throw new ScmException(e);
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private LocallyModifiedInfo createLocallyModifiedInfo(
-      final StatusScmResult result)
-  {
-    final List<ScmFile> changedFiles = filter(result.getChangedFiles());
-    final boolean locallyModified = !changedFiles.isEmpty();
-    if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  Modifications have" + (locallyModified ? "" : " not")
-                + " been found.");
-    }
-    return new LocallyModifiedInfo(locallyModified, locallyModified
-        ? toString(changedFiles) : null);
-  }
-
-  private List<ScmFile> filter(final List<ScmFile> files)
-  {
-    if (this.scmAccessInfo.isIgnoreDotFilesInBaseDir())
-    {
-      filterDotFiles(files);
-    }
-    return files;
-  }
-
-  private void filterDotFiles(final List<ScmFile> files)
-  {
-    for (final Iterator<ScmFile> i = files.iterator(); i.hasNext();)
-    {
-      final ScmFile file = i.next();
-      final String path = file.getPath();
-      if (path.length() > 0 && path.charAt(0) == '.')
-      {
-        i.remove();
-      }
     }
   }
 
@@ -256,10 +200,6 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
       final ScmVersion endVersion = changeLogSet.getEndVersion();
       if (endVersion != null)
       {
-        if(LOG.isDebugEnabled())
-        {
-          LOG.debug("End version found.");
-        }
         return new MavenRevision(endVersion, changeLogSet.getEndDate());
       }
 
@@ -280,28 +220,7 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
               return new StringRevision(revision, set.getDate());
             }
           }
-          else
-          {
-            if(LOG.isDebugEnabled())
-            {
-              LOG.debug("No change files found.");
-            }
-          }
         }
-      }
-      else
-      {
-        if(LOG.isDebugEnabled())
-        {
-          LOG.debug("No change set found.");
-        }
-      }
-    }
-    else
-    {
-      if(LOG.isDebugEnabled())
-      {
-        LOG.debug("No change log set found.");
       }
     }
 
@@ -316,7 +235,7 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
    * @throws ScmException if the provider cannot be created.
    */
   private ScmProvider createScmProvider(final ScmRepository repository)
-    throws ScmException
+      throws ScmException
   {
     try
     {
