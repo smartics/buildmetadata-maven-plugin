@@ -13,54 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.smartics.maven.plugin.buildmetadata.scm.maven;
+package de.smartics.maven.plugin.buildmetadata;
 
-import java.util.Date;
-
-import org.apache.maven.scm.ScmVersion;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
 
 /**
- * The revision implementation for the Maven SCM.
+ * Utilities for this Mojo.
  * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public class MavenRevision extends StringRevision
+public final class MojoUtils
 {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
 
-  /**
-   * The class version identifier.
-   * <p>
-   * The value of this constant is {@value}.
-   */
-  private static final long serialVersionUID = 1L;
-
   // --- members --------------------------------------------------------------
-
-  /**
-   * The type of the revision. May be for instance trunk, branch or tag.
-   */
-  private final String type;
 
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
 
   /**
-   * Default constructor.
-   * 
-   * @param version the SCM version provided by Maven.
-   * @param date the revision date.
-   * @see de.smartics.maven.plugin.buildmetadata.scm.maven.StringRevision#StringRevision(java.lang.String,
-   *      java.util.Date)
+   * Utilities pattern.
    */
-  public MavenRevision(final ScmVersion version, final Date date)
+  private MojoUtils()
   {
-    super(version.getName(), date);
-    this.type = version.getType();
   }
 
   // ****************************** Inner Classes *****************************
@@ -71,25 +51,29 @@ public class MavenRevision extends StringRevision
 
   // --- get&set --------------------------------------------------------------
 
-  /**
-   * Returns the type of the revision. May be for instance trunk, branch or tag.
-   * 
-   * @return the type of the revision.
-   */
-  public String getType()
-  {
-    return type;
-  }
-
   // --- business -------------------------------------------------------------
+
+  /**
+   * Logs and creates the given exception.
+   * 
+   * @param log the logger to use.
+   * @param e the original exception to throw.
+   * @param message the message to log and add to the mojo exception.
+   * @return the exception that wraps the given exception.
+   */
+  public static MojoExecutionException createException(
+      final Log log,
+      final Throwable e,
+      final String message)
+  {
+    if (log.isWarnEnabled())
+    {
+      log.warn(message, e);
+    }
+
+    return new MojoExecutionException(message, e);
+  }
 
   // --- object basics --------------------------------------------------------
 
-  /**
-   * {@inheritDoc}
-   */
-  public String toString()
-  {
-    return super.toString() + " (" + type + ')';
-  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package de.smartics.maven.plugin.buildmetadata.scm;
 
 /**
  * Thrown on any problem fetching SCM information.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
@@ -42,7 +42,7 @@ public class ScmException extends RuntimeException
 
   /**
    * Default Constructor.
-   *
+   * 
    * @param message the detail message (which is saved for later retrieval by
    *          the {@link #getMessage()} method).
    * @param cause the cause (which is saved for later retrieval by the
@@ -58,7 +58,7 @@ public class ScmException extends RuntimeException
 
   /**
    * Convenience constructor providing no cause.
-   *
+   * 
    * @param message the detail message. The detail message is saved for later
    *          retrieval by the {@link #getMessage()} method.
    * @see java.lang.RuntimeException#RuntimeException(java.lang.String)
@@ -70,7 +70,7 @@ public class ScmException extends RuntimeException
 
   /**
    * Convenience constructor providing no message.
-   *
+   * 
    * @param cause the cause (which is saved for later retrieval by the
    *          {@link #getCause()} method). (A <tt>null</tt> value is permitted,
    *          and indicates that the cause is nonexistent or unknown.)

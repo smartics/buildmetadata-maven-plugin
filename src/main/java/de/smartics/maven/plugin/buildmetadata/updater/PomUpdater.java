@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.smartics.maven.plugin.buildmetadata.scm;
+package de.smartics.maven.plugin.buildmetadata.updater;
+
+import java.util.Properties;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 
 /**
- * Provides means to fetch the revision number.
- * <p>
- * The implementation requires to provide access to the SCM.
- * </p>
+ * Interface to update POMs.
  * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
+ * @version $Revision$
  */
-public interface RevisionNumberFetcher
+public interface PomUpdater
 {
   // ********************************* Fields *********************************
 
@@ -38,15 +41,27 @@ public interface RevisionNumberFetcher
 
   // --- get&set --------------------------------------------------------------
 
+  /**
+   * Sets the logger to use by the updater.
+   * 
+   * @param log the logger to use.
+   */
+  void setLog(final Log log);
+
   // --- business -------------------------------------------------------------
 
   /**
-   * Returns the latest revision number from the SCM.
+   * Updates the POM with the new properties.
    * 
-   * @return the latest revision number from the SCM.
-   * @throws ScmException if the revision number cannot be fetched.
+   * @param project the access to project information.
+   * @param buildMetaDataProperties the information of the build to add to the
+   *        POM.
+   * @throws MojoExecutionException on any problem encountered while creating
+   *         the backup or while updating the project properties (by writing the
+   *         POM).
    */
-  Revision fetchLatestRevisionNumber() throws ScmException;
+  void updatePom(MavenProject project, Properties buildMetaDataProperties)
+      throws MojoExecutionException;
 
   // --- object basics --------------------------------------------------------
 

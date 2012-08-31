@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import de.smartics.maven.plugin.buildmetadata.scm.Revision;
 
 /**
  * Implementation for a simple revision string.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
@@ -55,14 +55,14 @@ public class StringRevision implements Revision, Serializable
 
   /**
    * Default constructor.
-   *
+   * 
    * @param id the ID of the revision.
    * @param date the revision date.
    */
   public StringRevision(final String id, final Date date)
   {
     this.id = id;
-    this.date = new Date(date.getTime());
+    this.date = date;
   }
 
   // ****************************** Inner Classes *****************************
@@ -75,22 +75,22 @@ public class StringRevision implements Revision, Serializable
 
   /**
    * Returns the ID of the revision.
-   *
+   * 
    * @return the ID of the revision.
    */
-  public final String getId()
+  public String getId()
   {
     return id;
   }
 
   /**
    * Returns the revision date.
-   *
+   * 
    * @return the revision date.
    */
-  public final Date getDate()
+  public Date getDate()
   {
-    return new Date(date.getTime());
+    return date;
   }
 
   // --- business -------------------------------------------------------------
@@ -100,9 +100,8 @@ public class StringRevision implements Revision, Serializable
   /**
    * {@inheritDoc}
    */
-  // CHECKSTYLE:OFF
-  public String toString()   // CHECKSTYLE:ON
+  public String toString()
   {
-    return id + " at " + date;
+    return id + "at " + date;
   }
 }
