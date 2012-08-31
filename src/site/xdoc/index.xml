@@ -1,173 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+  <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
+    Copyright 2006-2009 smartics, Kronseder & Reiner GmbH Licensed under
+    the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a
+    copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+    implied. See the License for the specific language governing
+    permissions and limitations under the License.
+  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-    <head profile="http://dublincore.org/documents/dcq-html/">
-      <title>Home</title>
-
-      <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"/>
-      <link rel="DC.rights copyright" href="license.html" />
-
-      <meta name="keywords" content="build, meta data, metadata, maven plugin, build number, build version, scm revision, build information, maven"/>
-      <meta name="description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
-      <meta name="author" content="smartics"/>
-
-      <meta name="DC.title" content="maven-buildmetadata-plugin"/>
-      <meta name="DC.creator" content="smartics"/>
-      <meta name="DC.subject" content="Homepage of the Maven buildmetadata plugin"/>
-      <meta name="DC.description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
-      <meta name="DC.publisher" content="smartics"/>
-      <meta name="DC.rights" content="Copyright 2006-2012 smartics"/>
-    </head>
+	<properties>
+		<title>maven-buildmetadata-plugin</title>
+	</properties>
 	<body>
-    <section name="Introduction">
+    <section name="maven-buildmetadata-plugin">
       <p>
-        This <a href="http://maven.apache.org/">Maven</a> plugin generates build meta data
-        and provides it as Maven build properties.
-        The properties are written to a <a href="#Properties_File"
-        title="Link to an example of a properties file containing build meta data.">properties file</a>
-        that can be included in the generated artifact. The information can also be
-        added to the <a href="#Manifest_File"
-        title="Link to an example of a manifest file containing build meta data.">manifest file</a>.
+        This plugin generates build meta data. The key benefit is the <em>revision
+        number</em> fetch from the SCM that references the sources used to build the
+        artifact. Also a build timestamp is generated.
       </p>
-      <p>
-        The meta data includes
-      </p>
-      <ol>
-        <li>SCM information
-          <ul>
-            <li>revision number</li>
-            <li>revision date</li>
-            <li>locally modified files</li>
-            <li>URL of SCM server</li>
-          </ul>
-        </li>
-        <li>build time</li>
-        <li>operating system
-          <ul>
-            <li>name</li>
-            <li>architecture</li>
-            <li>version</li>
-          </ul>
-        </li>
-        <li>Java runtime
-          <ul>
-            <li>vendor</li>
-            <li>name</li>
-            <li>version</li>
-            <li>virtual machine</li>
-            <li>compiler</li>
-            <li><code>JAVA_OPTS</code></li>
-          </ul>
-        </li>
-        <li>Maven execution information
-          <ul>
-            <li>Maven version</li>
-            <li>active profiles</li>
-            <li>environment properties</li>
-            <li>command line and executed goals</li>
-            <li><code>MAVEN_OPTS</code></li>
-          </ul>
-        </li>
-        <li>build user</li>
-        <li>build host name</li>
-        <li>Artifact and version
-          <ul>
-            <li>group ID</li>
-            <li>artifact ID</li>
-            <li>build version</li>
-          </ul>
-        </li>
-        <li>project info
-          <ul>
-            <li>home page URL</li>
-            <li>categories</li>
-            <li>tags</li>
-          </ul>
-        </li>
-      </ol>
-      <p>
-        For detailed information about the collected meta data and the properties
-        that store them, please consult the listing of the <a href="build-properties.html">build properties</a>.
-      </p>
-      <p>
-        If your desired meta data is not included in the list, this is no show stopper!
-        The <a href="provider.html">Provider SPI</a> allows you to add own implementations
-        to provide additional meta data from any source and even export build information to
-        remote systems.
-      </p>
-
-      <subsection name="Why add Meta Data to the Artifact?">
-        <p>
-          Imagine the product is running on an application server.
-          The product manager want to know,
-        </p>
-        <ul>
-          <li>which version of which artifact is currently running on that server?</li>
-          <li>which artifact maps to which source code version in the SCM repository?</li>
-          <li>what configuration set (including profiles and environment variables) has been used to
-            generate the artifact?</li>
-          <li>on which machine was the artifact built?</li>
-          <li>when was the artifact built?</li>
-        </ul>
-        <p>
-          If you have no answers to these questions, but love to have, this tool is for you.
-          It allows you to add this information easily as meta data to all kinds of Java
-          archives.
-        </p>
-        <p>
-          The following sections show the artifacts provided by this plugin.
-        </p>
-      </subsection>
 
       <subsection name="Properties File">
         <p>
-          The generated properties file is per default added to the <code>META-INF</code>
-          folder of the archive and can be easily accessed at runtime.
-          It contains the following information:
+          The generated properties file contains the following information.
         </p>
-        <source><![CDATA[#Created by maven-buildmetadata-plugin.build.date=17.07.2010 19\:13\:00
-build.copyright.year=2008-2010
-build.date.pattern=dd.MM.yyyy HH\:mm\:ss
-build.timestamp.millis=1279386780654
-build.year=2010
-
-build.version=0.7.0
-build.version.full=0.7.0-20100717r4223
-
-build.host.name=DevBox001
-build.user=john.doe
-
-build.maven.execution.cmdline=clean package
-build.maven.execution.goals=clean, package
-build.maven.execution.isRoot=true
-build.maven.execution.opts=-Xmx2048M -XX\:MaxPermSize\=256m
-build.maven.execution.profile.active.basic=settings.xml
-build.maven.execution.profile.active.nexus=settings.xml
-build.maven.execution.profiles.active=nexus, basic
+        <source><![CDATA[#Created by build-metadata maven plugin.
+#Mon May 18 15:42:27 CEST 2009
 build.maven.version=2.2.1
+build.user=robert.reiner
 
+build.scmRevision.id=6637
+build.scmRevision.date=16.05.2009 02\:06\:45
 build.scmLocallyModified=false
-build.scmRevision.date=16.07.2010 18\:12\:57
-build.scmRevision.id=4223
-build.scmRevision.url=scm\:svn\:https\://smartics.info/svn/smartics/maven/maven-buildmetadata-plugin/trunk]]></source>
+
+build.date=18.05.2009 15\:42\:26
+build.date.pattern=dd.MM.yyyy HH\:mm\:ss
+build.year=2009
+build.timestamp.millis=1242654146249
+
+build.version=0.2.0-SNAPSHOT
+build.version.full=0.2.0-20090518r6637-SNAPSHOT]]></source>
       </subsection>
 
       <subsection name="Manifest File">
@@ -179,47 +57,31 @@ build.scmRevision.url=scm\:svn\:https\://smartics.info/svn/smartics/maven/maven-
 Archiver-Version: Plexus Archiver
 Created-By: Apache Maven
 
-Build-Jdk: 1.6.0_20
-Built-By: john.doe
-Built-OS: Windows 7 / amd64 / 6.1
-Built-Host: DevBox001
+Build-Jdk: 1.6.0_12
 Java-Vendor: Sun Microsystems Inc.
-Java-Version: 1.6.0_20
+Built-OS: Windows Vista / amd64 / 6.0
 Maven-Version: 2.2.1
+Built-By: robert.reiner
 
+Specification-Title: maven-issues-plugin
+Specification-Version: 0.6.7-SNAPSHOT
 Specification-Vendor: smartics
-Specification-Title: maven-buildmetadata-plugin
-Specification-Version: 0.7.0
 
-Implementation-Vendor: smartics
+Implementation-Title: maven-issues-plugin
+Implementation-Version: 0.6.7-SNAPSHOT
 Implementation-Vendor-Id: de.smartics.maven.plugin
-Implementation-Title: maven-buildmetadata-plugin
-Implementation-Version: 0.7.0
+Implementation-Vendor: smartics
 Implementation-URL: http://project.smartics.de/public/de.smartics.mave
- n.plugin/maven-buildmetadata-plugin/0.7.0
+ n.plugin/maven-buildmetadata-plugin/0.6.7-SNAPSHOT
 
-Implementation-Date: 17.07.2010 19:13:00
+Implementation-Date: 18.05.2009 15:42:26
 Implementation-DatePattern: dd.MM.yyyy HH:mm:ss
-Implementation-Timestamp: 1279386780654
+Implementation-Full-Version: 0.2.0-20090518r6637-SNAPSHOT
+Implementation-Timestamp: 1242654146249
 
-Implementation-Full-Version: 0.7.0-20100717r4223
-
-Implementation-SCM-Revision-Date: 16.07.2010 18:12:57
-Implementation-SCM-Revision-Number: 4223]]></source>
-        <p>
-          The information is not added automatically, but requires to be edited
-          manually. Please refer to <a href="usage.html#Use_with_JAR_plugin"
-          title="Configuration of the maven-jar-plugin to include meta data to the manifest file within a Java archive.">Use with JAR plugin</a>
-          for details.
-        </p>
-        <p>
-          Please note that other archive type can be configured similarly
-          with e.g. the
-          <a href="http://maven.apache.org/plugins/maven-ear-plugin/">maven-ear-plugin</a>
-          or <a href="http://maven.apache.org/plugins/maven-war-plugin/">maven-war-plugin</a>.
-        </p>
+Implementation-SCM-Revision-Date: 16.05.2009 02:06:45
+Implementation-SCM-Revision-Number: 6637]]></source>
       </subsection>
-
       <subsection name="Report">
         <p>
           To map a site documentation to an artifact (and vice versa), a build
@@ -232,15 +94,64 @@ Implementation-SCM-Revision-Number: 4223]]></source>
         </p>
        </subsection>
     </section>
-
     <section name="Getting Started">
       <p>
-        Please have a look at the sample <a href="usage.html">usage patterns</a>.
+        Please have a look at the sample <a href="usage.html">usage patterns</a>
+        and consult the listing of the <a href="build-properties.html">build properties</a>
+        to see which properties are supported.
       </p>
       <p>
         The <a href="provide-buildmetadata-mojo.html">buildmetadata:provide-buildmetadata documentation</a>
-        details the configuration options.
+        details the configurable options.
       </p>
+    </section>
+
+    <section name="Accessing Artifacts">
+      <p>
+        Please note that the SVN repository is password protected and the
+        artifacts of this project are currently not available on the
+        Maven Central Repository.
+      </p>
+      <p>
+        If you want to integrate this plugin into your Maven build, please
+        add the following repository to the profiles section of your
+        <code>settings.xml</code>.
+      </p>
+      <source><![CDATA[<profile>
+  <id>smartics-repositories</id>
+  <repositories>
+    <repository>
+      <id>smartics</id>
+      <url>http://www.smartics.de/nexus/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>smartics</id>
+      <url>http://www.smartics.de/nexus/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+</profile>]]></source>
+      <p>
+        To authenticate use the anonymous login:
+      </p>
+      <source><![CDATA[<server>
+  <id>smartics</id>
+  <username>anonymous</username>
+  <password>anonymous</password>
+</server>]]></source>
     </section>
   </body>
 </document>
