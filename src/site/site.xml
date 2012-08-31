@@ -17,12 +17,11 @@
 
 -->
 <project name="${project.name}">
-  <publishDate position="bottom" format="dd.MM.yyyy"/>
+  <publishDate position="bottom" format="dd. MMMM yyyy"/>
 
   <bannerLeft>
     <name>${project.name}</name>
     <src>images/logos/logo.png</src>
-    <href>https://project.smartics.de/public/${project.groupId}/${project.artifactId}/${project.version}/index.html</href>
     <alt>${project.name}</alt>
   </bannerLeft>
   <bannerRight>
@@ -33,6 +32,10 @@
   </bannerRight>
 
   <body>
+    <head>
+      <link rel="SHORTCUT ICON" href="${project.url}/images/logos/favicon.ico"/>
+    </head>
+
     <menu name="Overview">
       <item name="Home"                href="index.html"/>
       <item name="Goals"               href="plugin-info.html"/>
