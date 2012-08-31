@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,8 +124,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
   protected File outputDirectory;
 
   /**
-   * Specifies the log level <code>buildmetadata.logLevel</code> used for this
-   * plugin.
+   * Specifies the log level used for this plugin.
    * <p>
    * Allowed values are <code>SEVERE</code>, <code>WARNING</code>,
    * <code>INFO</code> and <code>FINEST</code>.
@@ -145,15 +144,6 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    * @since 1.0
    */
   protected String locale;
-
-  /**
-   * A simple flag to skip the generation of the reports. If set on the command
-   * line use <code>-Dbuildmetadata.skip</code>.
-   *
-   * @parameter expression="${buildmetadata.skip}" default-value="false"
-   * @since 1.0
-   */
-  protected boolean skip;
 
   // ****************************** Initializer *******************************
 
@@ -175,7 +165,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    * @see org.apache.maven.reporting.AbstractMavenReport#getProject()
    */
   @Override
-  protected final MavenProject getProject()
+  protected MavenProject getProject()
   {
     return project;
   }
@@ -186,7 +176,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    * @see org.apache.maven.reporting.AbstractMavenReport#getSiteRenderer()
    */
   @Override
-  protected final Renderer getSiteRenderer()
+  protected Renderer getSiteRenderer()
   {
     return siteRenderer;
   }
@@ -201,20 +191,19 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    * @see org.apache.maven.reporting.AbstractMavenReport#getOutputDirectory()
    */
   @Override
-  protected final String getOutputDirectory()
+  protected String getOutputDirectory()
   {
     return outputDirectory.getAbsolutePath();
   }
 
   // --- business -------------------------------------------------------------
 
-  // CHECKSTYLE:OFF
   /**
    * Runs the report generation.
    *
    * @throws MojoExecutionException on any problem encountered.
    */
-  public void execute() throws MojoExecutionException // CHECKSTYLE:ON
+  public void execute() throws MojoExecutionException
   {
     final Log log = getLog();
     if (!canGenerateReport())
@@ -222,7 +211,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
       if (log.isInfoEnabled())
       {
         log.info("Report '" + getName(Locale.getDefault())
-                 + "' skipped due to offline mode.");
+            + "' skipped due to offline mode.");
       }
       return;
     }
@@ -232,19 +221,6 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
     provideSink();
   }
 
-  // CHECKSTYLE:OFF
-  /**
-   * {@inheritDoc}
-   *
-   * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
-   */
-  @Override
-  public boolean canGenerateReport() // CHECKSTYLE:ON
-  {
-    return super.canGenerateReport() && !skip;
-  }
-
-  // CHECKSTYLE:OFF
   /**
    * {@inheritDoc}
    * <p>
@@ -254,7 +230,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
    */
   @Override
-  protected void executeReport(final Locale locale) throws MavenReportException // CHECKSTYLE:ON
+  protected void executeReport(final Locale locale) throws MavenReportException
   {
     final Log log = getLog();
     LoggingUtils.configureLogger(log, logLevel);
@@ -268,7 +244,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    *
    * @throws MojoExecutionException if the sink cannot be created.
    */
-  protected final void provideSink() throws MojoExecutionException
+  protected void provideSink() throws MojoExecutionException
   {
     final Locale reportLocale = determineLocale();
 
@@ -289,7 +265,11 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
       final SiteRendererSink sink = new SiteRendererSink(context);
       generate(sink, reportLocale);
 
-      provideDir();
+      if (!outputDirectory.mkdirs())
+      {
+        throw new IOException("Cannot generate directories '"
+            + outputDirectory.getPath() + "'");
+      }
 
       // The writer will be closed by the renderer
       // http://maven.apache.org/doxia/doxia-sitetools/doxia-site-renderer/xref/index.html
@@ -314,18 +294,6 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
     }
   }
 
-  private void provideDir() throws IOException
-  {
-    if (!outputDirectory.exists())
-    {
-      if (!outputDirectory.mkdirs()) // NOPMD
-      {
-        throw new IOException("Cannot generate directories '"
-                              + outputDirectory.getPath() + "'");
-      }
-    }
-  }
-
   /**
    * Creates an error message signaling a problem with the report generation.
    *
@@ -335,7 +303,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
   private String createErrorMessage(final Locale reportLocale)
   {
     return "An error has occurred in " + getName(reportLocale)
-           + " report generation.";
+        + " report generation.";
   }
 
   /**
@@ -356,10 +324,10 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    * @param locale the locale for which the resource bundle is requested.
    * @return the bundle for the given locale.
    */
-  protected final ResourceBundle getBundle(final Locale locale)
+  protected ResourceBundle getBundle(final Locale locale)
   {
-    return ResourceBundle.getBundle(
-        "de.smartics.maven.buildmetadata.BuildReport", locale);
+    return ResourceBundle.getBundle("de.smartics.maven.buildmetadata.BuildReport",
+        locale);
   }
 
   // --- object basics --------------------------------------------------------
