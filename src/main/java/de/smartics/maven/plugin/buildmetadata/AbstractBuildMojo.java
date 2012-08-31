@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,25 @@
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.RuntimeInformation;
+import org.apache.maven.model.Build;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
 import de.smartics.maven.plugin.buildmetadata.data.MetaDataProvider;
 import de.smartics.maven.plugin.buildmetadata.data.MetaDataProviderBuilder;
-import de.smartics.maven.plugin.buildmetadata.data.Provider;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
 
 /**
- * Base implementation for all build mojos.
+ * Base implementatio for al build mojos.
  *
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision: 9143 $
@@ -79,17 +79,17 @@ public abstract class AbstractBuildMojo extends AbstractMojo
   /**
    * The name of the properties file to write. Per default this value is
    * overridden by packaging dependent locations. Please refer to <a
-   * href="#activatePropertyOutputFileMapping"
-   * >activatePropertyOutputFileMapping</a> for details.
+   * href="#deactivatePropertyOutputFileMapping"
+   * >deactivatePropertyOutputFileMapping</a> for details.
    *
    * @parameter default-value=
    *            "${project.build.outputDirectory}/META-INF/build.properties"
    * @since 1.0
    */
-  protected File propertiesOutputFile;
+  private File propertiesOutputFile;
 
   /**
-   * Used to activate the default mapping that writes the build properties of
+   * Used to deactivate the default mapping that writes the build properties of
    * deployable units to
    * <code>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</code>
    * and for standard JAR files to
@@ -193,7 +193,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @return the Maven project.
    */
-  public final MavenProject getProject()
+  public MavenProject getProject()
   {
     return project;
   }
@@ -203,7 +203,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param project the Maven project.
    */
-  public final void setProject(final MavenProject project)
+  public void setProject(final MavenProject project)
   {
     this.project = project;
   }
@@ -216,7 +216,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param session the Maven session.
    */
-  public final void setSession(final MavenSession session)
+  public void setSession(final MavenSession session)
   {
     this.session = session;
   }
@@ -226,45 +226,25 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <p>
    * Used for testing.
    * </p>
-   *
-   * @param propertiesOutputFile the name of the properties file to write.
    */
-  public final void setPropertiesOutputFile(final File propertiesOutputFile)
+  public void setPropertiesOutputFile(final File propertiesOutputFile)
   {
     this.propertiesOutputFile = propertiesOutputFile;
   }
 
   // --- business -------------------------------------------------------------
 
-  // CHECKSTYLE:OFF
   /**
    * {@inheritDoc}
    */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
-    // CHECKSTYLE:ON
-    final PropertyOutputFileMapper mapper =
-        new PropertyOutputFileMapper(project, propertyOutputFileMapping);
-    this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
-    this.propertiesOutputFile =
-        mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
-            propertiesOutputFile);
+    initPropertyOutputFileMapping();
   }
 
-  /**
-   * Adds the information as build properties for each provider.
-   *
-   * @param buildMetaDataProperties the build meta data properties to add to.
-   * @param scmInfo the information for the SCM provided to the build plugin.
-   * @param providers the providers to iterate over.
-   * @param runAtEndOfBuild checks if the provider is configured to be run at
-   *          the end of the build. If a provider matches this value, it is run.
-   * @throws MojoExecutionException on any problem running on the providers.
-   */
-  protected final void provideBuildMetaData(
-      final Properties buildMetaDataProperties, final ScmInfo scmInfo,
-      final List<Provider> providers, final boolean runAtEndOfBuild)
-    throws MojoExecutionException
+  protected void provideBuildMetaData(final Properties buildMetaDataProperties,
+      final ScmInfo scmInfo, final List<Provider> providers,
+      final boolean runAtEndOfBuild) throws MojoExecutionException
   {
     if (providers != null && !providers.isEmpty())
     {
@@ -281,14 +261,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
     }
   }
 
-  /**
-   * Updates the Maven runtime with build properties.
-   *
-   * @param buildMetaDataProperties the properties to add to the Maven project
-   *          properties.
-   * @param helper the project helper to use.
-   */
-  protected final void updateMavenEnvironment(
+  protected void updateMavenEnvironment(
       final Properties buildMetaDataProperties,
       final BuildPropertiesFileHelper helper)
   {
@@ -297,11 +270,60 @@ public abstract class AbstractBuildMojo extends AbstractMojo
     // Filters are only added temporarily and are not written to the POM...
     if (addToFilters)
     {
-      project.getBuild().addFilter(propertiesOutputFile.getAbsolutePath());
+      project.getBuild().addFilter(getPropertiesOutputFile().getAbsolutePath());
     }
     projectProperties.putAll(buildMetaDataProperties);
   }
 
+  private void initPropertyOutputFileMapping()
+  {
+    if (propertyOutputFileMapping == null)
+    {
+      final Build build = project.getBuild();
+      final String classesDir = build.getOutputDirectory();
+      final File jarFile =
+          new File(classesDir, "META-INF/build.properties");
+      final File targetDir = new File(build.getDirectory());
+      final String finalName = build.getFinalName();
+      final File deploymentUnitFile =
+          new File(targetDir, finalName + "/META-INF/build.properties");
+
+      propertyOutputFileMapping = new ArrayList<FileMapping>(3);
+      propertyOutputFileMapping.add(new FileMapping("pom", new File(targetDir, "build.properties")));
+      propertyOutputFileMapping.add(new FileMapping("war", deploymentUnitFile));
+      propertyOutputFileMapping.add(new FileMapping("ear", deploymentUnitFile));
+      propertyOutputFileMapping.add(new FileMapping("sar", deploymentUnitFile));
+      propertyOutputFileMapping.add(new FileMapping("rar", deploymentUnitFile));
+      propertyOutputFileMapping.add(new FileMapping("par", deploymentUnitFile));
+      propertyOutputFileMapping.add(new FileMapping("jar", jarFile));
+      propertyOutputFileMapping.add(new FileMapping("ejb", jarFile));
+      propertyOutputFileMapping.add(new FileMapping("maven-plugin", jarFile));
+      propertyOutputFileMapping.add(new FileMapping("maven-archetype", jarFile));
+    }
+  }
+
+  /**
+   * Returns the output location for the build meta data properties.
+   *
+   * @return the output location for the build meta data properties.
+   */
+  protected File getPropertiesOutputFile()
+  {
+    if (activatePropertyOutputFileMapping)
+    {
+      final String packaging = project.getPackaging();
+      for (final FileMapping mapping : propertyOutputFileMapping)
+      {
+        if (packaging.equals(mapping.getPackaging()))
+        {
+          return mapping.getOutputFile();
+        }
+      }
+    }
+
+    return propertiesOutputFile;
+
+  }
   // --- object basics --------------------------------------------------------
 
 }

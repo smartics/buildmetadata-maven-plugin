@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -98,26 +98,6 @@
       <fileMapping>
         <packaging>maven-plugin</packaging>
         <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-plugin</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-feature</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-repository</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-update-site</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>targetplatform</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>pom</packaging>

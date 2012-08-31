@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
     <head profile="http://dublincore.org/documents/dcq-html/">
-      <title>Home</title>
+      <title>maven-buildmetadata-plugin</title>
 
       <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"/>
       <link rel="DC.rights copyright" href="license.html" />
@@ -34,10 +34,10 @@
       <meta name="DC.subject" content="Homepage of the Maven buildmetadata plugin"/>
       <meta name="DC.description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
       <meta name="DC.publisher" content="smartics"/>
-      <meta name="DC.rights" content="Copyright 2006-2012 smartics"/>
+      <meta name="DC.rights" content="Copyright 2006-2010 smartics"/>
     </head>
 	<body>
-    <section name="Introduction">
+    <section name="maven-buildmetadata-plugin">
       <p>
         This <a href="http://maven.apache.org/">Maven</a> plugin generates build meta data
         and provides it as Maven build properties.
@@ -88,13 +88,7 @@
         </li>
         <li>build user</li>
         <li>build host name</li>
-        <li>Artifact and version
-          <ul>
-            <li>group ID</li>
-            <li>artifact ID</li>
-            <li>build version</li>
-          </ul>
-        </li>
+        <li>build version</li>
         <li>project info
           <ul>
             <li>home page URL</li>

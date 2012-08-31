@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.reporting.MavenReportException;
-
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 
 /**
  * Generates a report about the meta data provided to the build.
@@ -33,10 +30,10 @@ import de.smartics.maven.plugin.buildmetadata.common.Property;
  * @phase site
  * @description Generates a report on the build meta data.
  * @requiresProject
- * @threadSafe
- * @since 1.0
+ * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
+ * @version $Revision$
  */
-public final class BuildReportMojo extends AbstractReportMojo
+public class BuildReportMojo extends AbstractReportMojo
 {
   // ********************************* Fields *********************************
 
@@ -47,8 +44,8 @@ public final class BuildReportMojo extends AbstractReportMojo
   /**
    * The name of the properties file to write. Per default this value is
    * overridden by packaging dependent locations. Please refer to <a
-   * href="#activatePropertyOutputFileMapping"
-   * >activatePropertyOutputFileMapping</a> for details.
+   * href="#deactivatePropertyOutputFileMapping"
+   * >deactivatePropertyOutputFileMapping</a> for details.
    *
    * @parameter default-value=
    *            "${project.build.outputDirectory}/META-INF/build.properties"
@@ -57,7 +54,7 @@ public final class BuildReportMojo extends AbstractReportMojo
   private File propertiesOutputFile;
 
   /**
-   * Used to activate the default mapping that writes the build properties of
+   * Used to deactivate the default mapping that writes the build properties of
    * deployable units to
    * <code>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</code>
    * and for standard JAR files to
@@ -77,7 +74,7 @@ public final class BuildReportMojo extends AbstractReportMojo
    * @parameter
    * @since 1.1
    */
-  protected List<FileMapping> propertyOutputFileMapping; // NOPMD
+  protected List<FileMapping> propertyOutputFileMapping;
 
   /**
    * The list of a system properties or environment variables to be selected by
@@ -103,12 +100,7 @@ public final class BuildReportMojo extends AbstractReportMojo
    * @parameter
    * @since 1.0
    */
-  protected List<Property> properties; // NOPMD
-
-  /**
-   * Flag to check if the mojo has already been initialized.
-   */
-  private boolean initialized;
+  protected List<Property> properties;
 
   // ****************************** Initializer *******************************
 
@@ -156,33 +148,6 @@ public final class BuildReportMojo extends AbstractReportMojo
 
   /**
    * {@inheritDoc}
-   */
-  @Override
-  public void execute() throws MojoExecutionException
-  {
-    init();
-    super.execute();
-  }
-
-  /**
-   * Initializes the Mojo.
-   */
-  protected void init()
-  {
-    if (!initialized)
-    {
-      final PropertyOutputFileMapper mapper =
-          new PropertyOutputFileMapper(project, propertyOutputFileMapping);
-      this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
-      this.propertiesOutputFile =
-          mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
-              propertiesOutputFile);
-      this.initialized = true;
-    }
-  }
-
-  /**
-   * {@inheritDoc}
    *
    * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
    */
@@ -211,8 +176,7 @@ public final class BuildReportMojo extends AbstractReportMojo
   @Override
   public boolean canGenerateReport()
   {
-    init();
-    return super.canGenerateReport() && propertiesOutputFile.canRead();
+    return super.canGenerateReport() && this.propertiesOutputFile.canRead();
   }
 
   // --- object basics --------------------------------------------------------

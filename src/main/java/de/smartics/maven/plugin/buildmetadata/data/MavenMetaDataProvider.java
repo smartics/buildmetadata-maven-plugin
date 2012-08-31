@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
+import de.smartics.maven.plugin.buildmetadata.Property;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.maven.MavenPropertyHelper;
 
 /**
@@ -40,8 +40,8 @@ import de.smartics.maven.plugin.buildmetadata.maven.MavenPropertyHelper;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenMetaDataProvider extends AbstractMetaDataProvider
-{ // NOPMD
+public class MavenMetaDataProvider extends AbstractMetaDataProvider
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -191,12 +191,10 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
           else
           {
             final String envValue = System.getenv(name);
-            // CHECKSTYLE:OFF
             if (StringUtils.isNotBlank(envValue))
             {
               setProperty(buildMetaDataProperties, property, envValue);
             }
-            // CHECKSTYLE:ON
           }
         }
       }

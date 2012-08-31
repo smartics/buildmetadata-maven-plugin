@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision$
  */
-public final class BuildMetaDataProjectStub extends MavenProjectStub
+public class BuildMetaDataProjectStub extends MavenProjectStub
 {
   // ********************************* Fields *********************************
 

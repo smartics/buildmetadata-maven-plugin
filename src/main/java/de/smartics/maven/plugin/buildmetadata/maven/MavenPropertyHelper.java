@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.maven;
 
 import java.lang.reflect.InvocationTargetException;
@@ -34,7 +35,7 @@ import org.apache.maven.project.MavenProject;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenPropertyHelper
+public class MavenPropertyHelper
 {
   // ********************************* Fields *********************************
 
@@ -99,7 +100,10 @@ public final class MavenPropertyHelper
    * Returns the property value specified by the given name.
    *
    * @param name the name of the property to return.
-   * @return the property value for the given {@code name}.
+   * @param the value of the property or <code>null</code> if it is neiter a
+   *          property of the Maven project nor a property of the properties
+   *          section.
+   * @throws NullPointerException if <code>name</code> is <code>null</code>.
    */
   public String getProperty(final String name)
   {

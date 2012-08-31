@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
    *
    * @param buildMetaDataProperties the build meta data properties.
    */
-  public final void provideBuildMetaData(final Properties buildMetaDataProperties)
+  public void provideBuildMetaData(final Properties buildMetaDataProperties)
   {
     final ScmControl scmControl = scmInfo.getScmControl();
     if (scmControl.isAddScmInfo() && !scmControl.isOffline()
@@ -107,7 +107,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
         throw new IllegalStateException(
             "Cannot fetch SCM revision information.", e);
       }
-      catch (final NoSuchScmProviderException e)
+      catch (NoSuchScmProviderException e)
       {
         throw new IllegalStateException(
             "Cannot fetch SCM revision information.", e);
@@ -170,7 +170,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
    *           return the SCM connection string.
    * @see org.apache.maven.model.Scm#getConnection()
    */
-  protected final String getConnection() throws IllegalStateException
+  protected String getConnection() throws IllegalStateException
   {
     if (project.getScm() == null)
     {

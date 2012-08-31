@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.File;
@@ -23,7 +24,7 @@ import java.io.File;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class FileMapping
+public class FileMapping
 {
   // ********************************* Fields *********************************
 
@@ -59,7 +60,7 @@ public final class FileMapping
    *
    * @param packaging the project's packaging as specified in the
    *          <code>packaging</code> element of a POM to be mapped to a location
-   *          to write the <code>build</code>.
+   *          to write the <code>build.
    * @param outputFile the name of the properties file to write.
    */
   public FileMapping(final String packaging, final File outputFile)
@@ -83,7 +84,7 @@ public final class FileMapping
    *
    * @return the project's packaging as specified in the <code>packaging</code>
    *         element of a POM to be mapped to a location to write the
-   *         <code>build</code>.
+   *         <code>build.
    */
   public String getPackaging()
   {
