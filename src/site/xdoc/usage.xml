@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,91 +50,15 @@
           <code>META-INF</code> folder by default. You may change the
           by changing the destination of the
           <a href="provide-buildmetadata-mojo.html#propertiesOutputFile">propertiesOutputFile</a>
-          property.
-        </p>
-        <p>
-          For multi projects it is especially useful to map the output file to
-          packaging types. This is done by (following is the default configuration if
-          it is not specified):
+          property. This is useful in the case of generating a WAR or an EAR file.
         </p>
         <source><![CDATA[<plugin>
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>maven-buildmetadata-plugin</artifactId>
   <configuration>
-    <addProjectInfo>true</addProjectInfo>
-    <propertyOutputFileMapping>
-      <fileMapping>
-        <packaging>war</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>ear</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>sar</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>rar</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>par</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>jar</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>ejb</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>maven-archetype</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>maven-plugin</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-plugin</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-feature</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-repository</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>eclipse-update-site</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>targetplatform</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-      <fileMapping>
-        <packaging>pom</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
-      </fileMapping>
-    </propertyOutputFileMapping>
+    <propertiesOutputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</propertiesOutputFile>
   </configuration>
 </plugin>]]></source>
-        <p>
-          Packaging types not specified here default to
-          <a href="provide-buildmetadata-mojo.html#propertiesOutputFile">propertiesOutputFile</a>.
-        </p>
-        <p>
-          If you want to disable the <code>propertyOutputFileMapping</code>,
-          set <a href="provide-buildmetadata-mojo.html#activatePropertyOutputFileMapping">activatePropertyOutputFileMapping</a>
-          to <code>false</code>.
-        </p>
       </subsection>
 
       <subsection name="Use with JAR plugin">
@@ -207,7 +131,6 @@
           <li><a href="provide-buildmetadata-mojo.html#addOsInfo">addOsInfo</a></li>
           <li><a href="provide-buildmetadata-mojo.html#addMavenExecutionInfo">addMavenExecutionInfo</a></li>
           <li><a href="provide-buildmetadata-mojo.html#addScmInfo">addScmInfo</a></li>
-          <li><a href="provide-buildmetadata-mojo.html#addProjectInfo">addProjectInfo</a></li>
         </ol>
         <p>
           Since the command line, <code>MAVEN_OPTS</code>, and <code>JAVA_OPTS</code> may
@@ -227,9 +150,8 @@
 
       <subsection name="Copy Property to Build Properties">
         <p>
-          In case you want to copy a system property, an environment variable,
-          or a Maven property to the build properties, use the
-          <code>properties</code> element
+          In case you want to copy a system property or environment variable
+          to the build properties, use the <code>properties</code> element
           within the plugin's <code>configuration</code>.
         </p>
         <p>
@@ -248,16 +170,6 @@
             at either place is silently ignored.</td>
           </tr>
           <tr>
-            <td>mappedName</td>
-            <td>The name of the property to be used in the build meta data
-            properties. This allows to change the name of the property.</td>
-          </tr>
-          <tr>
-            <td>value</td>
-            <td>The value provided for the property. No lookup is performed.
-              Standard Maven properties are resolved.</td>
-          </tr>
-          <tr>
             <td>section</td>
             <td>Binds the property to be displayed in the given section.
               This value is only relevant for reports. This value is optional
@@ -267,13 +179,12 @@
                 The following values are allowed:
               </p>
              <ul>
-               <li><code>build.scm</code> - source code management information.</li>
-               <li><code>build.dateAndVersion</code> - information about build date and artifact version.</li>
-               <li><code>build.runtime</code> - information about the build runtime.</li>
-               <li><code>build.java</code> - information about the Java runtime running the build.</li>
-               <li><code>build.maven</code> - information about the Maven runtime running the build.</li>
-               <li><code>project</code> - information about the project or product.</li>
-               <li><code>build.misc</code> - miscellaneous build information (catch all category).</li>
+               <li><code>build.scm</code></li>
+               <li><code>build.dateAndVersion</code></li>
+               <li><code>build.runtime</code></li>
+               <li><code>build.java</code></li>
+               <li><code>build.maven</code></li>
+               <li><code>build.misc</code></li>
              </ul>
             </td>
           </tr>
@@ -291,127 +202,50 @@
     <name>user.home</name>
     <section>build.runtime</section>
   </property>
+  <property>
+    <name>unknown</name>
+    <section>build.java</section>
+  </property>
+  <property>
+    <name>file.separator</name>
+    <section>build.invalid</section>
+    <label>Separator for Files</label>
+  </property>
+  <property>
+    <name>java.vendor.url</name>
+    <section>build.java</section>
+    <label>Vendor-URL</label>
+  </property>
+  <property>
+    <name>PATH</name>
+  </property>
 </properties>]]></source>
         <p>
           The <code>user.home</code> property is associated with the
           runtime section. Since no label is given the value will be
           displayed with the property name as key.
         </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>unknown</name>
-    <section>build.java</section>
-  </property>
-</properties>]]></source>
         <p>
           The <code>unknown</code> property will not be found as a
           system property or environment variable and is therefore
           silently ignored.
         </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>file.separator</name>
-    <section>build.invalid</section>
-    <label>Separator for Files</label>
-  </property>
-</properties>]]></source>
         <p>
           The <code>file.separator</code> property has a label of
           "Separator for Files" that is rendered as a key instead
           of the property name. Since the section is invalid, the
           property will be displayed with the misc section.
         </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>java.vendor.url</name>
-    <section>build.java</section>
-    <label>Vendor-URL</label>
-  </property>
-</properties>]]></source>
         <p>
           The <code>java.vendor.url</code> will be displayed in the
           Java section with the label "Vendor-URL". If the value
           is an URL starting with <code>http://</code> or
           <code>https://</code>, it is rendered as a link.
         </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>PATH</name>
-  </property>
-</properties>]]></source>
         <p>
-          This declaration copies the operating system
+          Finally the last declaration copies the operating system
           environment variable <code>PATH</code> with no label to
           the misc section.
-        </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>project.url</name>
-    <mappedName>project.homepage</mappedName>
-    <label>Project Homepage</label>
-  </property>
-</properties>]]></source>
-        <p>
-          The URL of the project specified in the POM is copied to the
-          build properties by the name <code>project.homepage</code>
-          instead of <code>project.url</code>.
-        </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>ohlohProjectId</name>
-    <mappedName>project.id.ohloh</mappedName>
-    <label>Ohloh</label>
-  </property>
-</properties>]]></source>
-        <p>
-          Suppose the property <code>ohlohProjectId</code> is definied
-          in the properties section of the POM. The example above copies
-          the value to the build properties by the name <code>project.id.ohloh</code>
-          instead of <code>ohlohProjectId</code>..
-        </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>project.my.property</name>
-  </property>
-</properties>]]></source>
-        <p>
-          Normally, if the property starts with <code>project.</code>
-          it is assumed that the property is found in the POM
-          like in <code>project.version</code> (which fetches the
-          version of the project from the POM). If the property
-          is not a property of the POM, it is looked up in the
-          properties section. The example above will find the
-          property <code>project.my.property</code> there.
-        </p>
-
-        <source><![CDATA[<properties>
-  <property>
-    <name>project.coordinates</name>
-    <value>${project.groupId}:${project.artifactId}:${project.version}</value>
-    <label>Coordinates</label>
-  </property>
-</properties>]]></source>
-        <p>
-          Normally, if the property starts with <code>project.</code>
-          it is assumed that the property is found in the POM
-          like in <code>project.version</code> (which fetches the
-          version of the project from the POM). If the property
-          is not a property of the POM, it is looked up in the
-          properties section. The example above will find the
-          property <code>project.my.property</code> there.
-        </p>
-
-        <p>
-          Please note that properties specified in the
-          <code>settings.xml</code> or in activated profiles
-          are considered due to Maven's property resolution.
         </p>
       </subsection>
 

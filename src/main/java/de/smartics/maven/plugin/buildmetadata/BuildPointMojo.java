@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,23 +27,21 @@ import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
 
 /**
  * Adds the build time to the properties file and runs all providers flagged
- * with
- * {@link de.smartics.maven.plugin.buildmetadata.data.Provider#RUN_AT_BUILD_POINT}
- * .
+ * with {@value Provider#RUN_AT_BUILD_POINT}.
  *
  * @goal build-point
  * @phase prepare-package
  * @requiresProject
- * @threadSafe
- * @since 1.0
  * @description Provides the duration of the build at the given point to the
  *              build properties and runs all providers flagged with
  *              'runAtBuildPoint' with a value of 'true'. The mojo is run at the
  *              specified point. Note that dependent on the phase, the build
  *              information (such as the duration of the build) may or may not
  *              packaged with the artifacts.
+ * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
+ * @version $Revision: 9143 $
  */
-public final class BuildPointMojo extends AbstractBuildMojo
+public class BuildPointMojo extends AbstractBuildMojo
 {
   // ********************************* Fields *********************************
 
@@ -91,13 +89,11 @@ public final class BuildPointMojo extends AbstractBuildMojo
    */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
-    super.execute();
-
     if (propertiesOutputFile.exists())
     {
       final Properties buildMetaDataProperties = new Properties();
       final BuildPropertiesFileHelper helper =
-          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile);
+          new BuildPropertiesFileHelper(getLog(), this.propertiesOutputFile);
       helper.readBuildPropertiesFile(buildMetaDataProperties);
 
       provideBuildPointInfo(buildMetaDataProperties, helper);
@@ -129,7 +125,7 @@ public final class BuildPointMojo extends AbstractBuildMojo
         durationPropertyName);
   }
 
-  private void setTimeDifference(final BuildPropertiesFileHelper helper, // NOPMD
+  private void setTimeDifference(final BuildPropertiesFileHelper helper,
       final Properties buildMetaDataProperties, final Date currentEnd,
       final String durationString, final String durationPropertyName)
   {

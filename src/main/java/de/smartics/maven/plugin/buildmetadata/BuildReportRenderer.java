@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
 
 /**
@@ -44,11 +43,18 @@ import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class BuildReportRenderer
-{ // NOPMD
+public class BuildReportRenderer
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
+
+  /**
+   * The class version identifier.
+   * <p>
+   * The value of this constant is {@value}.
+   */
+  private static final long serialVersionUID = 1L;
 
   // --- members --------------------------------------------------------------
 
@@ -102,9 +108,6 @@ public final class BuildReportRenderer
    * @param sink the sink to write to.
    * @param buildMetaDataPropertiesFile the properties file to read the build
    *          information from.
-   * @param properties the list of a system properties or environment variables
-   *          to be selected by the user to include into the build meta data
-   *          properties.
    */
   public BuildReportRenderer(final ResourceBundle messages, final Sink sink,
       final File buildMetaDataPropertiesFile, final List<Property> properties)
@@ -243,7 +246,7 @@ public final class BuildReportRenderer
     if (!nonStandardProperties.isEmpty())
     {
       sink.sectionTitle2();
-      sink.text(messages.getString(Constant.SECTION_BUILD_MISC));
+      sink.text(messages.getString("build.misc"));
       sink.sectionTitle2_();
       renderTableStart();
       for (final Enumeration<Object> en = nonStandardProperties.keys(); en
@@ -263,12 +266,9 @@ public final class BuildReportRenderer
   {
     final Set<String> selectedProperties = new HashSet<String>();
 
-    if (properties != null)
+    for (final Property property : properties)
     {
-      for (final Property property : properties)
-      {
-        selectedProperties.add(property.getName());
-      }
+      selectedProperties.add(property.getName());
     }
 
     return selectedProperties;
@@ -425,8 +425,7 @@ public final class BuildReportRenderer
         for (final Property property : properties)
         {
           final String label = property.getLabel();
-          if (StringUtils.isNotBlank(label)
-              && key.equals(property.getMappedName()))
+          if (StringUtils.isNotBlank(label) && key.equals(property.getName()))
           {
             return label;
           }

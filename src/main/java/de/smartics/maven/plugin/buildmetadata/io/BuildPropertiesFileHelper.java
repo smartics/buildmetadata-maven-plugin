@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.io;
 
 import java.io.BufferedInputStream;
@@ -68,8 +69,7 @@ public final class BuildPropertiesFileHelper
    * @param log the logger to use.
    * @param propertiesOutputFile the file to write to.
    */
-  public BuildPropertiesFileHelper(final Log log,
-      final File propertiesOutputFile)
+  public BuildPropertiesFileHelper(final Log log, final File propertiesOutputFile)
   {
     this.log = log;
     this.propertiesOutputFile = propertiesOutputFile;
@@ -158,15 +158,6 @@ public final class BuildPropertiesFileHelper
     return propertiesOutputFile;
   }
 
-  /**
-   * Reads the build properties file from stream. The properties file is passed
-   * to this instance via the {@link #BuildPropertiesFileHelper(Log, File)
-   * constructor} {@code propertiesOutputFile}.
-   *
-   * @param buildMetaDataProperties the properties instance to append the read
-   *          properties to.
-   * @throws MojoExecutionException if the properties cannot be read.
-   */
   public void readBuildPropertiesFile(final Properties buildMetaDataProperties)
     throws MojoExecutionException
   {

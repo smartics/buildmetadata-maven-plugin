@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,12 +48,12 @@ import de.smartics.maven.util.LoggingUtils;
  * @goal provide-buildmetadata
  * @phase initialize
  * @requiresProject
- * @threadSafe
- * @since 1.0
  * @description Provides a build meta data to the build process.
+ * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
+ * @version $Revision$
  */
-public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
-{ // NOPMD
+public class BuildMetaDataMojo extends AbstractBuildMojo
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -183,23 +183,15 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * META-INF folder. Please refer to <code>propertiesOutputFile</code>
    * property.
    * </p>
+   * <p>
+   * Note that per default the command line info is hidden for security reasons.
+   * </p>
    *
    * @parameter expression="${buildMetaData.addMavenExecutionInfo}"
    *            default-value="true"
    * @since 1.0
    */
   private boolean addMavenExecutionInfo;
-
-  /**
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   *
-   * @parameter expression="${buildMetaData.addProjectInfo}"
-   *            default-value="false"
-   * @since 1.1
-   */
-  private boolean addProjectInfo;
 
   /**
    * While the command line may be useful to refer to for a couple of reasons,
@@ -323,7 +315,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    *            default-value="dd.MM.yyyy"
    * @since 1.0
    */
-  protected String buildDatePattern = Constant.DEFAULT_DATE_PATTERN; // NOPMD
+  protected String buildDatePattern = Constant.DEFAULT_DATE_PATTERN;
 
   /**
    * The property to query for the build user.
@@ -489,10 +481,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   {
     if (!skip)
     {
-      super.execute();
-
       final BuildPropertiesFileHelper helper =
-          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile);
+          new BuildPropertiesFileHelper(getLog(), this.propertiesOutputFile);
       final Properties projectProperties = helper.getProjectProperties(project);
       if (!isBuildPropertiesAlreadySet(projectProperties))
       {
@@ -550,7 +540,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     selection.setAddEnvInfo(addEnvInfo);
     selection.setAddJavaRuntimeInfo(addJavaRuntimeInfo);
     selection.setAddOsInfo(addOsInfo);
-    selection.setAddProjectInfo(addProjectInfo);
     selection.setHideCommandLineInfo(hideCommandLineInfo);
     selection.setHideJavaOptsInfo(hideJavaOptsInfo);
     selection.setHideMavenOptsInfo(hideMavenOptsInfo);
@@ -707,10 +696,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   {
     final String version = project.getVersion();
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION, version);
-    buildMetaDataProperties.setProperty(Constant.PROP_NAME_GROUP_ID,
-        project.getGroupId());
-    buildMetaDataProperties.setProperty(Constant.PROP_NAME_ARTIFACT_ID,
-        project.getArtifactId());
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_BUILD_DATE,
         buildDateString);
 

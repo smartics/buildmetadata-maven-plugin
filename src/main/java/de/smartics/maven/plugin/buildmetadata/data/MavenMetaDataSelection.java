@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.data;
 
 import java.util.List;
 
-import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.Property;
 
 /**
  * Defines the Maven information to be included in the build meta data.
@@ -25,7 +26,7 @@ import de.smartics.maven.plugin.buildmetadata.common.Property;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenMetaDataSelection
+public class MavenMetaDataSelection
 {
   // ********************************* Fields *********************************
 
@@ -58,13 +59,6 @@ public final class MavenMetaDataSelection
    * interested in execution information, set this to <code>false</code>.
    */
   private boolean addMavenExecutionInfo;
-
-  /**
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   */
-  private boolean addProjectInfo;
 
   /**
    * While the command line may be useful to refer to for a couple of reasons,
@@ -306,34 +300,6 @@ public final class MavenMetaDataSelection
   public void setAddJavaRuntimeInfo(final boolean addJavaRuntimeInfo)
   {
     this.addJavaRuntimeInfo = addJavaRuntimeInfo;
-  }
-
-  /**
-   * Sets the value for addProjectInfo.
-   * <p>
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   *
-   * @param addProjectInfo the value for addProjectInfo.
-   */
-  public void setAddProjectInfo(final boolean addProjectInfo)
-  {
-    this.addProjectInfo = addProjectInfo;
-  }
-
-  /**
-   * Returns the value for addProjectInfo.
-   * <p>
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   *
-   * @return the value for addProjectInfo.
-   */
-  public boolean isAddProjectInfo()
-  {
-    return addProjectInfo;
   }
 
   /**
