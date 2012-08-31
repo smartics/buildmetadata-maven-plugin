@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package test.de.smartics.maven.plugin.buildmetadata;
 
 import java.io.BufferedInputStream;
@@ -33,9 +34,6 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import de.smartics.maven.plugin.buildmetadata.BuildMetaDataMojo;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
@@ -120,7 +118,6 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    *
    * @throws Exception {@inheritDoc}
    */
-  @Before
   protected void setUp() throws Exception
   {
     super.setUp();
@@ -141,7 +138,6 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    *
    * @throws Exception {@inheritDoc}
    */
-  @After
   protected void tearDown() throws Exception
   {
     final File rootDir = new File(getBasedir(), ROOT_DIR_SUFFIX);
@@ -267,7 +263,6 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    *
    * @throws Exception never.
    */
-  @Test
   public void testBuild() throws Exception
   {
     uut.setPropertiesOutputFile(new File(targetDir,

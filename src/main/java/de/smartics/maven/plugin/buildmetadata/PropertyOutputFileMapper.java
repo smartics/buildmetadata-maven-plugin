@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.File;
@@ -81,7 +82,7 @@ final class PropertyOutputFileMapper
           new File(targetDir, finalName + "/META-INF/build.properties");
 
       propertyOutputFileMapping.add(new FileMapping("pom", new File(targetDir,
-          "build.properties"))); // NOPMD
+          "build.properties")));
       propertyOutputFileMapping.add(new FileMapping("war", deploymentUnitFile));
       propertyOutputFileMapping.add(new FileMapping("ear", deploymentUnitFile));
       propertyOutputFileMapping.add(new FileMapping("sar", deploymentUnitFile));

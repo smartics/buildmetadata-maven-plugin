@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.BufferedInputStream;
@@ -44,11 +45,18 @@ import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class BuildReportRenderer
-{ // NOPMD
+public class BuildReportRenderer
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
+
+  /**
+   * The class version identifier.
+   * <p>
+   * The value of this constant is {@value}.
+   */
+  private static final long serialVersionUID = 1L;
 
   // --- members --------------------------------------------------------------
 
@@ -102,9 +110,6 @@ public final class BuildReportRenderer
    * @param sink the sink to write to.
    * @param buildMetaDataPropertiesFile the properties file to read the build
    *          information from.
-   * @param properties the list of a system properties or environment variables
-   *          to be selected by the user to include into the build meta data
-   *          properties.
    */
   public BuildReportRenderer(final ResourceBundle messages, final Sink sink,
       final File buildMetaDataPropertiesFile, final List<Property> properties)

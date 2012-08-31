@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.scm.maven;
 
 import java.io.Serializable;
@@ -78,7 +79,7 @@ public class StringRevision implements Revision, Serializable
    *
    * @return the ID of the revision.
    */
-  public final String getId()
+  public String getId()
   {
     return id;
   }
@@ -88,7 +89,7 @@ public class StringRevision implements Revision, Serializable
    *
    * @return the revision date.
    */
-  public final Date getDate()
+  public Date getDate()
   {
     return new Date(date.getTime());
   }
@@ -100,8 +101,7 @@ public class StringRevision implements Revision, Serializable
   /**
    * {@inheritDoc}
    */
-  // CHECKSTYLE:OFF
-  public String toString()   // CHECKSTYLE:ON
+  public String toString()
   {
     return id + " at " + date;
   }

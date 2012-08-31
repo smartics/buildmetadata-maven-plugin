@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.File;
@@ -33,10 +34,10 @@ import de.smartics.maven.plugin.buildmetadata.common.Property;
  * @phase site
  * @description Generates a report on the build meta data.
  * @requiresProject
- * @threadSafe
- * @since 1.0
+ * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
+ * @version $Revision$
  */
-public final class BuildReportMojo extends AbstractReportMojo
+public class BuildReportMojo extends AbstractReportMojo
 {
   // ********************************* Fields *********************************
 
@@ -77,7 +78,7 @@ public final class BuildReportMojo extends AbstractReportMojo
    * @parameter
    * @since 1.1
    */
-  protected List<FileMapping> propertyOutputFileMapping; // NOPMD
+  protected List<FileMapping> propertyOutputFileMapping;
 
   /**
    * The list of a system properties or environment variables to be selected by
@@ -103,11 +104,8 @@ public final class BuildReportMojo extends AbstractReportMojo
    * @parameter
    * @since 1.0
    */
-  protected List<Property> properties; // NOPMD
+  protected List<Property> properties;
 
-  /**
-   * Flag to check if the mojo has already been initialized.
-   */
   private boolean initialized;
 
   // ****************************** Initializer *******************************
@@ -164,9 +162,6 @@ public final class BuildReportMojo extends AbstractReportMojo
     super.execute();
   }
 
-  /**
-   * Initializes the Mojo.
-   */
   protected void init()
   {
     if (!initialized)

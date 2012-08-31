@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.io;
 
 import java.io.IOException;
@@ -49,8 +50,8 @@ import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class SdocBuilder
-{ // NOPMD
+public class SdocBuilder
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -136,11 +137,12 @@ public final class SdocBuilder
   /**
    * Default constructor.
    *
+   * @param bundle the resource bundle with labels to render.
    * @param document the empty document to write to.
-   * @param buildMetaDataProperties the properties to write to the XML report.
    * @param selectedProperties the list of a system properties or environment
    *          variables to be selected by the user to include into the build
    *          meta data properties.
+   * @param buildMetaDataProperties the properties to write to the XML report.
    */
   public SdocBuilder(final Document document,
       final Properties buildMetaDataProperties,
@@ -164,7 +166,6 @@ public final class SdocBuilder
   /**
    * Writes the content to the document.
    *
-   * @return the written XML document.
    * @throws IOException on any problem writing to the XML document.
    */
   public Document writeDocumentContent() throws IOException

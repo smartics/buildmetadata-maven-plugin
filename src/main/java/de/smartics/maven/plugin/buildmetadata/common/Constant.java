@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.common;
 
 import java.util.ArrayList;
@@ -738,31 +739,29 @@ public final class Constant
   }
 
   /**
-   * Prettifies a value string that contains brackets. It simply removes the
-   * brackets.
+   * Prettifies a file value string that contains brackets. It simply removes
+   * the brackets.
    *
-   * @param value the object whose string representation is to be prettified.
+   * @param string the string to prettify.
    * @return the prettified string.
    */
   public static String prettifyFilesValue(final Object value)
   {
-    if (value == null)
+    if (value != null)
     {
-      return null;
-    }
-
-    String string = String.valueOf(value);
-    if (StringUtils.isNotBlank(string))
-    {
-      string = string.replace(']', ' ');
-      string = string.replace('[', ',');
-      if (string.indexOf(0) == ',')
+      String string = String.valueOf(value);
+      if (StringUtils.isNotBlank(string))
       {
-        return string.substring(1);
+        string = string.replace(']', ' ');
+        string = string.replace('[', ',');
+        if (string.indexOf(0) == ',')
+        {
+          return string.substring(1);
+        }
       }
+      return string;
     }
-
-    return string;
+    return null;
   }
 
   // --- object basics --------------------------------------------------------

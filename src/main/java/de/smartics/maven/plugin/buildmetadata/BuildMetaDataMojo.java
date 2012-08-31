@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.File;
@@ -48,12 +49,12 @@ import de.smartics.maven.util.LoggingUtils;
  * @goal provide-buildmetadata
  * @phase initialize
  * @requiresProject
- * @threadSafe
- * @since 1.0
  * @description Provides a build meta data to the build process.
+ * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
+ * @version $Revision$
  */
-public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
-{ // NOPMD
+public class BuildMetaDataMojo extends AbstractBuildMojo
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -323,7 +324,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    *            default-value="dd.MM.yyyy"
    * @since 1.0
    */
-  protected String buildDatePattern = Constant.DEFAULT_DATE_PATTERN; // NOPMD
+  protected String buildDatePattern = Constant.DEFAULT_DATE_PATTERN;
 
   /**
    * The property to query for the build user.

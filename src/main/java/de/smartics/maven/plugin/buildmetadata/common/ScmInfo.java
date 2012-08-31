@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.common;
 
 import java.io.File;
@@ -25,7 +26,7 @@ import org.apache.maven.scm.manager.ScmManager;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class ScmInfo
+public class ScmInfo
 {
   // ********************************* Fields *********************************
 
@@ -93,7 +94,6 @@ public final class ScmInfo
 
   // ****************************** Constructors ******************************
 
-  // CHECKSTYLE:OFF
   /**
    * Default constructor.
    *
@@ -112,7 +112,7 @@ public final class ScmInfo
    * @note This argument list is quite long. The next time we touch this class,
    *       we should provide a builder.
    */
-  public ScmInfo(final ScmManager scmManager, final String connectionType, // NOPMD
+  public ScmInfo(final ScmManager scmManager, final String connectionType,
       final String scmDateFormat, final File basedir,
       final ScmCredentials scmCrendentials, final String tagBase,
       final int queryRangeInDays, final String buildDatePattern,
@@ -128,7 +128,6 @@ public final class ScmInfo
     this.buildDatePattern = buildDatePattern;
     this.scmControl = scmControl;
   }
-  // CHECKSTYLE:ON
 
   // ****************************** Inner Classes *****************************
 

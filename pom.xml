@@ -6,13 +6,13 @@
   <parent>
     <groupId>de.smartics.config.pom</groupId>
     <artifactId>pom-java</artifactId>
-    <version>31.2.1</version>
-    <relativePath />
+    <version>29</version>
   </parent>
 
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>maven-buildmetadata-plugin</artifactId>
-  <version>1.1.6-SNAPSHOT</version>
+  <version>1.1.2</version>
+
   <packaging>maven-plugin</packaging>
   <name>maven-buildmetadata-plugin</name>
   <description>
@@ -20,8 +20,8 @@
     version and build date which are used to create a full version
     property that contains the version, the build date and revision.
   </description>
-  <url>${weburl}</url>
   <inceptionYear>2006</inceptionYear>
+  <url>${weburl}</url>
 
   <licenses>
     <license>
@@ -35,9 +35,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:svn:https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/trunk</connection>
-    <developerConnection>scm:svn:https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/trunk</developerConnection>
-    <url>https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/trunk</url>
+    <connection>scm:svn:https://www.smartics.de/svn/public/maven/maven-buildmetadata-plugin/tags/maven-buildmetadata-plugin-1.1.2</connection>
+    <developerConnection>scm:svn:https://www.smartics.de/svn/public/maven/maven-buildmetadata-plugin/tags/maven-buildmetadata-plugin-1.1.2</developerConnection>
+    <url>https://www.smartics.de/svn/public/maven/maven-buildmetadata-plugin/tags/maven-buildmetadata-plugin-1.1.2</url>
   </scm>
 
   <distributionManagement>
@@ -47,10 +47,10 @@
       <url>${repo.server.upload}/${project-visibility}</url>
     </repository>
     <snapshotRepository>
-      <uniqueVersion>false</uniqueVersion>
       <id>${project-visibility}-snapshot</id>
       <name>internal smartics snapshot repository</name>
       <url>${repo.server.upload}/${project-visibility}-snapshot</url>
+      <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
     <site>
       <id>${project-visibility}-site</id>
@@ -66,7 +66,7 @@
     <ohlohProjectId>485170</ohlohProjectId>
     <twitterId>smartics</twitterId>
 
-    <maven-scm.version>1.6</maven-scm.version>
+    <maven-scm.version>1.3</maven-scm.version>
   </properties>
 
   <dependencies>
@@ -223,20 +223,6 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>de.smartics.maven.plugin</groupId>
-          <artifactId>bugzilla-maven-plugin</artifactId>
-          <version>0.4.1</version>
-          <configuration>
-            <classification>Build Management</classification>
-            <initialOwner>${user.email}</initialOwner>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -257,12 +243,30 @@
               <artifactId>maven-project-info-reports-plugin</artifactId>
             </plugin>
             <plugin>
-              <groupId>de.smartics.maven.plugin</groupId>
-              <artifactId>maven-issues-plugin</artifactId>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-changelog-plugin</artifactId>
             </plugin>
+              <plugin>
+                <groupId>de.smartics.maven.plugin</groupId>
+                <artifactId>maven-issues-plugin</artifactId>
+              </plugin>
             <plugin>
               <groupId>de.smartics.maven.plugin</groupId>
               <artifactId>maven-issues-plugin</artifactId>
+              <reportSets>
+                <reportSet>
+                  <id>release-notes-report-0_x</id>
+                  <reports>
+                    <report>bugzilla-releasenotes-report</report>
+                  </reports>
+                  <configuration>
+                    <outputName>release-notes-report-0_x</outputName>
+                    <title>Release Notes Version 0.x</title>
+                    <versionRange>(,1.0.0)</versionRange>
+                    <includeOnSamePageAllOfVersion>major</includeOnSamePageAllOfVersion>
+                  </configuration>
+                </reportSet>
+              </reportSets>
             </plugin>
             <plugin>
               <groupId>de.smartics.maven.plugin</groupId>
@@ -303,6 +307,9 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-checkstyle-plugin</artifactId>
+              <configuration>
+                <suppressionsLocation>${basedir}/src/etc/checkstyle-suppressions.xml</suppressionsLocation>
+              </configuration>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -324,39 +331,6 @@
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-plugin-plugin</artifactId>
               <version>2.5</version>
-            </plugin>
-            <plugin>
-              <groupId>de.smartics.maven.plugin</groupId>
-              <artifactId>maven-issues-plugin</artifactId>
-              <version>${maven-issues-plugin.version}</version>
-              <configuration>
-                <issueManagementUser>${bugzillaUser}</issueManagementUser>
-                <issueManagementPassword>${bugzillaPassword}</issueManagementPassword>
-
-                <currentReleaseVersionOnly>false</currentReleaseVersionOnly>
-                <includeOnSamePageAllOfVersion>major</includeOnSamePageAllOfVersion>
-
-                <repositoryVersion>3.6</repositoryVersion>
-                <ignoreLogoutProblem>true</ignoreLogoutProblem>
-                <locale>en</locale>
-
-                <product>${issues-product}</product>
-                <component>${issues-component}</component>
-              </configuration>
-              <reportSets>
-                <reportSet>
-                  <id>release-notes-report-0_x</id>
-                  <reports>
-                    <report>bugzilla-releasenotes-report</report>
-                  </reports>
-                  <configuration>
-                    <outputName>release-notes-report-0_x</outputName>
-                    <title>Release Notes Version 0.x</title>
-                    <versionRange>(,1.0.0)</versionRange>
-                    <includeOnSamePageAllOfVersion>major</includeOnSamePageAllOfVersion>
-                  </configuration>
-                </reportSet>
-              </reportSets>
             </plugin>
           </reportPlugins>
         </configuration>

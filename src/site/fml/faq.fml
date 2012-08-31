@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
     limitations under the License.
 
 -->
+
 <faqs title="Frequently Asked Questions">
   <part id="general">
     <title>General</title>
@@ -25,7 +26,7 @@
         What does this project aim at?
       </question>
       <answer>
-        <p>
+      	<p>
         This project's aim is to provide all kind of build meta data to a
         <a href="http://maven.apache.org/">Maven</a> project.
         This information can be included in the generated artifacts for further reference.
@@ -52,11 +53,11 @@
         What are similar projects?
       </question>
       <answer>
-        The <a href="http://mojo.codehaus.org/buildnumber-maven-plugin/">buildnumber-maven-plugin</a>
-        provides a build number, too. While the maven-buildmetadata-plugin aims to make it easy to
-        include any meta data within the generated artifact, the buildnumber-maven-plugin focuses on
-        handling build numbers. If the way the maven-buildmetadata-plugin deals with build numbers
-        does not meet your needs, we recommend to have a look at the buildnumber-maven-plugin.
+      	The <a href="http://mojo.codehaus.org/buildnumber-maven-plugin/">buildnumber-maven-plugin</a>
+      	provides a build number, too. While the maven-buildmetadata-plugin aims to make it easy to
+      	include any meta data within the generated artifact, the buildnumber-maven-plugin focuses on
+      	handling build numbers. If the way the maven-buildmetadata-plugin deals with build numbers
+      	does not meet your needs, we recommend to have a look at the buildnumber-maven-plugin.
       </answer>
     </faq>
   </part>
@@ -92,30 +93,6 @@
         </p>
       </answer>
     </faq>
-
-    <faq id="svnNumber">
-      <question>
-        The plugin fetched an SVN revision that is not part of the project's
-        history. For instance, the reported SVN revision is 11102, but the
-        history in my IDE only shows 11101 and 11103. What is wrong?
-      </question>
-      <answer>
-        <p>
-          Probably nothing is wrong. The revision 11102 is the revision of the
-          tag and may not be shown in the history of the trunk. If you list
-          all revisions you will get something like the following list:
-        </p>
-        <source>
-11103	21.03.12 23:33	1	robert.reiner	[maven-release-plugin] prepare for next development iteration
-11102	21.03.12 23:33	1	robert.reiner	[maven-release-plugin]  copy for tag bugzilla-maven-plugin-0.4.1
-11101	21.03.12 23:33	1	robert.reiner	[maven-release-plugin] prepare release bugzilla-maven-plugin-0.4.1
-        </source>
-        <p>
-          The revision number, the plugin receives from SVN, is that of the tag.
-        </p>
-      </answer>
-    </faq>
-
 
     <faq id="supportedScmProviders">
       <question>
