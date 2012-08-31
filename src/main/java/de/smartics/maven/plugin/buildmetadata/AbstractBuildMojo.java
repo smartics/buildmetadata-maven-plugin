@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,18 +23,15 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.RuntimeInformation;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
 import de.smartics.maven.plugin.buildmetadata.data.MetaDataProvider;
 import de.smartics.maven.plugin.buildmetadata.data.MetaDataProviderBuilder;
-import de.smartics.maven.plugin.buildmetadata.data.Provider;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
 
 /**
- * Base implementation for all build mojos.
+ * Base implementatio for al build mojos.
  *
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision: 9143 $
@@ -77,39 +74,18 @@ public abstract class AbstractBuildMojo extends AbstractMojo
   protected RuntimeInformation runtime;
 
   /**
-   * The name of the properties file to write. Per default this value is
-   * overridden by packaging dependent locations. Please refer to <a
-   * href="#activatePropertyOutputFileMapping"
-   * >activatePropertyOutputFileMapping</a> for details.
+   * The name of the properties file to write. If you do not want to include the
+   * properties file in the artifact, use
+   * <code>${project.build.directory}/buildmetadata.properties</code>.
+   * If the location is within a WAR or EAR file you may prefer to use
+   * this location:
+   * <code>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</code>.
    *
    * @parameter default-value=
-   *            "${project.build.outputDirectory}/META-INF/build.properties"
+   *            "${project.build.outputDirectory}/META-INF/buildmetadata.properties"
    * @since 1.0
    */
   protected File propertiesOutputFile;
-
-  /**
-   * Used to activate the default mapping that writes the build properties of
-   * deployable units to
-   * <code>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</code>
-   * and for standard JAR files to
-   * <code>${project.build.outputDirectory}/META-INF/build.properties</code>.
-   *
-   * @parameter default-value=true
-   * @since 1.1
-   */
-  private boolean activatePropertyOutputFileMapping;
-
-  /**
-   * Maps a packaging to a location for the build meta data properties file.
-   * <p>
-   * This mapping is especially useful for multi projects.
-   * </p>
-   *
-   * @parameter
-   * @since 1.1
-   */
-  protected List<FileMapping> propertyOutputFileMapping;
 
   /**
    * The name of the XML report file to write. If you want to include the XML
@@ -150,7 +126,6 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <li><code>build.runtime</code></li>
    * <li><code>build.java</code></li>
    * <li><code>build.maven</code></li>
-   * <li><code>project</code></li>
    * <li><code>build.misc</code></li>
    * </ul>
    * <p>
@@ -159,7 +134,6 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * </p>
    *
    * @parameter
-   * @since 1.0
    */
   protected List<Property> properties;
 
@@ -193,7 +167,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @return the Maven project.
    */
-  public final MavenProject getProject()
+  public MavenProject getProject()
   {
     return project;
   }
@@ -203,7 +177,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param project the Maven project.
    */
-  public final void setProject(final MavenProject project)
+  public void setProject(final MavenProject project)
   {
     this.project = project;
   }
@@ -216,7 +190,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param session the Maven session.
    */
-  public final void setSession(final MavenSession session)
+  public void setSession(final MavenSession session)
   {
     this.session = session;
   }
@@ -226,45 +200,17 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <p>
    * Used for testing.
    * </p>
-   *
-   * @param propertiesOutputFile the name of the properties file to write.
    */
-  public final void setPropertiesOutputFile(final File propertiesOutputFile)
+  public void setPropertiesOutputFile(final File propertiesOutputFile)
   {
     this.propertiesOutputFile = propertiesOutputFile;
   }
 
   // --- business -------------------------------------------------------------
 
-  // CHECKSTYLE:OFF
-  /**
-   * {@inheritDoc}
-   */
-  public void execute() throws MojoExecutionException, MojoFailureException
-  {
-    // CHECKSTYLE:ON
-    final PropertyOutputFileMapper mapper =
-        new PropertyOutputFileMapper(project, propertyOutputFileMapping);
-    this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
-    this.propertiesOutputFile =
-        mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
-            propertiesOutputFile);
-  }
-
-  /**
-   * Adds the information as build properties for each provider.
-   *
-   * @param buildMetaDataProperties the build meta data properties to add to.
-   * @param scmInfo the information for the SCM provided to the build plugin.
-   * @param providers the providers to iterate over.
-   * @param runAtEndOfBuild checks if the provider is configured to be run at
-   *          the end of the build. If a provider matches this value, it is run.
-   * @throws MojoExecutionException on any problem running on the providers.
-   */
-  protected final void provideBuildMetaData(
-      final Properties buildMetaDataProperties, final ScmInfo scmInfo,
-      final List<Provider> providers, final boolean runAtEndOfBuild)
-    throws MojoExecutionException
+  protected void provideBuildMetaData(final Properties buildMetaDataProperties,
+      final ScmInfo scmInfo, final List<Provider> providers,
+      final boolean runAtEndOfBuild) throws MojoExecutionException
   {
     if (providers != null && !providers.isEmpty())
     {
@@ -281,14 +227,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
     }
   }
 
-  /**
-   * Updates the Maven runtime with build properties.
-   *
-   * @param buildMetaDataProperties the properties to add to the Maven project
-   *          properties.
-   * @param helper the project helper to use.
-   */
-  protected final void updateMavenEnvironment(
+  protected void updateMavenEnvironment(
       final Properties buildMetaDataProperties,
       final BuildPropertiesFileHelper helper)
   {

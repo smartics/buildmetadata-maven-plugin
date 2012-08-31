@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.smartics.maven.plugin.buildmetadata.common;
+package de.smartics.maven.plugin.buildmetadata;
 
 /**
  * Defines a property to be selected by the user to include into the build meta
@@ -22,7 +22,7 @@ package de.smartics.maven.plugin.buildmetadata.common;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class Property
+public class Property
 {
   // ********************************* Fields *********************************
 
@@ -34,18 +34,6 @@ public final class Property
    * The name of the system property to add to the build meta data properties.
    */
   private String name;
-
-  /**
-   * The name of the property to be used in the build meta data properties. This
-   * allows to change the name of the property.
-   */
-  private String mappedName;
-
-  /**
-   * The value provided for the property. No lookup is performed. Standard Maven
-   * properties are resolved.
-   */
-  private String value;
 
   /**
    * The section the property is added to. If omitted or invalid, the property
@@ -91,29 +79,6 @@ public final class Property
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Returns the name of the property in the build meta data properties. This
-   * allows change the name of the property.
-   *
-   * @return the name of the property in the build meta data properties. If the
-   *         mapped name is not given, the {@link #getName() name} is returned.
-   */
-  public String getMappedName()
-  {
-    return mappedName != null ? mappedName : getName();
-  }
-
-  /**
-   * Returns the value provided for the property. No lookup is performed.
-   * Standard Maven properties are resolved.
-   *
-   * @return the value provided for the property.
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**

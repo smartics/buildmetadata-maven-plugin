@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import java.util.Set;
 
 import org.codehaus.plexus.util.StringUtils;
 
+import de.smartics.maven.plugin.buildmetadata.Property;
+
 /**
  * Constants used in this package.
  *
@@ -37,74 +39,6 @@ public final class Constant
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
-
-  // ... sections .............................................................
-
-  /**
-   * The name of the SCM section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_BUILD_SCM = "build.scm";
-
-  /**
-   * The name of the artifact section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_ARTIFACT = "build.artifact";
-
-  /**
-   * The name of the build date section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_BUILD_DATE = "build.timeAndDate";
-
-  /**
-   * The name of the runtime build section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_BUILD_RUNTIME = "build.runtime";
-
-  /**
-   * The name of the Java build section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_BUILD_JAVA = "build.java";
-
-  /**
-   * The name of the Maven build section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_BUILD_MAVEN = "build.maven";
-
-  /**
-   * The name of the miscellaneous build section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_BUILD_MISC = "build.misc";
-
-  /**
-   * The name of the project section.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String SECTION_PROJECT = "project";
-
-  // ... build property names .................................................
 
   /**
    * The name of the project property that stores the URL to the SCM server.
@@ -154,7 +88,7 @@ public final class Constant
       "build.scmLocallyModified.files";
 
   /**
-   * The name of the project property that stores the formatted build date.
+   * The name of the project property that stores the build date.
    * <p>
    * The value of this constant is {@value}.
    * </p>
@@ -179,24 +113,6 @@ public final class Constant
    */
   public static final String PROP_NAME_BUILD_DATE_PATTERN =
       "build.date.pattern";
-
-  /**
-   * The name of the project property that stores the group ID as read from the
-   * POM.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String PROP_NAME_GROUP_ID = "build.groupId";
-
-  /**
-   * The name of the project property that stores the artifact ID as read from
-   * the POM.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String PROP_NAME_ARTIFACT_ID = "build.artifactId";
 
   /**
    * The name of the project property that stores the version as read from the
@@ -454,51 +370,6 @@ public final class Constant
       "build.maven.execution.profile.active";
 
   /**
-   * The name of the property that stores URL of the project homepage.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String PROP_NAME_PROJECT_HOMEPAGE =
-      "project.page.home.url";
-
-  /**
-   * The name of the property that stores URL to a page useful for operations
-   * teams.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String PROP_NAME_PROJECT_OPS = "project.page.ops.url";
-
-  /**
-   * The name of the property that stores a value to categorize the project.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String PROP_NAME_PROJECT_CATEGORY = "project.category";
-
-  /**
-   * The name of the property that stores a value to further categorize the
-   * project.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String PROP_NAME_PROJECT_SUBCATEGORY =
-      "project.subcategory";
-
-  /**
-   * The name of the property that stores a comma separated list of tags to
-   * categorize the project.
-   * <p>
-   * The value of this constant is {@value}.
-   * </p>
-   */
-  public static final String PROP_NAME_PROJECT_TAGS = "project.tags";
-
-  /**
    * List of properties, organized in sections, relevant to the build report.
    * The order of properties in this list determines the order of the properties
    * listed in the report.
@@ -520,62 +391,47 @@ public final class Constant
   {
     final List<Section> sections = new ArrayList<Section>();
     final Section scm =
-        new Section(SECTION_BUILD_SCM, PROP_NAME_SCM_REVISION_ID,
+        new Section("build.scm", PROP_NAME_SCM_REVISION_ID,
             PROP_NAME_SCM_REVISION_DATE, PROP_NAME_SCM_URL,
             PROP_NAME_SCM_LOCALLY_MODIFIED_FILES);
     sections.add(scm);
 
-    final Section artifact =
-        new Section(SECTION_ARTIFACT, PROP_NAME_GROUP_ID,
-            PROP_NAME_ARTIFACT_ID, PROP_NAME_VERSION, PROP_NAME_FULL_VERSION);
-    sections.add(artifact);
-
     final Section dateAndVersion =
-        new Section(SECTION_BUILD_DATE, PROP_NAME_BUILD_DATE,
-            PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_BUILD_YEAR,
-            PROP_NAME_COPYRIGHT_YEAR, DEFAULT_DATE_PATTERN);
+        new Section("build.dateAndVersion", PROP_NAME_BUILD_DATE,
+            PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_VERSION,
+            PROP_NAME_FULL_VERSION);
     sections.add(dateAndVersion);
 
     final Section buildRuntime =
-        new Section(SECTION_BUILD_RUNTIME, PROP_NAME_HOSTNAME,
-            PROP_NAME_OS_NAME, PROP_NAME_OS_ARCH, PROP_NAME_OS_VERSION,
-            PROP_NAME_BUILD_USER);
+        new Section("build.runtime", PROP_NAME_HOSTNAME, PROP_NAME_OS_NAME,
+            PROP_NAME_OS_ARCH, PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER);
     sections.add(buildRuntime);
 
     final Section buildJava =
-        new Section(SECTION_BUILD_JAVA, PROP_NAME_JAVA_VENDOR,
+        new Section("build.java", PROP_NAME_JAVA_VENDOR,
             PROP_NAME_JAVA_RUNTIME_NAME, PROP_NAME_JAVA_RUNTIME_VERSION,
             PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS);
     sections.add(buildJava);
 
     final Section buildMaven =
-        new Section(SECTION_BUILD_MAVEN, PROP_NAME_MAVEN_VERSION,
+        new Section("build.maven", PROP_NAME_MAVEN_VERSION,
             PROP_NAME_MAVEN_CMDLINE, PROP_NAME_MAVEN_GOALS,
             PROP_NAME_MAVEN_OPTS, PROP_NAME_MAVEN_EXECUTION_PROJECT,
             PROP_NAME_MAVEN_ACTIVE_PROFILES);
     sections.add(buildMaven);
 
-    final Section project =
-        new Section(SECTION_PROJECT, PROP_NAME_PROJECT_HOMEPAGE,
-            PROP_NAME_PROJECT_OPS, PROP_NAME_PROJECT_CATEGORY,
-            PROP_NAME_PROJECT_SUBCATEGORY, PROP_NAME_PROJECT_TAGS);
-    sections.add(project);
-
     final Set<String> properties =
         new HashSet<String>(Arrays.asList(new String[]
         { PROP_NAME_SCM_REVISION_ID, PROP_NAME_SCM_REVISION_DATE,
          PROP_NAME_SCM_URL, PROP_NAME_SCM_LOCALLY_MODIFIED_FILES,
-         PROP_NAME_BUILD_DATE, PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_BUILD_YEAR,
-         PROP_NAME_COPYRIGHT_YEAR, DEFAULT_DATE_PATTERN, PROP_NAME_GROUP_ID,
-         PROP_NAME_ARTIFACT_ID, PROP_NAME_VERSION, PROP_NAME_FULL_VERSION,
-         PROP_NAME_HOSTNAME, PROP_NAME_OS_NAME, PROP_NAME_OS_ARCH,
-         PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER, PROP_NAME_JAVA_VENDOR,
-         PROP_NAME_JAVA_RUNTIME_NAME, PROP_NAME_JAVA_RUNTIME_VERSION,
-         PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS,
-         PROP_NAME_MAVEN_VERSION, PROP_NAME_MAVEN_CMDLINE,
-         PROP_NAME_MAVEN_GOALS, PROP_NAME_MAVEN_OPTS,
-         PROP_NAME_MAVEN_EXECUTION_PROJECT, PROP_NAME_MAVEN_ACTIVE_PROFILES,
-         PROP_NAME_PROJECT_HOMEPAGE, PROP_NAME_PROJECT_OPS }));
+         PROP_NAME_BUILD_DATE, PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_VERSION,
+         PROP_NAME_FULL_VERSION, PROP_NAME_HOSTNAME, PROP_NAME_OS_NAME,
+         PROP_NAME_OS_ARCH, PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER,
+         PROP_NAME_JAVA_VENDOR, PROP_NAME_JAVA_RUNTIME_NAME,
+         PROP_NAME_JAVA_RUNTIME_VERSION, PROP_NAME_JAVA_VM,
+         PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS, PROP_NAME_MAVEN_VERSION,
+         PROP_NAME_MAVEN_CMDLINE, PROP_NAME_MAVEN_GOALS, PROP_NAME_MAVEN_OPTS,
+         PROP_NAME_MAVEN_EXECUTION_PROJECT, PROP_NAME_MAVEN_ACTIVE_PROFILES }));
 
     STANDARD_PROPERTIES = Collections.unmodifiableSet(properties);
     REPORT_PROPERTIES = Collections.unmodifiableList(sections);
@@ -712,11 +568,10 @@ public final class Constant
 
   private static boolean isNotTargetedForMiscSection(final String section)
   {
-    return SECTION_BUILD_SCM.equals(section)
-           || SECTION_BUILD_DATE.equals(section)
-           || SECTION_BUILD_RUNTIME.equals(section)
-           || SECTION_BUILD_JAVA.equals(section)
-           || SECTION_BUILD_MAVEN.equals(section);
+    return "build.scm".equals(section)
+           || "build.dateAndVersion".equals(section)
+           || "build.runtime".equals(section) || "build.java".equals(section)
+           || "build.maven".equals(section);
   }
 
   /**
@@ -738,31 +593,29 @@ public final class Constant
   }
 
   /**
-   * Prettifies a value string that contains brackets. It simply removes the
-   * brackets.
+   * Prettifies a file value string that contains brackets. It simply removes
+   * the brackets.
    *
-   * @param value the object whose string representation is to be prettified.
+   * @param string the string to prettify.
    * @return the prettified string.
    */
   public static String prettifyFilesValue(final Object value)
   {
-    if (value == null)
+    if (value != null)
     {
-      return null;
-    }
-
-    String string = String.valueOf(value);
-    if (StringUtils.isNotBlank(string))
-    {
-      string = string.replace(']', ' ');
-      string = string.replace('[', ',');
-      if (string.indexOf(0) == ',')
+      String string = String.valueOf(value);
+      if (StringUtils.isNotBlank(string))
       {
-        return string.substring(1);
+        string = string.replace(']', ' ');
+        string = string.replace('[', ',');
+        if (string.indexOf(0) == ',')
+        {
+          return string.substring(1);
+        }
       }
+      return string;
     }
-
-    return string;
+    return null;
   }
 
   // --- object basics --------------------------------------------------------

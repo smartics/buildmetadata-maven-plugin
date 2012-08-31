@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,9 @@ import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
+import de.smartics.maven.plugin.buildmetadata.Property;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
-import de.smartics.maven.plugin.buildmetadata.maven.MavenPropertyHelper;
 
 /**
  * Extracts information from the Maven project, session, and runtime
@@ -40,8 +39,8 @@ import de.smartics.maven.plugin.buildmetadata.maven.MavenPropertyHelper;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenMetaDataProvider extends AbstractMetaDataProvider
-{ // NOPMD
+public class MavenMetaDataProvider extends AbstractMetaDataProvider
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -113,7 +112,8 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
         selection.getSelectedSystemProperties();
     if (selectedProperties != null && !selectedProperties.isEmpty())
     {
-      provideSelectedProperties(buildMetaDataProperties, selectedProperties);
+      provideSelectedSystemProperties(buildMetaDataProperties,
+          selectedProperties);
     }
   }
 
@@ -160,54 +160,27 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
     }
   }
 
-  private void provideSelectedProperties(
+  private void provideSelectedSystemProperties(
       final Properties buildMetaDataProperties,
       final List<Property> selectedProperties)
   {
-    final MavenPropertyHelper helper = new MavenPropertyHelper(project);
     for (final Property property : selectedProperties)
     {
       final String name = property.getName();
-
-      final String fixedValue = property.getValue();
-      if (fixedValue != null)
+      final String value = System.getProperty(name);
+      if (StringUtils.isNotBlank(value))
       {
-        setProperty(buildMetaDataProperties, property, fixedValue);
+        buildMetaDataProperties.setProperty(name, value);
       }
       else
       {
-        final String mavenPropertyValue = helper.getProperty(name);
-        if (mavenPropertyValue != null)
+        final String envValue = System.getenv(name);
+        if (StringUtils.isNotBlank(envValue))
         {
-          setProperty(buildMetaDataProperties, property, mavenPropertyValue);
-        }
-        else
-        {
-          final String value = System.getProperty(name);
-          if (StringUtils.isNotBlank(value))
-          {
-            setProperty(buildMetaDataProperties, property, value);
-          }
-          else
-          {
-            final String envValue = System.getenv(name);
-            // CHECKSTYLE:OFF
-            if (StringUtils.isNotBlank(envValue))
-            {
-              setProperty(buildMetaDataProperties, property, envValue);
-            }
-            // CHECKSTYLE:ON
-          }
+          buildMetaDataProperties.setProperty(name, envValue);
         }
       }
     }
-  }
-
-  private static void setProperty(final Properties buildMetaDataProperties,
-      final Property property, final String value)
-  {
-    final String name = property.getMappedName();
-    buildMetaDataProperties.setProperty(name, value);
   }
 
   private void provideSessionInfo(final Properties buildMetaDataProperties)
@@ -234,40 +207,6 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
             filters);
       }
     }
-
-    if (selection.isAddProjectInfo())
-    {
-      final String projectUrl = project.getUrl();
-      if (StringUtils.isNotBlank(projectUrl))
-      {
-        buildMetaDataProperties.setProperty(
-            Constant.PROP_NAME_PROJECT_HOMEPAGE, projectUrl);
-      }
-
-      final Properties projectProperties = project.getProperties();
-      if (projectProperties != null)
-      {
-        providePropertiesProperty(buildMetaDataProperties, projectProperties,
-            Constant.PROP_NAME_PROJECT_OPS);
-        providePropertiesProperty(buildMetaDataProperties, projectProperties,
-            Constant.PROP_NAME_PROJECT_CATEGORY);
-        providePropertiesProperty(buildMetaDataProperties, projectProperties,
-            Constant.PROP_NAME_PROJECT_SUBCATEGORY);
-        providePropertiesProperty(buildMetaDataProperties, projectProperties,
-            Constant.PROP_NAME_PROJECT_TAGS);
-      }
-    }
-  }
-
-  private static void providePropertiesProperty(
-      final Properties buildMetaDataProperties,
-      final Properties projectProperties, final String name)
-  {
-    final String value = projectProperties.getProperty(name);
-    if (StringUtils.isNotBlank(value))
-    {
-      buildMetaDataProperties.setProperty(name, value);
-    }
   }
 
   private void provideExecutedProjectInfo(
@@ -293,7 +232,7 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
       for (final Profile profile : profiles)
       {
         final String profileId = profile.getId();
-        if (!profileIds.contains(profileId))
+        if(!profileIds.contains(profileId))
         {
           final String key =
               Constant.MAVEN_ACTIVE_PROFILE_PREFIX + '.' + profileId;

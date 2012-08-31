@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,60 +13,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata;
 
-import java.io.File;
+import java.util.Map;
 
 /**
- * Maps an properties output file location to a packaging.
+ * Configuration instance to create instances of
+ * {@link de.smartics.maven.plugin.buildmetadata.data.MetaDataProvider} by the
+ * {@link de.smartics.maven.plugin.buildmetadata.data.MetaDataProviderBuilder}.
  *
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class FileMapping
+public class Provider
 {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
 
+  /**
+   * The name of the property to indicate that a provider is to be run with the
+   * build point mojo. Usually this kind of provider export the build
+   * information to a backend system or measures time at a given point of the
+   * build.
+   * <p>
+   * The value of this constant is {@value}.
+   */
+  public static final String RUN_AT_BUILD_POINT = "runAtBuildPoint";
+
   // --- members --------------------------------------------------------------
 
   /**
-   * The project's packaging as specified in the <code>packaging</code> element
-   * of a POM to be mapped to a location to write the
-   * <code>build.properties</code>.
+   * The class to instantiate.
    */
-  private String packaging;
+  private String type;
 
   /**
-   * The name of the properties file to write.
+   * Properties to set.
    */
-  private File outputFile;
+  private Map<String, String> properties;
 
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
-
-  /**
-   * Default constructor for Maven.
-   */
-  public FileMapping()
-  {
-  }
-
-  /**
-   * Default constructor for Maven.
-   *
-   * @param packaging the project's packaging as specified in the
-   *          <code>packaging</code> element of a POM to be mapped to a location
-   *          to write the <code>build</code>.
-   * @param outputFile the name of the properties file to write.
-   */
-  public FileMapping(final String packaging, final File outputFile)
-  {
-    this.packaging = packaging;
-    this.outputFile = outputFile;
-  }
 
   // ****************************** Inner Classes *****************************
 
@@ -77,27 +67,38 @@ public final class FileMapping
   // --- get&set --------------------------------------------------------------
 
   /**
-   * Returns the project's packaging as specified in the <code>packaging</code>
-   * element of a POM to be mapped to a location to write the
-   * <code>build. properties</code>.
+   * Returns the class to instantiate.
    *
-   * @return the project's packaging as specified in the <code>packaging</code>
-   *         element of a POM to be mapped to a location to write the
-   *         <code>build</code>.
+   * @return the class to instantiate.
    */
-  public String getPackaging()
+  public String getType()
   {
-    return packaging;
+    return type;
   }
 
   /**
-   * Returns the name of the properties file to write.
+   * Returns the value for properties.
+   * <p>
+   * Properties to set.
    *
-   * @return the name of the properties file to write.
+   * @return the value for properties.
    */
-  public File getOutputFile()
+  public Map<String, String> getProperties()
   {
-    return outputFile;
+    return properties;
+  }
+
+  /**
+   * Checks if the provider is configured to be run at the end of the build.
+   * Usually this kind of provider export the build information to a backend
+   * system.
+   *
+   * @return <code>true</code> if the provider runs at the end of the build,
+   *         <code>false</code> if it runs at the start.
+   */
+  public boolean isRunAtEndOfBuild()
+  {
+    return ("true".equals(properties.get(RUN_AT_BUILD_POINT)));
   }
 
   // --- business -------------------------------------------------------------
