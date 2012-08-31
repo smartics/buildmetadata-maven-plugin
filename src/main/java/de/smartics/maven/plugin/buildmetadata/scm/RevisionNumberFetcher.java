@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
  */
 package de.smartics.maven.plugin.buildmetadata.scm;
 
-import org.apache.maven.scm.ScmFileSet;
-
 /**
  * Provides means to fetch the revision number.
  * <p>
  * The implementation requires to provide access to the SCM.
  * </p>
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
@@ -44,22 +42,12 @@ public interface RevisionNumberFetcher
 
   /**
    * Returns the latest revision number from the SCM.
-   *
+   * 
    * @return the latest revision number from the SCM, <code>null</code> if none
    *         can be found.
    * @throws ScmException if the revision number cannot be fetched.
    */
   Revision fetchLatestRevisionNumber() throws ScmException;
-
-  /**
-   * Checks if the local source files are in-sync with the repository or not.
-   *
-   * @param fileSet the file set to check.
-   * @return the status of the files.
-   * @throws ScmException on any problem checking the up-to-date status.
-   */
-  LocallyModifiedInfo containsModifications(ScmFileSet fileSet)
-      throws ScmException;
 
   // --- object basics --------------------------------------------------------
 

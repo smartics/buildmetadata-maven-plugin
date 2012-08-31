@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
 
 /**
  * Provides the information required to connect to a SCM system.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class ScmConnectionInfo implements Serializable
+public class ScmConnectionInfo implements Serializable
 {
   // ********************************* Fields *********************************
 
@@ -92,7 +92,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Returns the URL to connect to the SCM system.
-   *
+   * 
    * @return the URL to connect to the SCM system.
    */
   public String getConnectionUrl()
@@ -102,7 +102,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Sets the URL to connect to the SCM system.
-   *
+   * 
    * @param connectionUrl the URL to connect to the SCM system.
    */
   public void setScmConnectionUrl(final String connectionUrl)
@@ -112,7 +112,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Returns the user name to authenticate against the SCM system.
-   *
+   * 
    * @return the user name to authenticate against the SCM system.
    */
   public String getUserName()
@@ -122,7 +122,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Sets the user name to authenticate against the SCM system.
-   *
+   * 
    * @param userName the user name to authenticate against the SCM system.
    */
   public void setUserName(final String userName)
@@ -132,7 +132,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Returns the password to authenticate against the SCM system.
-   *
+   * 
    * @return the password to authenticate against the SCM system.
    */
   public String getPassword()
@@ -142,7 +142,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Sets the password to authenticate against the SCM system.
-   *
+   * 
    * @param password the password to authenticate against the SCM system.
    */
   public void setPassword(final String password)
@@ -152,7 +152,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Returns the private key to authenticate against the SCM system.
-   *
+   * 
    * @return the private key to authenticate against the SCM system.
    */
   public String getPrivateKey()
@@ -162,7 +162,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Sets the private key to authenticate against the SCM system.
-   *
+   * 
    * @param privateKey the private key to authenticate against the SCM system.
    */
   public void setPrivateKey(final String privateKey)
@@ -172,7 +172,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Returns the pass phrase to authenticate against the SCM system.
-   *
+   * 
    * @return the pass phrase to authenticate against the SCM system.
    */
   public String getPassPhrase()
@@ -182,7 +182,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Sets the pass phrase to authenticate against the SCM system.
-   *
+   * 
    * @param passPhrase the pass phrase to authenticate against the SCM system.
    */
   public void setPassPhrase(final String passPhrase)
@@ -192,7 +192,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Returns the url of tags base directory (used by svn protocol).
-   *
+   * 
    * @return the url of tags base directory (used by svn protocol).
    */
   public String getTagBase()
@@ -202,7 +202,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Sets the url of tags base directory (used by svn protocol).
-   *
+   * 
    * @param tagBase the url of tags base directory (used by svn protocol).
    */
   public void setTagBase(final String tagBase)
@@ -214,7 +214,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Creates and configures the SCM repository.
-   *
+   * 
    * @param scmManager the manager to create the repository dependent on the
    *          {@link #getConnectionUrl() connection URL}.
    * @return the repository implementation to connect to the SCM system.
@@ -223,7 +223,7 @@ public final class ScmConnectionInfo implements Serializable
    *           given connection URL.
    */
   public ScmRepository createRepository(final ScmManager scmManager)
-    throws ScmException
+      throws ScmException
   {
     try
     {
@@ -258,7 +258,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Configures the repository with authentication information.
-   *
+   * 
    * @param repository the repository instance to configure.
    */
   protected void configure(final ScmProviderRepository repository)
@@ -276,7 +276,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Configures the repository with private key and password information.
-   *
+   * 
    * @param repository the repository instance to configure.
    */
   protected void configure(final ScmProviderRepositoryWithHost repository)
@@ -294,7 +294,7 @@ public final class ScmConnectionInfo implements Serializable
 
   /**
    * Configures the repository with the tag base information.
-   *
+   * 
    * @param repository the repository instance to configure.
    */
   protected void configure(final SvnScmProviderRepository repository)
@@ -304,47 +304,4 @@ public final class ScmConnectionInfo implements Serializable
 
   // --- object basics --------------------------------------------------------
 
-  /**
-   * Returns the string representation of the object.
-   * Sensitive information is masked.
-   *
-   * @return the string representation of the object.
-   */
-  @Override
-  public String toString()
-  {
-    final StringBuilder buffer = new StringBuilder();
-
-    buffer.append("SCM connection info: url=").append(connectionUrl);
-    appendIfExists(buffer, "user", userName);
-    appendSensibleDataIfExists(buffer, "password", password);
-    appendSensibleDataIfExists(buffer, "privateKey", privateKey);
-    appendSensibleDataIfExists(buffer, "passPhrase", passPhrase);
-    appendIfExists(buffer, "tagBase", tagBase);
-
-    return buffer.toString();
-  }
-
-  private static void appendIfExists(final StringBuilder buffer,
-      final String label, final String value)
-  {
-    if (StringUtils.isNotBlank(value))
-    {
-      buffer.append(", ").append(label).append('=').append(value);
-    }
-  }
-
-  private static void appendSensibleDataIfExists(final StringBuilder buffer,
-      final String label, final String value)
-  {
-    if (StringUtils.isNotBlank(value))
-    {
-      buffer.append(", ").append(label).append('=').append(mask(value));
-    }
-  }
-
-  private static String mask(final String input)
-  {
-    return StringUtils.repeat("*", input.length());
-  }
 }
