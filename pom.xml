@@ -6,13 +6,13 @@
   <parent>
     <groupId>de.smartics.config.pom</groupId>
     <artifactId>pom-java</artifactId>
-    <version>31.2.1</version>
+    <version>31.1.5</version>
     <relativePath />
   </parent>
 
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>maven-buildmetadata-plugin</artifactId>
-  <version>1.1.6-SNAPSHOT</version>
+  <version>1.1.4</version>
   <packaging>maven-plugin</packaging>
   <name>maven-buildmetadata-plugin</name>
   <description>
@@ -35,9 +35,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:svn:https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/trunk</connection>
-    <developerConnection>scm:svn:https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/trunk</developerConnection>
-    <url>https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/trunk</url>
+    <connection>scm:svn:https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/tags/maven-buildmetadata-plugin-1.1.4</connection>
+    <developerConnection>scm:svn:https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/tags/maven-buildmetadata-plugin-1.1.4</developerConnection>
+    <url>https://www.smartics.eu/svn/public/maven/maven-buildmetadata-plugin/tags/maven-buildmetadata-plugin-1.1.4</url>
   </scm>
 
   <distributionManagement>
@@ -231,7 +231,7 @@
           <version>0.4.1</version>
           <configuration>
             <classification>Build Management</classification>
-            <initialOwner>${user.email}</initialOwner>
+            <initialOwner>robert.reiner@smartics.de</initialOwner>
           </configuration>
         </plugin>
       </plugins>
