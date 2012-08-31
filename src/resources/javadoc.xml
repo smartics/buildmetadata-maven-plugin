@@ -1,7 +1,7 @@
-<?xml version='1.0'?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@
     limitations under the License.
 
 -->
-<ci-config>
-  <import-definitions>
-    <import-definition id="default">
-      <import>config-default-smartics-hudson</import>
-    </import-definition>
-    <import-definition id="site">
-      <import>config-site-smartics-hudson</import>
-    </import-definition>
-    <import-definition id="release">
-      <import>config-release-smartics-hudson</import>
-    </import-definition>
-  </import-definitions>
-</ci-config>
+<additionalHeaders>
+    <javadoc_style>
+        <firstLine>/*</firstLine>
+        <beforeEachLine> * </beforeEachLine>
+        <endLine> */</endLine>
+        <!--skipLine></skipLine-->
+        <firstLineDetectionPattern>(\s|\t)*/\*.*$</firstLineDetectionPattern>
+        <lastLineDetectionPattern>.*\*/(\s|\t)*$</lastLineDetectionPattern>
+        <allowBlankLines>false</allowBlankLines>
+        <isMultiline>true</isMultiline>
+    </javadoc_style>
+</additionalHeaders>

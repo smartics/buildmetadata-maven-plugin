@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.io;
 
 import java.io.IOException;
@@ -36,8 +37,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import de.smartics.maven.plugin.buildmetadata.Property;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
 
 /**
@@ -49,8 +50,8 @@ import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class SdocBuilder
-{ // NOPMD
+public class SdocBuilder
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -136,11 +137,12 @@ public final class SdocBuilder
   /**
    * Default constructor.
    *
+   * @param bundle the resource bundle with labels to render.
    * @param document the empty document to write to.
-   * @param buildMetaDataProperties the properties to write to the XML report.
    * @param selectedProperties the list of a system properties or environment
    *          variables to be selected by the user to include into the build
    *          meta data properties.
+   * @param buildMetaDataProperties the properties to write to the XML report.
    */
   public SdocBuilder(final Document document,
       final Properties buildMetaDataProperties,
@@ -164,7 +166,6 @@ public final class SdocBuilder
   /**
    * Writes the content to the document.
    *
-   * @return the written XML document.
    * @throws IOException on any problem writing to the XML document.
    */
   public Document writeDocumentContent() throws IOException
@@ -173,8 +174,6 @@ public final class SdocBuilder
 
     createContentElement(GI_NAME, Constant.PROP_NAME_FULL_VERSION, docRoot);
     createContentElement(GI_VERSION, Constant.PROP_NAME_VERSION, docRoot);
-    createContentElement("groupId", Constant.PROP_NAME_GROUP_ID, docRoot);
-    createContentElement("artifactId", Constant.PROP_NAME_ARTIFACT_ID, docRoot);
     final String date = formatDate(Constant.PROP_NAME_BUILD_DATE);
     createValueElement("date", date, docRoot);
     createContentElement("timestamp", Constant.PROP_NAME_BUILD_TIMESTAMP,
@@ -198,8 +197,7 @@ public final class SdocBuilder
         final String originalPattern =
             buildMetaDataProperties
                 .getProperty(Constant.PROP_NAME_BUILD_DATE_PATTERN);
-        final DateFormat format =
-            new SimpleDateFormat(originalPattern, Locale.ENGLISH);
+        final DateFormat format = new SimpleDateFormat(originalPattern, Locale.ENGLISH);
         final Date date = format.parse(originalDateString);
         final String dateString =
             DateFormatUtils.ISO_DATETIME_FORMAT.format(date);

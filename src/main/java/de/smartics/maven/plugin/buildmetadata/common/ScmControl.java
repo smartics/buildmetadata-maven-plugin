@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.common;
 
 /**
@@ -21,7 +22,7 @@ package de.smartics.maven.plugin.buildmetadata.common;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class ScmControl
+public class ScmControl
 {
   // ********************************* Fields *********************************
 
@@ -82,8 +83,6 @@ public final class ScmControl
 
   // ****************************** Constructors ******************************
 
-  // CHECKSTYLE:OFF
-
   /**
    * Default constructor.
    *
@@ -95,8 +94,7 @@ public final class ScmControl
    * @param validateCheckout the value for validateCheckout.
    * @param failOnMissingRevision the value for failOnMissingRevision.
    */
-  public ScmControl(// NOPMD
-      final boolean failOnLocalModifications,
+  public ScmControl(final boolean failOnLocalModifications,
       final boolean ignoreDotFilesInBaseDir, final boolean offline,
       final boolean addScmInfo, final boolean validateCheckout,
       final boolean failOnMissingRevision)
@@ -108,8 +106,6 @@ public final class ScmControl
     this.validateCheckout = validateCheckout;
     this.failOnMissingRevision = failOnMissingRevision;
   }
-
-  // CHECKSTYLE:ON
 
   // ****************************** Inner Classes *****************************
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.io;
 
 import java.io.BufferedOutputStream;
@@ -35,8 +36,8 @@ import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
 
 import de.smartics.maven.io.MojoIoUtils;
+import de.smartics.maven.plugin.buildmetadata.Property;
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 
 /**
  * Helper to handle the build meta data properties file.
@@ -93,9 +94,6 @@ public final class BuildXmlFileHelper
    *
    * @param log the logger to use.
    * @param xmlOutputFile the file to write to.
-   * @param selectedProperties the list of a system properties or environment
-   *          variables to be selected by the user to include into the build
-   *          meta data properties.
    */
   public BuildXmlFileHelper(final Log log, final File xmlOutputFile,
       final List<Property> selectedProperties)
@@ -145,7 +143,11 @@ public final class BuildXmlFileHelper
     try
     {
       out = new BufferedOutputStream(new FileOutputStream(buildMetaDataFile));
-      serializeDocument(buildMetaDataProperties, out);
+      final Document document = createDocument();
+      final SdocBuilder builder =
+          new SdocBuilder(document, buildMetaDataProperties, selectedProperties);
+      builder.writeDocumentContent();
+      MojoIoUtils.serialize(document, out);
     }
     catch (final FileNotFoundException e)
     {
@@ -178,17 +180,6 @@ public final class BuildXmlFileHelper
     {
       IOUtils.closeQuietly(out);
     }
-  }
-
-  private void serializeDocument(final Properties buildMetaDataProperties,
-      final OutputStream out) throws ParserConfigurationException, IOException,
-    TransformerException
-  {
-    final Document document = createDocument();
-    final SdocBuilder builder =
-        new SdocBuilder(document, buildMetaDataProperties, selectedProperties);
-    builder.writeDocumentContent();
-    MojoIoUtils.serialize(document, out);
   }
 
   /**

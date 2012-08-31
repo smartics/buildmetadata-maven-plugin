@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+    Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
     limitations under the License.
 
 -->
+
 <document xmlns="http://maven.apache.org/XDOC/2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
@@ -362,32 +363,18 @@
         </p>
       </subsection>
 
-      <subsection name="Build Artifact and Version Information">
+      <subsection name="Build Version Information">
         <p>
-          Artifact and version information for the build. This information is for
-          convenience to construct version information to be used in the
-          POM (e.g. to name the final file).
+          Version information for the build. This information is for
+          convenience
+          to construct version information to be used in the
+          POM (e.g. to name
+          the final file).
         </p>
         <table width="98%">
           <tr>
             <th width="100">Property</th>
             <th>Description</th>
-          </tr>
-          <tr>
-            <td>
-              <code>build.groupId</code>
-            </td>
-            <td>
-              This is the group ID that is read from the POM.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>build.artifactId</code>
-            </td>
-            <td>
-              This is the artifact ID that is read from the POM.
-            </td>
           </tr>
           <tr>
             <td>

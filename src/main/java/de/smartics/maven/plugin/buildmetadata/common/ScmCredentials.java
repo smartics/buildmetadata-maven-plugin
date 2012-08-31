@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.common;
 
 import org.apache.maven.settings.Server;
@@ -24,7 +25,7 @@ import org.apache.maven.settings.Settings;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class ScmCredentials
+public class ScmCredentials
 {
   // ********************************* Fields *********************************
 
@@ -64,14 +65,14 @@ public final class ScmCredentials
   /**
    * Default constructor.
    *
-   * @param settings the settings to fetch SCM information.
+   * @param setting the settings to fetch SCM information.
    * @param userName the user name (used by svn and starteam protocol).
    * @param password the user password (used by svn and starteam protocol).
    * @param privateKey the private key (used by java svn).
    * @param passphrase the passphrase (used by java svn).
    */
-  public ScmCredentials(final Settings settings, final String userName, // NOPMD
-      final String password, final String privateKey, final String passphrase)
+  public ScmCredentials(final Settings settings, final String userName, final String password,
+      final String privateKey, final String passphrase)
   {
     this.settings = settings;
     this.userName = userName;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.File;
@@ -26,11 +27,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
 import de.smartics.maven.plugin.buildmetadata.data.MetaDataProvider;
 import de.smartics.maven.plugin.buildmetadata.data.MetaDataProviderBuilder;
-import de.smartics.maven.plugin.buildmetadata.data.Provider;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
 
 /**
@@ -193,7 +192,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @return the Maven project.
    */
-  public final MavenProject getProject()
+  public MavenProject getProject()
   {
     return project;
   }
@@ -203,7 +202,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param project the Maven project.
    */
-  public final void setProject(final MavenProject project)
+  public void setProject(final MavenProject project)
   {
     this.project = project;
   }
@@ -216,7 +215,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param session the Maven session.
    */
-  public final void setSession(final MavenSession session)
+  public void setSession(final MavenSession session)
   {
     this.session = session;
   }
@@ -226,23 +225,19 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <p>
    * Used for testing.
    * </p>
-   *
-   * @param propertiesOutputFile the name of the properties file to write.
    */
-  public final void setPropertiesOutputFile(final File propertiesOutputFile)
+  public void setPropertiesOutputFile(final File propertiesOutputFile)
   {
     this.propertiesOutputFile = propertiesOutputFile;
   }
 
   // --- business -------------------------------------------------------------
 
-  // CHECKSTYLE:OFF
   /**
    * {@inheritDoc}
    */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
-    // CHECKSTYLE:ON
     final PropertyOutputFileMapper mapper =
         new PropertyOutputFileMapper(project, propertyOutputFileMapping);
     this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
@@ -251,20 +246,9 @@ public abstract class AbstractBuildMojo extends AbstractMojo
             propertiesOutputFile);
   }
 
-  /**
-   * Adds the information as build properties for each provider.
-   *
-   * @param buildMetaDataProperties the build meta data properties to add to.
-   * @param scmInfo the information for the SCM provided to the build plugin.
-   * @param providers the providers to iterate over.
-   * @param runAtEndOfBuild checks if the provider is configured to be run at
-   *          the end of the build. If a provider matches this value, it is run.
-   * @throws MojoExecutionException on any problem running on the providers.
-   */
-  protected final void provideBuildMetaData(
-      final Properties buildMetaDataProperties, final ScmInfo scmInfo,
-      final List<Provider> providers, final boolean runAtEndOfBuild)
-    throws MojoExecutionException
+  protected void provideBuildMetaData(final Properties buildMetaDataProperties,
+      final ScmInfo scmInfo, final List<Provider> providers,
+      final boolean runAtEndOfBuild) throws MojoExecutionException
   {
     if (providers != null && !providers.isEmpty())
     {
@@ -281,14 +265,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
     }
   }
 
-  /**
-   * Updates the Maven runtime with build properties.
-   *
-   * @param buildMetaDataProperties the properties to add to the Maven project
-   *          properties.
-   * @param helper the project helper to use.
-   */
-  protected final void updateMavenEnvironment(
+  protected void updateMavenEnvironment(
       final Properties buildMetaDataProperties,
       final BuildPropertiesFileHelper helper)
   {

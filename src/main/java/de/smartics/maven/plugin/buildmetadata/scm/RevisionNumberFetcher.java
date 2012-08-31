@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.smartics.maven.plugin.buildmetadata.scm;
 
 import org.apache.maven.scm.ScmFileSet;
@@ -54,7 +55,6 @@ public interface RevisionNumberFetcher
   /**
    * Checks if the local source files are in-sync with the repository or not.
    *
-   * @param fileSet the file set to check.
    * @return the status of the files.
    * @throws ScmException on any problem checking the up-to-date status.
    */

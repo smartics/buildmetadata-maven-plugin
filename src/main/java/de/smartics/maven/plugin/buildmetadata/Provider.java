@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2011 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.smartics.maven.plugin.buildmetadata.data;
+
+package de.smartics.maven.plugin.buildmetadata;
 
 import java.util.Map;
 
@@ -70,7 +71,7 @@ public class Provider
    *
    * @return the class to instantiate.
    */
-  public final String getType()
+  public String getType()
   {
     return type;
   }
@@ -82,7 +83,7 @@ public class Provider
    *
    * @return the value for properties.
    */
-  public final Map<String, String> getProperties()
+  public Map<String, String> getProperties()
   {
     return properties;
   }
@@ -95,7 +96,7 @@ public class Provider
    * @return <code>true</code> if the provider runs at the end of the build,
    *         <code>false</code> if it runs at the start.
    */
-  public final boolean isRunAtEndOfBuild()
+  public boolean isRunAtEndOfBuild()
   {
     return ("true".equals(properties.get(RUN_AT_BUILD_POINT)));
   }
