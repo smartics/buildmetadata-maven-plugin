@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,44 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.smartics.maven.plugin.buildmetadata.scm;
+package de.smartics.maven.plugin.buildmetadata.data;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Properties;
+
+import org.apache.maven.plugin.MojoExecutionException;
+
+import de.smartics.maven.plugin.buildmetadata.common.Constant;
 
 /**
- * Thrown on any problem fetching SCM revision information.
+ * Provides information about the host running the build.
  *
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public class ScmNoRevisionException extends ScmException
+public class HostMetaData implements MetaDataProvider
 {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
-
-  /**
-   * The class version identifier.
-   * <p>
-   * The value of this constant is {@value}.
-   */
-  private static final long serialVersionUID = 1L;
 
   // --- members --------------------------------------------------------------
 
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
-
-  /**
-   * Default constructor.
-   *
-   * @param message the detail message. The detail message is saved for later
-   *          retrieval by the {@link #getMessage()} method.
-   * @see java.lang.RuntimeException#RuntimeException(java.lang.String)
-   */
-  public ScmNoRevisionException(final String message)
-  {
-    super(message);
-  }
 
   // ****************************** Inner Classes *****************************
 
@@ -61,6 +50,26 @@ public class ScmNoRevisionException extends ScmException
   // --- get&set --------------------------------------------------------------
 
   // --- business -------------------------------------------------------------
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see de.smartics.maven.plugin.buildmetadata.data.MetaDataProvider#provideBuildMetaData(java.util.Properties)
+   */
+  public void provideBuildMetaData(final Properties buildMetaDataProperties)
+    throws MojoExecutionException
+  {
+    try
+    {
+      final InetAddress address = InetAddress.getLocalHost();
+      final String hostname = address.getHostName();
+      buildMetaDataProperties.put(Constant.PROP_HOSTNAME, hostname);
+    }
+    catch (final UnknownHostException e)
+    {
+      throw new MojoExecutionException("Cannot determine host information.", e);
+    }
+  }
 
   // --- object basics --------------------------------------------------------
 
