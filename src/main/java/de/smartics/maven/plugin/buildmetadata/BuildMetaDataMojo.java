@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,39 @@
  */
 package de.smartics.maven.plugin.buildmetadata;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.execution.RuntimeInformation;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.manager.ScmManager;
+import org.apache.maven.scm.provider.ScmProviderRepositoryWithHost;
+import org.apache.maven.scm.repository.ScmRepository;
+import org.apache.maven.scm.repository.ScmRepositoryException;
+import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.StringUtils;
 
-import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.common.ScmControl;
-import de.smartics.maven.plugin.buildmetadata.common.ScmCredentials;
-import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
-import de.smartics.maven.plugin.buildmetadata.data.HostMetaDataProvider;
-import de.smartics.maven.plugin.buildmetadata.data.MavenMetaDataProvider;
-import de.smartics.maven.plugin.buildmetadata.data.MavenMetaDataSelection;
-import de.smartics.maven.plugin.buildmetadata.data.ScmMetaDataProvider;
-import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
-import de.smartics.maven.plugin.buildmetadata.io.BuildXmlFileHelper;
-import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
+import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;
+import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmConnectionInfo;
 import de.smartics.maven.util.LoggingUtils;
 
 /**
@@ -48,12 +57,12 @@ import de.smartics.maven.util.LoggingUtils;
  * @goal provide-buildmetadata
  * @phase initialize
  * @requiresProject
- * @threadSafe
- * @since 1.0
  * @description Provides a build meta data to the build process.
+ * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
+ * @version $Revision$
  */
-public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
-{ // NOPMD
+public class BuildMetaDataMojo extends AbstractMojo
+{
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -61,6 +70,16 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   // --- members --------------------------------------------------------------
 
   // ... Mojo infrastructure ..................................................
+
+  /**
+   * The Maven project.
+   *
+   * @parameter expression="${project}"
+   * @required
+   * @readonly
+   * @since 1.0
+   */
+  private MavenProject project;
 
   /**
    * The user's settings.
@@ -71,6 +90,14 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @since 1.0
    */
   private Settings settings;
+
+  /**
+   * The runtime information of the Maven instance being executed for the build.
+   *
+   * @component
+   * @since 1.0
+   */
+  private RuntimeInformation runtime;
 
   /**
    * If set to <code>true</code>, build properties will be generate even if they
@@ -95,169 +122,11 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * Add SCM information if set to <code>true</code>, skip it, if set to
    * <code>false</code>. If you are not interested in SCM information, set this
    * to <code>false</code>.
-   * <p>
-   * For security reasons you may want to remove the properties file from the
-   * META-INF folder. Please refer to <code>propertiesOutputFile</code>
-   * property.
-   * </p>
    *
    * @parameter expression="${buildMetaData.addScmInfo}" default-value="true"
    * @since 1.0
    */
   private boolean addScmInfo;
-
-  /**
-   * Fail if revision is requested to be retrieved, access to SCM is provided,
-   * system is online, nothing should prevent the build from fetching the
-   * information.
-   * <p>
-   * If set to <code>true</code> the build will fail, if revision cannot be
-   * fetched under the conditions mentioned above. If set to <code>false</code>
-   * the build will continue silently so that the meta data do not contain the
-   * revision.
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.failOnMissingRevision}"
-   *            default-value="false"
-   * @since 1.0
-   */
-  private boolean failOnMissingRevision;
-
-  /**
-   * Add host information if set to <code>true</code>, skip it, if set to
-   * <code>false</code>. If you are not interested in host information (e.g. for
-   * security reasons), set this to <code>false</code>.
-   * <p>
-   * For security reasons you may want to remove the properties file from the
-   * META-INF folder. Please refer to <code>propertiesOutputFile</code>
-   * property.
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.addHostInfo}" default-value="true"
-   * @since 1.0
-   */
-  private boolean addHostInfo;
-
-  /**
-   * Add environment variables if set to <code>true</code>, skip it, if set to
-   * <code>false</code>. If you are not interested in the environment variables
-   * of the host (e.g. for security reasons), set this to <code>false</code>.
-   * <p>
-   * For security reasons you may want to remove the properties file from the
-   * META-INF folder. Please refer to <code>propertiesOutputFile</code>
-   * property.
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.addEnvInfo}" default-value="false"
-   * @since 1.0
-   */
-  private boolean addEnvInfo;
-
-  /**
-   * Add information about the Java runtime running the build if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   *
-   * @parameter expression="${buildMetaData.addJavaRuntimeInfo}"
-   *            default-value="true"
-   * @since 1.0
-   */
-  private boolean addJavaRuntimeInfo;
-
-  /**
-   * Add information about the operating system the build is run in if set to
-   * <code>true</code>, skip it, if set to <code>false</code>.
-   *
-   * @parameter expression="${buildMetaData.addOsInfo}" default-value="true"
-   * @since 1.0
-   */
-  private boolean addOsInfo;
-
-  /**
-   * Add Maven execution information (all properties starting with
-   * <code>build.maven.execution</code>, like command line, goals, profiles,
-   * etc.) if set to <code>true</code>, skip it, if set to <code>false</code>.
-   * If you are not interested in execution information, set this to
-   * <code>false</code>.
-   * <p>
-   * For security reasons you may want to remove the properties file from the
-   * META-INF folder. Please refer to <code>propertiesOutputFile</code>
-   * property.
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.addMavenExecutionInfo}"
-   *            default-value="true"
-   * @since 1.0
-   */
-  private boolean addMavenExecutionInfo;
-
-  /**
-   * Add project information (homepage URL, categories, tags, etc.) if set to
-   * <code>true</code>, skip it, if set to <code>false</code>. If you are not
-   * interested in execution information, set this to <code>false</code>.
-   *
-   * @parameter expression="${buildMetaData.addProjectInfo}"
-   *            default-value="false"
-   * @since 1.1
-   */
-  private boolean addProjectInfo;
-
-  /**
-   * While the command line may be useful to refer to for a couple of reasons,
-   * displaying it with the build properties is a security issue. Some plugins
-   * allow to read passwords as properties from the command line and this
-   * sensible data will be shown.
-   * <p>
-   * Therefore the command line is hidden by default (<code>true</code>). If you
-   * want to include this information, use a value of <code>false</code>.
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.hideCommandLineInfo}"
-   *            default-value="true"
-   * @since 1.0
-   */
-  private boolean hideCommandLineInfo;
-
-  /**
-   * While the <code>MAVEN_OPTS</code> may be useful to refer to for a couple of
-   * reasons, displaying them with the build properties is a security issue.
-   * Some plugins allow to read passwords as properties from the command line
-   * and this sensible data will be shown.
-   * <p>
-   * Therefore the <code>MAVEN_OPTS</code> are hidden by default (
-   * <code>true</code>). If you want to include this information, use a value of
-   * <code>false</code>.
-   * </p>
-   * <p>
-   * This exclusion does not prevent the property from being written as part of
-   * <code>addEnvInfo</code>!
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.hideMavenOptsInfo}"
-   *            default-value="true"
-   * @since 1.0
-   */
-  private boolean hideMavenOptsInfo;
-
-  /**
-   * While the <code>JAVA_OPTS</code> may be useful to refer to for a couple of
-   * reasons, displaying them with the build properties is a security issue.
-   * Some plugins allow to read passwords as properties from the command line
-   * and this sensible data will be shown.
-   * <p>
-   * Therefore the <code>JAVA_OPTS</code> are hidden by default (
-   * <code>true</code>). If you want to include this information, use a value of
-   * <code>false</code>.
-   * </p>
-   * <p>
-   * This exclusion does not prevent the property from being written as part of
-   * <code>addEnvInfo</code>!
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.hideJavaOptsInfo}"
-   *            default-value="true"
-   * @since 1.0
-   */
-  private boolean hideJavaOptsInfo;
 
   /**
    * A simple flag to skip the generation of the build information. If set on
@@ -267,18 +136,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @since 1.0
    */
   private boolean skip;
-
-  /**
-   * If it should be checked if the local files are up-to-date with the remote
-   * files in the SCM repository. If the value is <code>true</code> the result
-   * of the check, including the list of changed files, is added to the build
-   * meta data.
-   *
-   * @parameter expression="${buildMetaData.validateCheckout}"
-   *            default-value="true"
-   * @since 1.0
-   */
-  private boolean validateCheckout;
 
   /**
    * Specifies the log level used for this plugin.
@@ -314,6 +171,19 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   // ... core information .....................................................
 
   /**
+   * Flag to indicate whether or not the generated properties file should be
+   * added to the projects filters.
+   * <p>
+   * Filters are only added temporarily (read in-memory during the build) and
+   * are not written to the POM.
+   * </p>
+   *
+   * @parameter expression="${buildMetaData.addToFilters}" default-value="true"
+   * @since 1.0
+   */
+  private boolean addToFilters;
+
+  /**
    * The date pattern to use to format the build and revision dates. Please
    * refer to the <a href =
    * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html"
@@ -323,7 +193,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    *            default-value="dd.MM.yyyy"
    * @since 1.0
    */
-  protected String buildDatePattern = Constant.DEFAULT_DATE_PATTERN; // NOPMD
+  protected String buildDatePattern = Constant.DEFAULT_DATE_PATTERN;
 
   /**
    * The property to query for the build user.
@@ -332,6 +202,16 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @since 1.0
    */
   private String buildUserPropertyName;
+
+  /**
+   * The name of the properties file to write.
+   *
+   * @parameter default-value=
+   *            "${project.build.outputDirectory}/META-INF/buildmetadata.properties"
+   * @readonly
+   * @since 1.0
+   */
+  private File propertiesOutputFile;
 
   // ... build information related ............................................
 
@@ -432,12 +312,10 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
   /**
    * The range of the query in days to fetch change log entries from the SCM. If
-   * no change logs have been found, the range is incremented up to {@value
-   * de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;#
-   * DEFAULT_RETRY_COUNT} (5) times. If no change log has been found after these
-   * {@value de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;#
-   * DEFAULT_RETRY_COUNT} (5) additional queries, the revision number will not
-   * be set with a valid value.
+   * no change logs have been found, the range is incremented up to
+   * {@value ScmAccessInfo#DEFAULT_RETRY_COUNT} times. If no change log has been
+   * found after these {@value ScmAccessInfo#DEFAULT_RETRY_COUNT} additional
+   * queries, the revision number will not be set with a valid value.
    *
    * @parameter expression="${buildMetaData.queryRangeInDays}"
    *            default-value="30"
@@ -456,18 +334,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    */
   private boolean failOnLocalModifications;
 
-  /**
-   * The flag to ignore files and directories starting with a dot for checking
-   * modified files. This implicates that any files or directories, starting
-   * with a dot, are ignored when the check on changed files is run. If the
-   * value is <code>true</code>, dot files are ignored, if it is set to
-   * <code>false</code>, dot files are respected.
-   *
-   * @parameter default-value="true"
-   * @since 1.0
-   */
-  private boolean ignoreDotFilesInBaseDir;
-
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
@@ -480,6 +346,37 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
   // --- get&set --------------------------------------------------------------
 
+  /**
+   * Returns the maven project.
+   *
+   * @return the maven project.
+   */
+  public MavenProject getProject()
+  {
+    return project;
+  }
+
+  /**
+   * Sets the maven project.
+   *
+   * @param project the maven project.
+   */
+  public void setProject(final MavenProject project)
+  {
+    this.project = project;
+  }
+
+  /**
+   * Sets the name of the properties file to write.
+   * <p>
+   * Used for testing.
+   * </p>
+   */
+  public void setPropertiesOutputFile(final File propertiesOutputFile)
+  {
+    this.propertiesOutputFile = propertiesOutputFile;
+  }
+
   // --- business -------------------------------------------------------------
 
   /**
@@ -489,40 +386,35 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   {
     if (!skip)
     {
-      super.execute();
+      LoggingUtils.configureLogger(getLog(), logLevel);
 
-      final BuildPropertiesFileHelper helper =
-          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile);
-      final Properties projectProperties = helper.getProjectProperties(project);
+      final Properties projectProperties = getProjectProperties();
       if (!isBuildPropertiesAlreadySet(projectProperties))
       {
-        LoggingUtils.configureLogger(getLog(), logLevel);
         final Properties buildMetaDataProperties = new Properties();
         if (isBuildPropertiesToBeRebuild())
         {
-          final Date buildDate = session.getStartTime();
+          final Date buildDate = new Date();
 
           provideBuildUser(projectProperties, buildMetaDataProperties);
-          provideMavenMetaData(buildMetaDataProperties);
-          provideHostMetaData(buildMetaDataProperties);
-          final ScmInfo scmInfo = provideScmMetaData(buildMetaDataProperties);
-          provideBuildDateMetaData(buildMetaDataProperties, buildDate);
+          provideMavenInfo(buildMetaDataProperties);
+          provideScmBuildInfo(buildMetaDataProperties);
 
-          // The custom providers are required to be run at the end.
-          // This allows these providers to access the information generated
-          // by the built-in providers.
-          provideBuildMetaData(buildMetaDataProperties, scmInfo, providers,
-              false);
+          final String buildDateString =
+              createBuildDate(buildMetaDataProperties, buildDate);
+          createBuildYear(buildMetaDataProperties, buildDate);
+          createBuildVersion(buildMetaDataProperties, buildDate,
+              buildDateString);
 
-          writeBuildMetaData(helper, buildMetaDataProperties);
+          writePropertiesFile(buildMetaDataProperties);
         }
         else
         {
           getLog().info("Reusing previously built metadata file.");
-          helper.readBuildPropertiesFile(buildMetaDataProperties);
+          readBuildPropertiesFile(buildMetaDataProperties);
         }
 
-        updateMavenEnvironment(buildMetaDataProperties, helper);
+        updateMavenEnvironment(projectProperties, buildMetaDataProperties);
       }
     }
     else
@@ -531,84 +423,36 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     }
   }
 
-  private void writeBuildMetaData(final BuildPropertiesFileHelper helper,
-      final Properties buildMetaDataProperties) throws MojoExecutionException
+  private void updateMavenEnvironment(final Properties projectProperties,
+      final Properties buildMetaDataProperties)
   {
-    helper.writePropertiesFile(buildMetaDataProperties);
-    if (createXmlReport)
+    // Filters are only added temporarily and are not written to the POM...
+    if (addToFilters)
     {
-      final BuildXmlFileHelper xmlHelper =
-          new BuildXmlFileHelper(getLog(), this.xmlOutputFile, this.properties);
-      xmlHelper.writeXmlFile(buildMetaDataProperties);
+      project.getBuild().addFilter(propertiesOutputFile.getAbsolutePath());
     }
+    projectProperties.putAll(buildMetaDataProperties);
   }
 
-  private void provideMavenMetaData(final Properties buildMetaDataProperties)
-  {
-    final MavenMetaDataSelection selection = new MavenMetaDataSelection();
-    selection.setAddMavenExecutionInfo(addMavenExecutionInfo);
-    selection.setAddEnvInfo(addEnvInfo);
-    selection.setAddJavaRuntimeInfo(addJavaRuntimeInfo);
-    selection.setAddOsInfo(addOsInfo);
-    selection.setAddProjectInfo(addProjectInfo);
-    selection.setHideCommandLineInfo(hideCommandLineInfo);
-    selection.setHideJavaOptsInfo(hideJavaOptsInfo);
-    selection.setHideMavenOptsInfo(hideMavenOptsInfo);
-    selection.setSelectedSystemProperties(properties);
-
-    final MavenMetaDataProvider mavenMetaDataProvider =
-        new MavenMetaDataProvider(project, session, runtime, selection);
-    mavenMetaDataProvider.provideBuildMetaData(buildMetaDataProperties);
-  }
-
-  private ScmInfo provideScmMetaData(final Properties buildMetaDataProperties)
-    throws MojoFailureException
-  {
-    try
-    {
-      final ScmInfo scmInfo = createScmInfo();
-      final ScmMetaDataProvider scmMetaDataProvider =
-          new ScmMetaDataProvider(project, scmInfo);
-      scmMetaDataProvider.provideBuildMetaData(buildMetaDataProperties);
-      return scmInfo;
-    }
-    catch (final ScmNoRevisionException e)
-    {
-      throw new MojoFailureException(e.getMessage()); // NOPMD
-    }
-  }
-
-  private void provideHostMetaData(final Properties buildMetaDataProperties)
+  private void readBuildPropertiesFile(final Properties buildMetaDataProperties)
     throws MojoExecutionException
   {
-    if (addHostInfo)
+    InputStream inStream = null;
+    try
     {
-      final HostMetaDataProvider hostMetaData = new HostMetaDataProvider();
-      hostMetaData.provideBuildMetaData(buildMetaDataProperties);
+      inStream =
+          new BufferedInputStream(new FileInputStream(propertiesOutputFile));
+      buildMetaDataProperties.load(inStream);
     }
-  }
-
-  private void provideBuildDateMetaData(
-      final Properties buildMetaDataProperties, final Date buildDate)
-  {
-    final String buildDateString =
-        createBuildDate(buildMetaDataProperties, buildDate);
-    createYears(buildMetaDataProperties, buildDate);
-    createBuildVersion(buildMetaDataProperties, buildDate, buildDateString);
-  }
-
-  private ScmInfo createScmInfo()
-  {
-    final ScmCredentials scmCredentials =
-        new ScmCredentials(settings, userName, password, privateKey, passphrase);
-    final ScmControl scmControl =
-        new ScmControl(failOnLocalModifications, ignoreDotFilesInBaseDir,
-            offline, addScmInfo, validateCheckout, failOnMissingRevision);
-    final ScmInfo scmInfo =
-        new ScmInfo(scmManager, connectionType, scmDateFormat, basedir,
-            scmCredentials, tagBase, queryRangeInDays, buildDatePattern,
-            scmControl);
-    return scmInfo;
+    catch (final IOException e)
+    {
+      throw new MojoExecutionException("Cannot read provided properties file: "
+                                       + propertiesOutputFile.getAbsolutePath());
+    }
+    finally
+    {
+      IOUtils.closeQuietly(inStream);
+    }
   }
 
   private boolean isBuildPropertiesToBeRebuild()
@@ -650,6 +494,63 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   }
 
   /**
+   * Adds the information of the Maven runtime as build properties.
+   *
+   * @param buildMetaDataProperties the build meta data properties.
+   */
+  private void provideMavenInfo(final Properties buildMetaDataProperties)
+  {
+    if (runtime != null)
+    {
+      final ArtifactVersion mavenVersion = runtime.getApplicationVersion();
+      final String mavenVersionString = mavenVersion.toString();
+      buildMetaDataProperties.setProperty(Constant.PROP_MAVEN_VERSION,
+          mavenVersionString);
+    }
+  }
+
+  /**
+   * Provides the SCM build information to the property sets if the URL to the
+   * SCM is provided.
+   *
+   * @param buildMetaDataProperties the build meta data properties.
+   * @throws MojoExecutionException if providing SCM information failed.
+   */
+  private void provideScmBuildInfo(final Properties buildMetaDataProperties)
+    throws MojoExecutionException
+  {
+    if (addScmInfo && !offline && project.getScm() != null)
+    {
+      try
+      {
+        final ScmConnectionInfo scmConnectionInfo = loadConnectionInfo();
+        final ScmAccessInfo scmAccessInfo = createScmAccessInfo();
+        final RevisionHelper helper =
+            new RevisionHelper(scmManager, scmConnectionInfo, scmAccessInfo,
+                buildDatePattern);
+        helper.provideScmBuildInfo(buildMetaDataProperties);
+      }
+      catch (final ScmRepositoryException e)
+      {
+        throw new MojoExecutionException(
+            "Cannot fetch SCM revision information.", e);
+      }
+      catch (NoSuchScmProviderException e)
+      {
+        throw new MojoExecutionException(
+            "Cannot fetch SCM revision information.", e);
+      }
+    }
+    else
+    {
+      getLog().debug(
+          "Skipping SCM data since addScmInfo=" + addScmInfo + ", offline="
+              + offline + ", scmInfoProvided=" + (project.getScm() != null)
+              + ".");
+    }
+  }
+
+  /**
    * Creates and adds the build date information.
    *
    * @param buildMetaDataProperties the build meta data properties.
@@ -675,24 +576,18 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   }
 
   /**
-   * Adds the build and copyright year information.
+   * Adds the build year information.
    *
    * @param buildMetaDataProperties the build meta data properties.
    * @param buildDate the build date to create the build year information.
    */
-  private void createYears(final Properties buildMetaDataProperties,
+  private void createBuildYear(final Properties buildMetaDataProperties,
       final Date buildDate)
   {
     final DateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.ENGLISH);
     final String buildYearString = yearFormat.format(buildDate);
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_BUILD_YEAR,
         buildYearString);
-    final String inceptionYearString = project.getInceptionYear();
-    final String copyrightYearString =
-        (buildYearString.equals(inceptionYearString) ? inceptionYearString
-            : inceptionYearString + '-' + buildYearString);
-    buildMetaDataProperties.setProperty(Constant.PROP_NAME_COPYRIGHT_YEAR,
-        copyrightYearString);
   }
 
   /**
@@ -707,10 +602,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   {
     final String version = project.getVersion();
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION, version);
-    buildMetaDataProperties.setProperty(Constant.PROP_NAME_GROUP_ID,
-        project.getGroupId());
-    buildMetaDataProperties.setProperty(Constant.PROP_NAME_ARTIFACT_ID,
-        project.getArtifactId());
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_BUILD_DATE,
         buildDateString);
 
@@ -718,6 +609,72 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
         createFullVersion(buildMetaDataProperties, buildDate);
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_FULL_VERSION,
         fullVersion);
+  }
+
+  /**
+   * Fetches the project properties and if <code>null</code> returns a new empty
+   * properties instance that is associated with the project.
+   *
+   * @return the properties of the project.
+   */
+  private Properties getProjectProperties()
+  {
+    Properties projectProperties = project.getProperties();
+    if (projectProperties == null)
+    {
+      projectProperties = new Properties();
+      project.getModel().setProperties(projectProperties);
+    }
+
+    return projectProperties;
+  }
+
+  /**
+   * Writes the build meta data properties to the target file.
+   *
+   * @param buildMetaDataProperties the properties to write.
+   * @return the reference to the written file.
+   * @throws MojoExecutionException on any problem encountered while writing the
+   *           properties.
+   */
+  private File writePropertiesFile(final Properties buildMetaDataProperties)
+    throws MojoExecutionException
+  {
+    final File buildMetaDataFile = createBuildMetaDataFile();
+    if (getLog().isInfoEnabled())
+    {
+      getLog()
+          .info(
+              "Writing properties '" + buildMetaDataFile.getAbsolutePath()
+                  + "'...");
+    }
+
+    OutputStream out = null;
+    try
+    {
+      out = new BufferedOutputStream(new FileOutputStream(buildMetaDataFile));
+      final String comments = "Created by build-metadata maven plugin.";
+      buildMetaDataProperties.store(out, comments);
+    }
+    catch (final FileNotFoundException e)
+    {
+      final String message =
+          "Cannot find file '" + buildMetaDataFile
+              + "' to write properties to.";
+      throw MojoUtils.createException(getLog(), e, message);
+    }
+    catch (final IOException e)
+    {
+      final String message =
+          "Cannot write properties to file '" + buildMetaDataFile + "'.";
+      throw MojoUtils.createException(getLog(), e, message);
+    }
+    finally
+    {
+      IOUtils.closeQuietly(out);
+    }
+
+    return buildMetaDataFile;
   }
 
   /**
@@ -770,6 +727,166 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
             + modified + versionSuffix;
 
     return fullVersion;
+  }
+
+  /**
+   * Creates the properties file for the build meta data. If the directory to
+   * place it in is not present, it will be created.
+   *
+   * @return the file to write the build properties to.
+   * @throws MojoExecutionException if the output directory is not present and
+   *           cannot be created.
+   */
+  private File createBuildMetaDataFile() throws MojoExecutionException
+  {
+    final File outputDirectory = propertiesOutputFile.getParentFile();
+    if (!outputDirectory.exists())
+    {
+      final boolean created = outputDirectory.mkdirs();
+      if (!created)
+      {
+        throw new MojoExecutionException("Cannot create output directory '"
+                                         + outputDirectory + "'.");
+      }
+    }
+    return propertiesOutputFile;
+  }
+
+  /**
+   * Fetches the server information from the settings for the specified host.
+   *
+   * @param host the host whose access information is fetched from the settings
+   *          file.
+   */
+  private void configureByServer(final String host)
+  {
+    final Server server = this.settings.getServer(host);
+    if (server != null)
+    {
+      if (userName == null)
+      {
+        userName = this.settings.getServer(host).getUsername();
+      }
+
+      if (password == null)
+      {
+        password = this.settings.getServer(host).getPassword();
+      }
+
+      if (privateKey == null)
+      {
+        privateKey = this.settings.getServer(host).getPrivateKey();
+      }
+
+      if (passphrase == null)
+      {
+        passphrase = this.settings.getServer(host).getPassphrase();
+      }
+    }
+  }
+
+  /**
+   * Returns the SCM connection string.
+   *
+   * @return the URL string to connect to the SCM.
+   * @throws MojoExecutionException when there is insufficient information to
+   *           return the SCM connection string.
+   */
+  protected String getConnection() throws MojoExecutionException
+  {
+    if (project.getScm() == null)
+    {
+      throw new MojoExecutionException("SCM Connection is not set.");
+    }
+
+    final String scmConnection = project.getScm().getConnection();
+    if (StringUtils.isNotEmpty(scmConnection)
+        && "connection".equals(connectionType.toLowerCase(Locale.ENGLISH)))
+    {
+      return scmConnection;
+    }
+
+    final String scmDeveloper = project.getScm().getDeveloperConnection();
+    if (StringUtils.isNotEmpty(scmDeveloper)
+        && "developerconnection".equals(connectionType
+            .toLowerCase(Locale.ENGLISH)))
+    {
+      return scmDeveloper;
+    }
+
+    throw new MojoExecutionException("SCM Connection is not set.");
+  }
+
+  /**
+   * Load user name password from settings if user has not set them via JVM
+   * properties.
+   *
+   * @return the connection information to connect to the SCM system.
+   * @throws MojoExecutionException if the connection string to the SCM cannot
+   *           be fetched.
+   * @throws ScmRepositoryException if the repository information is not
+   *           sufficient to build the repository instance.
+   * @throws NoSuchScmProviderException if there is no provider for the SCM
+   *           connection URL.
+   */
+  private ScmConnectionInfo loadConnectionInfo() throws MojoExecutionException,
+    ScmRepositoryException, NoSuchScmProviderException
+  {
+    final String scmConnection = getConnection();
+    if (userName == null || password == null)
+    {
+      final ScmRepository repository =
+          scmManager.makeScmRepository(scmConnection);
+      if (repository.getProviderRepository() instanceof ScmProviderRepositoryWithHost)
+      {
+        final ScmProviderRepositoryWithHost repositoryWithHost =
+            (ScmProviderRepositoryWithHost) repository.getProviderRepository();
+        final String host = createHostName(repositoryWithHost);
+        configureByServer(host);
+      }
+    }
+
+    final ScmConnectionInfo info = new ScmConnectionInfo();
+    info.setUserName(userName);
+    info.setPassword(password);
+    info.setPrivateKey(privateKey);
+    info.setScmConnectionUrl(scmConnection);
+    info.setTagBase(tagBase);
+    return info;
+  }
+
+  /**
+   * Creates the host name by adding the port if present.
+   *
+   * @param repositoryWithHost the host information.
+   * @return the host with port if present.
+   */
+  private String createHostName(
+      final ScmProviderRepositoryWithHost repositoryWithHost)
+  {
+    final String host = repositoryWithHost.getHost();
+    final int port = repositoryWithHost.getPort();
+    if (port > 0)
+    {
+      return host + ":" + port;
+    }
+    return host;
+  }
+
+  /**
+   * Creates the access information instance to retrieve the change logs from
+   * the SCM.
+   *
+   * @return the SCM access instance.
+   */
+  private ScmAccessInfo createScmAccessInfo()
+  {
+    final ScmAccessInfo accessInfo = new ScmAccessInfo();
+    accessInfo.setDateFormat(scmDateFormat);
+    accessInfo.setRootDirectory(basedir);
+    accessInfo.setFailOnLocalModifications(failOnLocalModifications);
+    accessInfo.setQueryRangeInDays(queryRangeInDays);
+    return accessInfo;
   }
 
   // --- object basics --------------------------------------------------------
