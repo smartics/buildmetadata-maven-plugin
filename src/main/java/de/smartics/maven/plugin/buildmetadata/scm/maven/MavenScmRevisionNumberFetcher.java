@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2009 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,18 @@
  */
 package de.smartics.maven.plugin.buildmetadata.scm.maven;
 
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.maven.scm.ChangeFile;
 import org.apache.maven.scm.ChangeSet;
-import org.apache.maven.scm.ScmFile;
-import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.command.changelog.ChangeLogScmResult;
 import org.apache.maven.scm.command.changelog.ChangeLogSet;
-import org.apache.maven.scm.command.status.StatusScmResult;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.provider.ScmProvider;
 import org.apache.maven.scm.repository.ScmRepository;
 
-import de.smartics.maven.plugin.buildmetadata.scm.LocallyModifiedInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.Revision;
 import de.smartics.maven.plugin.buildmetadata.scm.RevisionNumberFetcher;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
@@ -42,21 +34,15 @@ import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
 /**
  * Implementation on the Maven SCM implementation to fetch the latest revision
  * number.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetcher
+public class MavenScmRevisionNumberFetcher implements RevisionNumberFetcher
 {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
-
-  /**
-   * Reference to the logger for this class.
-   */
-  private static final Log LOG = LogFactory
-      .getLog(MavenScmRevisionNumberFetcher.class);
 
   // --- members --------------------------------------------------------------
 
@@ -82,7 +68,7 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
 
   /**
    * Default constructor.
-   *
+   * 
    * @param scmManager the SCM manager to access to SCM system.
    * @param scmConnectionInfo the information to connect to the SCM system.
    * @param scmAccessInfo the value for scmAccessInfo.
@@ -108,17 +94,11 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
 
   /**
    * {@inheritDoc}
-   *
+   * 
    * @see de.smartics.maven.plugin.buildmetadata.scm.RevisionNumberFetcher#fetchLatestRevisionNumber()
    */
   public Revision fetchLatestRevisionNumber() throws ScmException
   {
-    if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  Fetching latest revision number.\n    "
-                + this.scmConnectionInfo + "\n    " + this.scmAccessInfo);
-    }
-
     final ScmRepository repository =
         scmConnectionInfo.createRepository(scmManager);
     final ScmProvider provider = createScmProvider(repository);
@@ -129,118 +109,14 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
     {
       final ChangeLogSet changeLogSet = result.getChangeLog();
       final Revision revision = findEndVersion(changeLogSet);
-      if (LOG.isDebugEnabled())
-      {
-        LOG.debug("  Found revision '" + revision + "'.");
-      }
       return revision;
-    }
-    else if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  No revision information found.");
     }
     return null;
   }
 
   /**
-   * {@inheritDoc}
-   *
-   * @see de.smartics.maven.plugin.buildmetadata.scm.RevisionNumberFetcher#containsModifications(org.apache.maven.scm.ScmFileSet)
-   */
-  public LocallyModifiedInfo containsModifications(final ScmFileSet fileSet)
-    throws ScmException
-  {
-    if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  Fetching modification information.\n    "
-                + this.scmConnectionInfo + "\n    " + this.scmAccessInfo);
-    }
-
-    try
-    {
-      final ScmRepository repository =
-          scmConnectionInfo.createRepository(scmManager);
-      final ScmProvider provider = createScmProvider(repository);
-      final StatusScmResult result = provider.status(repository, fileSet);
-
-      if (result.isSuccess())
-      {
-        return createLocallyModifiedInfo(result);
-      }
-      else
-      {
-        final String message =
-            result.getProviderMessage() + ": " + result.getCommandOutput();
-        if (LOG.isDebugEnabled())
-        {
-          LOG.debug(message);
-        }
-
-        throw new ScmException(message);
-      }
-    }
-    catch (final org.apache.maven.scm.ScmException e)
-    {
-      throw new ScmException(e);
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private LocallyModifiedInfo createLocallyModifiedInfo(
-      final StatusScmResult result)
-  {
-    final List<ScmFile> changedFiles = filter(result.getChangedFiles());
-    final boolean locallyModified = !changedFiles.isEmpty();
-    if (LOG.isDebugEnabled())
-    {
-      LOG.debug("  Modifications have" + (locallyModified ? "" : " not")
-                + " been found.");
-    }
-    return new LocallyModifiedInfo(locallyModified, locallyModified
-        ? toString(changedFiles) : null);
-  }
-
-  private List<ScmFile> filter(final List<ScmFile> files)
-  {
-    if (this.scmAccessInfo.isIgnoreDotFilesInBaseDir())
-    {
-      filterDotFiles(files);
-    }
-    return files;
-  }
-
-  private void filterDotFiles(final List<ScmFile> files)
-  {
-    for (final Iterator<ScmFile> i = files.iterator(); i.hasNext();)
-    {
-      final ScmFile file = i.next();
-      final String path = file.getPath();
-      if (path.length() > 0 && path.charAt(0) == '.')
-      {
-        i.remove();
-      }
-    }
-  }
-
-  /**
-   * Renders the files to a blank separated list of file names.
-   *
-   * @param items the file items.
-   * @return the string representation of the files.
-   */
-  private String toString(final List<?> items)
-  {
-    final StringBuilder buffer = new StringBuilder(512);
-    for (Object item : items)
-    {
-      buffer.append(item).append(' ');
-    }
-    return StringUtils.chomp(buffer.toString());
-  }
-
-  /**
    * Finds the largest revision number.
-   *
+   * 
    * @impl Currently we assume the the largest revision is provided by the last
    *       entry of the set.
    * @param changeLogSet the set of change log entries to compare the revision
@@ -256,10 +132,6 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
       final ScmVersion endVersion = changeLogSet.getEndVersion();
       if (endVersion != null)
       {
-        if(LOG.isDebugEnabled())
-        {
-          LOG.debug("End version found.");
-        }
         return new MavenRevision(endVersion, changeLogSet.getEndDate());
       }
 
@@ -280,28 +152,7 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
               return new StringRevision(revision, set.getDate());
             }
           }
-          else
-          {
-            if(LOG.isDebugEnabled())
-            {
-              LOG.debug("No change files found.");
-            }
-          }
         }
-      }
-      else
-      {
-        if(LOG.isDebugEnabled())
-        {
-          LOG.debug("No change set found.");
-        }
-      }
-    }
-    else
-    {
-      if(LOG.isDebugEnabled())
-      {
-        LOG.debug("No change log set found.");
       }
     }
 
@@ -310,13 +161,13 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
 
   /**
    * Creates the provider instance to access the given repository.
-   *
+   * 
    * @param repository the repository to access with the provider to be created.
    * @return the provider to access the given repository.
    * @throws ScmException if the provider cannot be created.
    */
   private ScmProvider createScmProvider(final ScmRepository repository)
-    throws ScmException
+      throws ScmException
   {
     try
     {
