@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.provider.ScmProviderRepositoryWithHost;
@@ -28,8 +29,6 @@ import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.RevisionHelper;
-import de.smartics.maven.plugin.buildmetadata.common.ScmControl;
-import de.smartics.maven.plugin.buildmetadata.common.ScmCredentials;
 import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmConnectionInfo;
@@ -41,7 +40,7 @@ import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmConnectionInfo;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public class ScmMetaDataProvider extends AbstractMetaDataProvider
+public class ScmMetaData extends AbstractMetaDataProvider
 {
   // ********************************* Fields *********************************
 
@@ -50,7 +49,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
   /**
    * Reference to the logger for this class.
    */
-  private static final Log LOG = LogFactory.getLog(ScmMetaDataProvider.class);
+  private static final Log LOG = LogFactory.getLog(ScmMetaData.class);
 
   // --- members --------------------------------------------------------------
 
@@ -65,7 +64,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
    * @param scmInfo the value for scmInfo.
    * @see de.smartics.maven.plugin.buildmetadata.data.AbstractMetaDataProvider#AbstractMetaDataProvider()
    */
-  public ScmMetaDataProvider(final MavenProject project, final ScmInfo scmInfo)
+  public ScmMetaData(final MavenProject project, final ScmInfo scmInfo)
   {
     this.project = project;
     this.scmInfo = scmInfo;
@@ -86,11 +85,11 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
    * SCM is provided.
    *
    * @param buildMetaDataProperties the build meta data properties.
+   * @throws MojoExecutionException if providing SCM information failed.
    */
-  public final void provideBuildMetaData(final Properties buildMetaDataProperties)
+  public void provideBuildMetaData(final Properties buildMetaDataProperties)
   {
-    final ScmControl scmControl = scmInfo.getScmControl();
-    if (scmControl.isAddScmInfo() && !scmControl.isOffline()
+    if (scmInfo.isAddScmInfo() && !scmInfo.isOffline()
         && project.getScm() != null)
     {
       try
@@ -100,14 +99,15 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
         final RevisionHelper helper =
             new RevisionHelper(scmInfo.getScmManager(), scmConnectionInfo,
                 scmAccessInfo, scmInfo.getBuildDatePattern());
-        helper.provideScmBuildInfo(buildMetaDataProperties, scmControl);
+        helper.provideScmBuildInfo(buildMetaDataProperties,
+            scmInfo.isValidateCheckout());
       }
       catch (final ScmRepositoryException e)
       {
         throw new IllegalStateException(
             "Cannot fetch SCM revision information.", e);
       }
-      catch (final NoSuchScmProviderException e)
+      catch (NoSuchScmProviderException e)
       {
         throw new IllegalStateException(
             "Cannot fetch SCM revision information.", e);
@@ -115,9 +115,8 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
     }
     else
     {
-      LOG.debug("Skipping SCM data since addScmInfo="
-                + scmControl.isAddScmInfo() + ", offline="
-                + scmControl.isOffline() + ", scmInfoProvided="
+      LOG.debug("Skipping SCM data since addScmInfo=" + scmInfo.isAddScmInfo()
+                + ", offline=" + scmInfo.isOffline() + ", scmInfoProvided="
                 + (project.getScm() != null) + ".");
     }
   }
@@ -127,8 +126,8 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
    * properties.
    *
    * @return the connection information to connect to the SCM system.
-   * @throws IllegalStateException if the connection string to the SCM cannot be
-   *           fetched.
+   * @throws MojoExecutionException if the connection string to the SCM cannot
+   *           be fetched.
    * @throws ScmRepositoryException if the repository information is not
    *           sufficient to build the repository instance.
    * @throws NoSuchScmProviderException if there is no provider for the SCM
@@ -138,8 +137,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
     ScmRepositoryException, NoSuchScmProviderException
   {
     final String scmConnection = getConnection();
-    final ScmCredentials credentials = scmInfo.getScmCrendentials();
-    if (credentials.getUserName() == null || credentials.getPassword() == null)
+    if (scmInfo.getUserName() == null || scmInfo.getPassword() == null)
     {
       final ScmRepository repository =
           scmInfo.getScmManager().makeScmRepository(scmConnection);
@@ -148,14 +146,14 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
         final ScmProviderRepositoryWithHost repositoryWithHost =
             (ScmProviderRepositoryWithHost) repository.getProviderRepository();
         final String host = createHostName(repositoryWithHost);
-        credentials.configureByServer(host);
+        scmInfo.configureByServer(host);
       }
     }
 
     final ScmConnectionInfo info = new ScmConnectionInfo();
-    info.setUserName(credentials.getUserName());
-    info.setPassword(credentials.getPassword());
-    info.setPrivateKey(credentials.getPrivateKey());
+    info.setUserName(scmInfo.getUserName());
+    info.setPassword(scmInfo.getPassword());
+    info.setPrivateKey(scmInfo.getPrivateKey());
     info.setScmConnectionUrl(scmConnection);
     info.setTagBase(scmInfo.getTagBase());
     return info;
@@ -170,7 +168,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
    *           return the SCM connection string.
    * @see org.apache.maven.model.Scm#getConnection()
    */
-  protected final String getConnection() throws IllegalStateException
+  protected String getConnection() throws IllegalStateException
   {
     if (project.getScm() == null)
     {
@@ -225,10 +223,8 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
     final ScmAccessInfo accessInfo = new ScmAccessInfo();
     accessInfo.setDateFormat(scmInfo.getScmDateFormat());
     accessInfo.setRootDirectory(scmInfo.getBasedir());
-    accessInfo.setFailOnLocalModifications(scmInfo.getScmControl()
-        .isFailOnLocalModifications());
-    accessInfo.setIgnoreDotFilesInBaseDir(scmInfo.getScmControl()
-        .isIgnoreDotFilesInBaseDir());
+    accessInfo
+        .setFailOnLocalModifications(scmInfo.isFailOnLocalModifications());
     accessInfo.setQueryRangeInDays(scmInfo.getQueryRangeInDays());
     return accessInfo;
   }

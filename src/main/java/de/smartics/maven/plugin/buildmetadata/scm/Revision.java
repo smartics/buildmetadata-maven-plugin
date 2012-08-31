@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.Date;
 /**
  * Interface to allow different implementations of the revision information. Our
  * application requires only the string representation.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
@@ -40,7 +40,7 @@ public interface Revision
 
   /**
    * Returns the identifier of the revision.
-   *
+   * 
    * @return the identifier of the revision.
    */
   String getId();
@@ -48,7 +48,7 @@ public interface Revision
   /**
    * Returns the date of the revision. This is the date the revision was checked
    * in.
-   *
+   * 
    * @return the date of the revision.
    */
   Date getDate();
@@ -57,7 +57,7 @@ public interface Revision
 
   /**
    * Returns the revision information as a {@link String}.
-   *
+   * 
    * @return the string representation of the revision.
    */
   String toString();

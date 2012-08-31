@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import de.smartics.maven.plugin.buildmetadata.common.Constant;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class HostMetaDataProvider implements MetaDataProvider
+public class HostMetaData implements MetaDataProvider
 {
   // ********************************* Fields *********************************
 
@@ -63,7 +63,7 @@ public final class HostMetaDataProvider implements MetaDataProvider
     {
       final InetAddress address = InetAddress.getLocalHost();
       final String hostname = address.getHostName();
-      buildMetaDataProperties.put(Constant.PROP_NAME_HOSTNAME, hostname);
+      buildMetaDataProperties.put(Constant.PROP_HOSTNAME, hostname);
     }
     catch (final UnknownHostException e)
     {

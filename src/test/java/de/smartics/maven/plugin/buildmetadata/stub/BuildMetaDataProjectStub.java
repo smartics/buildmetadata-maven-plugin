@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 
 /**
  * A stub to use with unit tests.
- *
+ * 
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision$
  */
-public final class BuildMetaDataProjectStub extends MavenProjectStub
+public class BuildMetaDataProjectStub extends MavenProjectStub
 {
   // ********************************* Fields *********************************
 
@@ -64,7 +64,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
 
   /**
    * Returns the properties of the model.
-   *
+   * 
    * @return the properties of the model.
    */
   public Properties getProperties()
@@ -76,7 +76,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    * Returns the version of the model.
    * <p>
    * {@inheritDoc}
-   *
+   * 
    * @see org.apache.maven.plugin.testing.stubs.MavenProjectStub#getVersion()
    */
   public String getVersion()
@@ -88,7 +88,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    * Returns the build of the model.
    * <p>
    * {@inheritDoc}
-   *
+   * 
    * @see org.apache.maven.plugin.testing.stubs.MavenProjectStub#getBuild()
    */
   public Build getBuild()
@@ -98,7 +98,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
 
   /**
    * Sets the base directory of the unit test build.
-   *
+   * 
    * @param dir the base directory of the unit test build.
    */
   public void setBasedir(final File dir)
@@ -111,7 +111,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    * <p>
    * Returns the base directory of the unit test build.
    * </p>
-   *
+   * 
    * @see org.apache.maven.plugin.testing.stubs.MavenProjectStub#getBasedir()
    */
   public File getBasedir()
@@ -123,7 +123,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
 
   /**
    * Writes the model to the writer.
-   *
+   * 
    * @param writer the writer to write the model to.
    * @throws IOException on any problem writing to the writer.
    */

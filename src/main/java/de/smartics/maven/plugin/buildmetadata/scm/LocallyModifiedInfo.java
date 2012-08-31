@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2012 smartics, Kronseder & Reiner GmbH
+ * Copyright 2006-2010 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package de.smartics.maven.plugin.buildmetadata.scm;
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
  * @version $Revision:591 $
  */
-public final class LocallyModifiedInfo
+public class LocallyModifiedInfo
 {
   // ********************************* Fields *********************************
 
