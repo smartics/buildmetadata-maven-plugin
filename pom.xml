@@ -228,7 +228,6 @@
         <plugin>
           <groupId>de.smartics.maven.plugin</groupId>
           <artifactId>bugzilla-maven-plugin</artifactId>
-          <version>0.4.1</version>
           <configuration>
             <classification>Build Management</classification>
             <initialOwner>${user.email}</initialOwner>
