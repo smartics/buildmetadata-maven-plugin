@@ -16,7 +16,7 @@
     limitations under the License.
 
 -->
-<project name="${project.name}">
+<project name="${project.artifactId}">
   <!--
     The icon for the project is designed by
               Mattahan (Paul Davey, http://mattahan.deviantart.com)
@@ -55,9 +55,9 @@
       <item name="Home"                href="index.html"/>
       <item name="Goals"               href="plugin-info.html"/>
       <item name="Usage"               href="usage.html"/>
-      <item name="Accessing Artifacts" href="https://project.smartics.de/projects/projectdoc/references/topic/systems/0010-artifact-server.html"/>
-      <item name="All Versions"        href="https://project.smartics.de/public/${project.groupId}/${project.artifactId}/"/>
       <item name="FAQ"                 href="faq.html"/>
+      <item name="Accessing Artifacts" href="http://www.smartics.de/projects/accessing-artifacts"/>
+      <item name="All Versions"        href="${webroot}/${project.groupId}/${project.artifactId}/"/>
     </menu>
 
     <menu name="Topics">
