@@ -17,8 +17,6 @@
 
 -->
 <project name="${project.name}">
-  <publishDate position="bottom" format="dd. MMMM yyyy"/>
-
   <!--
     The icon for the project is designed by
               Mattahan (Paul Davey, http://mattahan.deviantart.com)
@@ -30,7 +28,6 @@
 
     Origin: http://findicons.com/icon/4508/i_was_a_fiend_before_i_became_a_teen
    -->
-
   <bannerLeft>
     <name>${project.name}</name>
     <src>images/logos/logo.png</src>
@@ -47,6 +44,12 @@
     <head>
       <link rel="SHORTCUT ICON" href="${project.url}/images/logos/favicon.ico"/>
     </head>
+
+    <breadcrumbs>
+      <item name="smartics" href="http://www.smartics.de/"/>
+      <item name="projects" href="${webroot-projects}/index.html"/>
+      <item name="${project.artifactId}" href="${project.url}/index.html"/>
+    </breadcrumbs>
 
     <menu name="Overview">
       <item name="Home"                href="index.html"/>
