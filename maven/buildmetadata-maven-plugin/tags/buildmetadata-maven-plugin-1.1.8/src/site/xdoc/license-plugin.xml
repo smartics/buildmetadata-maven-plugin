@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2013 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Using with the License Plugin</title>
+	</properties>
+	<body>
+    <section name="Using with the License Plugin">
+      <subsection name="Overview">
+      <p>
+        This is a tip on using the buildmetadata-plugin with the
+        <a href="http://code.google.com/p/maven-license-plugin/">maven-license-plugin</a>.
+      </p>
+      <p>
+        To use the <code>build.copyright.year</code> property with the
+        maven-license-plugin, the buildmetadata-plugin has to be run in
+        the same build execution. Use the following tip to run
+        the <source>license:format</source> goal successfully.
+      </p>
+      </subsection>
+
+      <subsection name="Configuration">
+        <p>
+          The buildmetadata-maven-plugin is configured to run
+          in the <code>initialize</code> phase.
+        </p>
+        <source><![CDATA[<plugin>
+  <groupId>de.smartics.maven.plugin</groupId>
+  <artifactId>buildmetadata-maven-plugin</artifactId>
+  <version>${project.version}</version>
+  <executions>
+    <execution>
+      <phase>initialize</phase>
+      <goals>
+        <goal>provide-buildmetadata</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>]]></source>
+        <p>
+          The license plugin uses the copyright year property
+          provided by the buildmetadata-plugin.
+        </p>
+<source><![CDATA[<plugin>
+  <groupId>com.mycila.maven-license-plugin</groupId>
+  <artifactId>maven-license-plugin</artifactId>
+  <version>1.9.0</version>
+  <configuration>
+    ...
+    <properties>
+      <year>\${build.copyright.year}</year>
+    </properties>
+    ...
+</plugin>]]></source>
+      </subsection>
+
+      <subsection name="Run the Build">
+        <p>
+          Run the build by typing
+        </p>
+        <source>mvn initialize license:format</source>
+      </subsection>
+    </section>
+  </body>
+</document>
