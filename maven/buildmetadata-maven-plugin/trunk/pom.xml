@@ -6,7 +6,7 @@
   <parent>
     <groupId>de.smartics.config.pom</groupId>
     <artifactId>pom-java</artifactId>
-    <version>31.2.5-SNAPSHOT</version>
+    <version>31.2.9</version>
     <relativePath />
   </parent>
 
@@ -29,7 +29,7 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0</url>
       <distribution>repo</distribution>
       <comments>
-        Copyright 2006-2011 smartics, Kronseder &amp; Reiner GmbH
+        Copyright 2006-2013 smartics, Kronseder &amp; Reiner GmbH
       </comments>
     </license>
   </licenses>
@@ -257,15 +257,15 @@
             </plugin>
             <plugin>
               <groupId>de.smartics.maven.plugin</groupId>
-              <artifactId>maven-issues-plugin</artifactId>
+              <artifactId>issues-maven-plugin</artifactId>
             </plugin>
             <plugin>
               <groupId>de.smartics.maven.plugin</groupId>
-              <artifactId>maven-issues-plugin</artifactId>
+              <artifactId>issues-maven-plugin</artifactId>
             </plugin>
             <plugin>
               <groupId>de.smartics.maven.plugin</groupId>
-              <artifactId>buildmetadata-maven-plugin</artifactId>
+              <artifactId>maven-buildmetadata-plugin</artifactId>
             </plugin>
 
             <plugin>
@@ -282,7 +282,7 @@
             </plugin>
             <plugin>
               <groupId>de.smartics.maven.plugin</groupId>
-              <artifactId>maven-apidoc-plugin</artifactId>
+              <artifactId>apidoc-maven-plugin</artifactId>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -326,8 +326,8 @@
             </plugin>
             <plugin>
               <groupId>de.smartics.maven.plugin</groupId>
-              <artifactId>maven-issues-plugin</artifactId>
-              <version>${maven-issues-plugin.version}</version>
+              <artifactId>issues-maven-plugin</artifactId>
+              <version>${issues-maven-plugin.version}</version>
               <configuration>
                 <issueManagementUser>${bugzillaUser}</issueManagementUser>
                 <issueManagementPassword>${bugzillaPassword}</issueManagementPassword>
