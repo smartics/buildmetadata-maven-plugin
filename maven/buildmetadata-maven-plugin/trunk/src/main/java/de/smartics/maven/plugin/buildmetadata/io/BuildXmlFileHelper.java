@@ -29,9 +29,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.util.IOUtil;
 import org.w3c.dom.Document;
 
 import de.smartics.maven.io.MojoIoUtils;
@@ -176,7 +176,7 @@ public final class BuildXmlFileHelper
     }
     finally
     {
-      IOUtils.closeQuietly(out);
+      IOUtil.close(out);
     }
   }
 

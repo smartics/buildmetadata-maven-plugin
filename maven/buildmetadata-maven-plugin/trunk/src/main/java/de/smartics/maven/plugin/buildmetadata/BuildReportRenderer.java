@@ -29,9 +29,9 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
@@ -473,7 +473,7 @@ public final class BuildReportRenderer
     }
     finally
     {
-      IOUtils.closeQuietly(inStream);
+      IOUtil.close(inStream);
     }
     return buildMetaDataProperties;
   }
