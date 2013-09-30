@@ -42,8 +42,8 @@ import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.StringUtils;
 
-import de.smartics.maven.util.LoggingUtils;
-import de.smartics.maven.util.report.ReportUtils;
+import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
+import de.smartics.maven.plugin.buildmetadata.util.ReportUtils;
 
 /**
  * The abstract base implementation for reports.

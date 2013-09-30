@@ -18,7 +18,6 @@ package de.smartics.maven.plugin.buildmetadata.scm.maven;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.scm.ChangeFile;
@@ -33,6 +32,7 @@ import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.provider.ScmProvider;
 import org.apache.maven.scm.repository.ScmRepository;
+import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.scm.LocallyModifiedInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.Revision;
@@ -248,7 +248,6 @@ public final class MavenScmRevisionNumberFetcher implements RevisionNumberFetche
    * @return the largest revision number from the set or <code>null</code> if no
    *         end version can be found.
    */
-  @SuppressWarnings("unchecked")
   private Revision findEndVersion(final ChangeLogSet changeLogSet)
   {
     if (changeLogSet != null)
