@@ -26,10 +26,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.IOUtil;
 
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
 import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
@@ -128,7 +128,7 @@ public final class BuildPropertiesFileHelper
     }
     finally
     {
-      IOUtils.closeQuietly(out);
+      IOUtil.close(out);
     }
 
     return buildMetaDataFile;
@@ -185,7 +185,7 @@ public final class BuildPropertiesFileHelper
     }
     finally
     {
-      IOUtils.closeQuietly(inStream);
+      IOUtil.close(inStream);
     }
   }
 

@@ -26,13 +26,13 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -186,7 +186,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
     }
     finally
     {
-      IOUtils.closeQuietly(writer);
+      IOUtil.close(writer);
     }
     return project;
   }
@@ -256,7 +256,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
     }
     finally
     {
-      IOUtils.closeQuietly(in);
+      IOUtil.close(in);
     }
   }
 
