@@ -60,9 +60,19 @@
 
   <dependencies>
     <dependency>
-      <groupId>de.smartics.util</groupId>
-      <artifactId>maven-utils</artifactId>
-      <version>0.3.2</version>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.3</version>
     </dependency>
 
     <dependency>
