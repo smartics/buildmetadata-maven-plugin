@@ -39,7 +39,7 @@ import de.smartics.maven.plugin.buildmetadata.data.ScmMetaDataProvider;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
 import de.smartics.maven.plugin.buildmetadata.io.BuildXmlFileHelper;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
-import de.smartics.maven.util.LoggingUtils;
+import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
 
 /**
  * Provides the build information defined in {@link Constant}. This information

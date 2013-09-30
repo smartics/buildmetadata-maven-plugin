@@ -34,9 +34,9 @@ import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.IOUtil;
 import org.w3c.dom.Document;
 
-import de.smartics.maven.io.MojoIoUtils;
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
 import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.util.MojoIoUtils;
 
 /**
  * Helper to handle the build meta data properties file.
