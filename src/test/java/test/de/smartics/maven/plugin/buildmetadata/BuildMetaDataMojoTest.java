@@ -270,6 +270,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
   @Test
   public void testBuild() throws Exception
   {
+    uut.setCreatePropertiesReport(true);
     uut.setPropertiesOutputFile(new File(targetDir,
         "META-INF/buildmetadata.properties"));
     final MavenSession session =

@@ -123,6 +123,19 @@ public abstract class AbstractBuildMojo extends AbstractMojo
 
   /**
    * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
+   * <code>build.properties</code> file should be created.
+   * <p>
+   * This will adjust the path of the <code>propertiesOutputFile</code> to
+   * <code>${project.build.directory}/build.properties</code>.
+   * </p>
+   *
+   * @parameter default-value= "true"
+   * @since 1.0
+   */
+  protected boolean createPropertiesReport;
+
+  /**
+   * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
    * XML report should be created.
    *
    * @parameter default-value= "true"
@@ -234,21 +247,66 @@ public abstract class AbstractBuildMojo extends AbstractMojo
     this.propertiesOutputFile = propertiesOutputFile;
   }
 
+  /**
+   * Returns the value for createPropertiesReport.
+   * <p>
+   * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
+   * <code>build. properties</code> file should be created.
+   * <p>
+   * This will adjust the path of the <code>propertiesOutputFile</code> to
+   * <code>${project.build.directory}/build.properties</code>.
+   * </p>
+   *
+   * @return the value for createPropertiesReport.
+   */
+  public boolean isCreatePropertiesReport()
+  {
+    return createPropertiesReport;
+  }
+
+  /**
+   * Sets the value for createPropertiesReport.
+   * <p>
+   * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
+   * <code>build. properties</code> file should be created.
+   * <p>
+   * This will adjust the path of the <code>propertiesOutputFile</code> to
+   * <code>${project.build.directory}/build.properties</code>.
+   * </p>
+   *
+   * @param createPropertiesReport the value for createPropertiesReport.
+   */
+  public void setCreatePropertiesReport(final boolean createPropertiesReport)
+  {
+    this.createPropertiesReport = createPropertiesReport;
+  }
+
   // --- business -------------------------------------------------------------
 
   // CHECKSTYLE:OFF
-  /**
-   * {@inheritDoc}
-   */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
     // CHECKSTYLE:ON
+    adjust();
+
     final PropertyOutputFileMapper mapper =
         new PropertyOutputFileMapper(project, propertyOutputFileMapping);
     this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
-    this.propertiesOutputFile =
-        mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
-            propertiesOutputFile);
+    if (createPropertiesReport)
+    {
+      this.propertiesOutputFile =
+          mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
+              propertiesOutputFile);
+    }
+  }
+
+  private void adjust()
+  {
+    if (!createPropertiesReport)
+    {
+      propertiesOutputFile =
+          new File(project.getBuild().getDirectory(), "build.properties");
+    }
   }
 
   /**
