@@ -115,6 +115,16 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * The name of the XML report file to write. If you want to include the XML
    * file in the artifact, use
    * <code>${project.build.outputDirectory}/META-INF/buildmetadata.xml</code>.
+   * <p>
+   * The handling is not in an analogous manner as that of the properties file.
+   * The reason is this: we want to keep the artifact as small as possible per default.
+   * Therefore we include the <code>build.properties</code> and generate the
+   * XML report (see property <code>createXmlReport</code> to the target
+   * folder (and not inside <code>META-INF</code>). The XML file can be stored
+   * to the artifact server (with a couple of other reports) by the use
+   * of the
+   * <a href="http://www.smartics.eu/projectmetadata-maven-plugin">projectmetadata-maven-plugin</a>.
+   * </p>
    *
    * @parameter default-value= "${project.build.directory}/buildmetadata.xml"
    * @since 1.0
