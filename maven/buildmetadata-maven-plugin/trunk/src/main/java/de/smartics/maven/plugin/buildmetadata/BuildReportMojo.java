@@ -110,6 +110,23 @@ public final class BuildReportMojo extends AbstractReportMojo
    */
   private boolean initialized;
 
+  /**
+   * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
+   * <code>build.properties</code> file should be created.
+   * <p>
+   * This will adjust the path of the <code>propertiesOutputFile</code> to
+   * <code>${project.build.directory}/build.properties</code>.
+   * </p>
+   * <p>
+   * This flag allows the report mojo to behave accordingly to that of the build
+   * mojo.
+   * </p>
+   *
+   * @parameter default-value= "true"
+   * @since 1.0
+   */
+  protected boolean createPropertiesReport;
+
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
@@ -174,9 +191,12 @@ public final class BuildReportMojo extends AbstractReportMojo
       final PropertyOutputFileMapper mapper =
           new PropertyOutputFileMapper(project, propertyOutputFileMapping);
       this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
-      this.propertiesOutputFile =
-          mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
-              propertiesOutputFile);
+      if (createPropertiesReport)
+      {
+        this.propertiesOutputFile =
+            mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
+                propertiesOutputFile);
+      }
       this.initialized = true;
     }
   }
@@ -189,6 +209,8 @@ public final class BuildReportMojo extends AbstractReportMojo
   @Override
   protected void executeReport(final Locale locale) throws MavenReportException
   {
+    adjust();
+
     super.executeReport(locale);
 
     final Sink sink = getSink();
@@ -197,6 +219,15 @@ public final class BuildReportMojo extends AbstractReportMojo
         new BuildReportRenderer(messages, sink, propertiesOutputFile,
             properties);
     renderer.renderReport();
+  }
+
+  private void adjust()
+  {
+    if (!createPropertiesReport)
+    {
+      propertiesOutputFile =
+          new File(project.getBuild().getDirectory(), "build.properties");
+    }
   }
 
   /**
