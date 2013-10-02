@@ -42,8 +42,8 @@ import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
 import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
 
 /**
- * Provides the build information defined in {@link Constant}. This information
- * is also written to a properties file.
+ * Provides the build properties. This information is also written to a
+ * <code>build.properties</code> file.
  *
  * @goal provide-buildmetadata
  * @phase initialize
