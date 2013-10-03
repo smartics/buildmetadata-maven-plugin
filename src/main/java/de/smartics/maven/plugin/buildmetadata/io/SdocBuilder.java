@@ -182,6 +182,11 @@ public final class SdocBuilder
     final Element docRoot = createDocRoot();
 
     createContentElement(GI_NAME, Constant.PROP_NAME_FULL_VERSION, docRoot);
+    createContentElement("category", Constant.PROP_NAME_PROJECT_CATEGORY,
+        docRoot);
+    createContentElement("subcategory", Constant.PROP_NAME_PROJECT_SUBCATEGORY,
+        docRoot);
+
     createContentElement(GI_VERSION, Constant.PROP_NAME_VERSION, docRoot);
     createContentElement("groupId", Constant.PROP_NAME_GROUP_ID, docRoot);
     createContentElement("artifactId", Constant.PROP_NAME_ARTIFACT_ID, docRoot);
@@ -189,9 +194,8 @@ public final class SdocBuilder
     createValueElement("date", date, docRoot);
     createContentElement("timestamp", Constant.PROP_NAME_BUILD_TIMESTAMP,
         docRoot);
+    createTagsElement(docRoot);
     createContentElement("build-year", Constant.PROP_NAME_BUILD_YEAR, docRoot);
-    createContentElement("copyright-year", Constant.PROP_NAME_COPYRIGHT_YEAR,
-        docRoot);
 
     createProjectElement(docRoot);
     createScmElement(docRoot);
@@ -199,6 +203,18 @@ public final class SdocBuilder
     createMiscElement(docRoot);
 
     return document;
+  }
+
+  private void createTagsElement(final Element docRoot)
+  {
+    final Element tags = document.createElement("tags");
+    final String tagsString =
+        buildMetaDataProperties.getProperty(Constant.PROP_NAME_PROJECT_TAGS);
+    renderList(tags, "tag", tagsString);
+    if (tags.hasChildNodes())
+    {
+      docRoot.appendChild(tags);
+    }
   }
 
   private String formatDate(final String datePropertyKey)
@@ -284,16 +300,8 @@ public final class SdocBuilder
   {
     final Element parent = document.createElement("project");
 
-    createContentElement("category", Constant.PROP_NAME_PROJECT_CATEGORY,
-        parent);
-    createContentElement("subcategory", Constant.PROP_NAME_PROJECT_SUBCATEGORY,
-        parent);
-
-    final Element tags = document.createElement("tags");
-    final String tagsString =
-        buildMetaDataProperties.getProperty(Constant.PROP_NAME_PROJECT_TAGS);
-    renderList(tags, "tag", tagsString);
-
+    createContentElement("copyright-year", Constant.PROP_NAME_COPYRIGHT_YEAR,
+        docRoot);
     createContentElement("home-page-url", Constant.PROP_NAME_PROJECT_HOMEPAGE,
         parent);
     createContentElement("ops-home-page-url", Constant.PROP_NAME_PROJECT_OPS,
