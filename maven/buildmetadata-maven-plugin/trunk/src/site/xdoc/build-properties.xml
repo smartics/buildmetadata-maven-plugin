@@ -443,7 +443,7 @@
             <td>
               The URL to a resource that compiles resources
               relevant for the operations team. This
-              property has to be explicty set as a property.
+              property has to be explicitly set as a property.
             </td>
           </tr>
           <tr>
@@ -453,7 +453,7 @@
             <td>
               A value to categorize the artifact. This allows tools
               to render artifacts in multiple sections. This
-              property has to be explicty set as a property.
+              property has to be explicitly set as a property.
             </td>
           </tr>
           <tr>
@@ -463,7 +463,7 @@
             <td>
               A value to further categorize the artifact. This allows tools
               to render artifacts in multiple sections. This
-              property has to be explicty set as a property.
+              property has to be explicitly set as a property.
             </td>
           </tr>
           <tr>
@@ -473,7 +473,7 @@
             <td>
               A value to tag the artifact. This allows tools
               to organize multiple artifacts. This
-              property has to be explicty set as a property.
+              property has to be explicitly set as a property.
             </td>
           </tr>
         </table>
