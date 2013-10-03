@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.reporting.MavenReportException;
 
 import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 
 /**
  * Generates a report about the meta data provided to the build.
@@ -215,9 +216,10 @@ public final class BuildReportMojo extends AbstractReportMojo
 
     final Sink sink = getSink();
     final ResourceBundle messages = getBundle(locale);
+    final String baseDir = project.getBasedir().getAbsolutePath();
     final BuildReportRenderer renderer =
-        new BuildReportRenderer(messages, sink, propertiesOutputFile,
-            properties);
+        new BuildReportRenderer(new FilePathNormalizer(baseDir), messages,
+            sink, propertiesOutputFile, properties);
     renderer.renderReport();
   }
 

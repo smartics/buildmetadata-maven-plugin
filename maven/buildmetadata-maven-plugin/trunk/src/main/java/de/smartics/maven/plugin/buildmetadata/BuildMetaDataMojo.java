@@ -39,6 +39,7 @@ import de.smartics.maven.plugin.buildmetadata.data.ScmMetaDataProvider;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
 import de.smartics.maven.plugin.buildmetadata.io.BuildXmlFileHelper;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
 
 /**
@@ -491,8 +492,12 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     {
       super.execute();
 
+      final String baseDir = project.getBasedir().getAbsolutePath();
+      final FilePathNormalizer filePathNormalizer =
+          new FilePathNormalizer(baseDir);
       final BuildPropertiesFileHelper helper =
-          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile);
+          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile,
+              filePathNormalizer);
       final Properties projectProperties = helper.getProjectProperties(project);
       if (!isBuildPropertiesAlreadySet(projectProperties))
       {
@@ -537,8 +542,10 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     helper.writePropertiesFile(buildMetaDataProperties);
     if (createXmlReport)
     {
+      final String projectRootPath = project.getBasedir().getAbsolutePath();
       final BuildXmlFileHelper xmlHelper =
-          new BuildXmlFileHelper(getLog(), this.xmlOutputFile, this.properties);
+          new BuildXmlFileHelper(projectRootPath, getLog(), xmlOutputFile,
+              properties);
       xmlHelper.writeXmlFile(buildMetaDataProperties);
     }
   }

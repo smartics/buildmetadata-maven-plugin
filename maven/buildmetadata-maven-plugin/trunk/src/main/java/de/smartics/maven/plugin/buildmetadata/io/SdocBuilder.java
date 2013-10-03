@@ -39,6 +39,7 @@ import org.w3c.dom.Text;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 
 /**
  * Creates an XML report with the build meta data. The report contains the same
@@ -98,6 +99,12 @@ public final class SdocBuilder
   // --- members --------------------------------------------------------------
 
   /**
+   * The normalizer to be applied to file name value to remove the base dir
+   * prefix.
+   */
+  private final FilePathNormalizer filePathNormalizer;
+
+  /**
    * The empty document to write to.
    */
   private final Document document;
@@ -136,16 +143,19 @@ public final class SdocBuilder
   /**
    * Default constructor.
    *
+   * @param filePathNormalizer the normalizer to be applied to file name value
+   *          to remove the base dir prefix.
    * @param document the empty document to write to.
    * @param buildMetaDataProperties the properties to write to the XML report.
    * @param selectedProperties the list of a system properties or environment
    *          variables to be selected by the user to include into the build
    *          meta data properties.
    */
-  public SdocBuilder(final Document document,
-      final Properties buildMetaDataProperties,
+  public SdocBuilder(final FilePathNormalizer filePathNormalizer,
+      final Document document, final Properties buildMetaDataProperties,
       final List<Property> selectedProperties)
   {
+    this.filePathNormalizer = filePathNormalizer;
     this.document = document;
     this.buildMetaDataProperties = buildMetaDataProperties;
     this.selectedProperties = selectedProperties;
@@ -179,7 +189,11 @@ public final class SdocBuilder
     createValueElement("date", date, docRoot);
     createContentElement("timestamp", Constant.PROP_NAME_BUILD_TIMESTAMP,
         docRoot);
+    createContentElement("build-year", Constant.PROP_NAME_BUILD_YEAR, docRoot);
+    createContentElement("copyright-year", Constant.PROP_NAME_COPYRIGHT_YEAR,
+        docRoot);
 
+    createProjectElement(docRoot);
     createScmElement(docRoot);
     createRuntimeElement(docRoot);
     createMiscElement(docRoot);
@@ -266,6 +280,46 @@ public final class SdocBuilder
     }
   }
 
+  private void createProjectElement(final Element docRoot)
+  {
+    final Element parent = document.createElement("project");
+
+    createContentElement("category", Constant.PROP_NAME_PROJECT_CATEGORY,
+        parent);
+    createContentElement("subcategory", Constant.PROP_NAME_PROJECT_SUBCATEGORY,
+        parent);
+
+    final Element tags = document.createElement("tags");
+    final String tagsString =
+        buildMetaDataProperties.getProperty(Constant.PROP_NAME_PROJECT_TAGS);
+    renderList(tags, "tag", tagsString);
+
+    createContentElement("home-page-url", Constant.PROP_NAME_PROJECT_HOMEPAGE,
+        parent);
+    createContentElement("ops-home-page-url", Constant.PROP_NAME_PROJECT_OPS,
+        parent);
+
+    if (parent.hasChildNodes())
+    {
+      docRoot.appendChild(parent);
+    }
+  }
+
+  private void renderList(final Element tags, final String itemTag,
+      final String value)
+  {
+    if (StringUtils.isNotBlank(value))
+    {
+      final String stringValue = Constant.prettify(value);
+      final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
+      while (tokenizer.hasMoreTokens())
+      {
+        final String item = tokenizer.nextToken();
+        createValueElement(itemTag, item.trim(), tags);
+      }
+    }
+  }
+
   private void createRuntimeElement(final Element docRoot)
   {
     final Element parent = document.createElement("runtime");
@@ -314,11 +368,24 @@ public final class SdocBuilder
     final Element parent = document.createElement("maven");
     createContentElement(GI_VERSION, Constant.PROP_NAME_MAVEN_VERSION, parent);
 
+    createContentElement("commandline", Constant.PROP_NAME_MAVEN_CMDLINE,
+        parent);
+    createContentElement("execution-project",
+        Constant.PROP_NAME_MAVEN_EXECUTION_PROJECT, parent);
+    createContentElement("is-excution-root",
+        Constant.PROP_NAME_MAVEN_IS_EXECUTION_ROOT, parent);
+
     final Element goals = document.createElement("goals");
     final String goalsString =
         buildMetaDataProperties.getProperty(Constant.PROP_NAME_MAVEN_GOALS);
-    renderGoals(goals, goalsString);
+    renderList(goals, "goal", goalsString);
     parent.appendChild(goals);
+
+    final Element filters = document.createElement("filters");
+    final String filtersString =
+        buildMetaDataProperties.getProperty(Constant.PROP_NAME_MAVEN_FILTERS);
+    renderFiles(filters, "filter", filtersString);
+    parent.appendChild(filters);
 
     final Element profiles = document.createElement("profiles");
     final String profilesString =
@@ -337,7 +404,8 @@ public final class SdocBuilder
     }
   }
 
-  private void renderGoals(final Element goals, final String value)
+  private void renderFiles(final Element parent, final String itemTag,
+      final String value)
   {
     if (StringUtils.isNotBlank(value))
     {
@@ -345,8 +413,10 @@ public final class SdocBuilder
       final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
       while (tokenizer.hasMoreTokens())
       {
-        final String goal = tokenizer.nextToken();
-        createValueElement("goal", goal.trim(), goals);
+        final String item = tokenizer.nextToken();
+        final String itemTrimmed = item.trim();
+        final String itemNorm = filePathNormalizer.normalize(itemTrimmed);
+        createValueElement(itemTag, itemNorm, parent);
       }
     }
   }

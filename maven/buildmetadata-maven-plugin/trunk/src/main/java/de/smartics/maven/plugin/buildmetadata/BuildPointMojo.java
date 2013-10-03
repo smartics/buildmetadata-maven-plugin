@@ -24,6 +24,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 
 /**
  * Adds the build time to the properties file and runs all providers flagged
@@ -96,8 +97,12 @@ public final class BuildPointMojo extends AbstractBuildMojo
     if (propertiesOutputFile.exists())
     {
       final Properties buildMetaDataProperties = new Properties();
+      final String baseDir = project.getBasedir().getAbsolutePath();
+      final FilePathNormalizer filePathNormalizer =
+          new FilePathNormalizer(baseDir);
       final BuildPropertiesFileHelper helper =
-          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile);
+          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile,
+              filePathNormalizer);
       helper.readBuildPropertiesFile(buildMetaDataProperties);
 
       provideBuildPointInfo(buildMetaDataProperties, helper);
@@ -129,7 +134,8 @@ public final class BuildPointMojo extends AbstractBuildMojo
         durationPropertyName);
   }
 
-  private void setTimeDifference(final BuildPropertiesFileHelper helper, // NOPMD
+  private void setTimeDifference(
+      final BuildPropertiesFileHelper helper, // NOPMD
       final Properties buildMetaDataProperties, final Date currentEnd,
       final String durationString, final String durationPropertyName)
   {
