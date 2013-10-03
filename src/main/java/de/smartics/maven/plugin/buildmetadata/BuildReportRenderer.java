@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.IOUtil;
@@ -37,6 +38,9 @@ import org.codehaus.plexus.util.StringUtils;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
+import de.smartics.maven.plugin.buildmetadata.util.NoopNormalizer;
+import de.smartics.maven.plugin.buildmetadata.util.Normalizer;
 
 /**
  * Renders the build report.
@@ -51,6 +55,12 @@ public final class BuildReportRenderer
   // --- constants ------------------------------------------------------------
 
   // --- members --------------------------------------------------------------
+
+  /**
+   * The normalizer to be applied to file name value to remove the base dir
+   * prefix.
+   */
+  private final FilePathNormalizer filePathNormalizer;
 
   /**
    * The sink to write to.
@@ -98,6 +108,8 @@ public final class BuildReportRenderer
   /**
    * Default constructor.
    *
+   * @param filePathNormalizer the normalizer to be applied to file name value
+   *          to remove the base dir prefix.
    * @param messages the resource bundle to access localized messages.
    * @param sink the sink to write to.
    * @param buildMetaDataPropertiesFile the properties file to read the build
@@ -106,9 +118,11 @@ public final class BuildReportRenderer
    *          to be selected by the user to include into the build meta data
    *          properties.
    */
-  public BuildReportRenderer(final ResourceBundle messages, final Sink sink,
+  public BuildReportRenderer(final FilePathNormalizer filePathNormalizer,
+      final ResourceBundle messages, final Sink sink,
       final File buildMetaDataPropertiesFile, final List<Property> properties)
   {
+    this.filePathNormalizer = filePathNormalizer;
     this.sink = sink;
     this.messages = messages;
     this.buildMetaDataPropertiesFile = buildMetaDataPropertiesFile;
@@ -320,15 +334,15 @@ public final class BuildReportRenderer
       else if (Constant.PROP_NAME_SCM_LOCALLY_MODIFIED_FILES.equals(key))
       {
         final String filesValue = Constant.prettifyFilesValue(value);
-        renderMultiValue(filesValue);
+        renderMultiValue(filesValue, NoopNormalizer.INSTANCE);
       }
       else if (Constant.PROP_NAME_MAVEN_GOALS.equals(key))
       {
-        renderMultiValue(value);
+        renderMultiValue(value, NoopNormalizer.INSTANCE);
       }
       else if (Constant.PROP_NAME_MAVEN_FILTERS.equals(key))
       {
-        renderMultiValue(value);
+        renderMultiValue(value, filePathNormalizer);
       }
       else
       {
@@ -385,25 +399,27 @@ public final class BuildReportRenderer
     }
   }
 
-  private void renderMultiValue(final Object value)
+  private void renderMultiValue(final Object value, final Normalizer normalizer)
   {
-    final String stringValue = Constant.prettify((String) value);
+    final String stringValue = Constant.prettify(ObjectUtils.toString(value));
     if (hasMultipleValues(stringValue))
     {
       final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
       sink.numberedList(Sink.NUMBERING_DECIMAL);
       while (tokenizer.hasMoreTokens())
       {
-        final String subValue = tokenizer.nextToken();
+        final String subValue = tokenizer.nextToken().trim();
+        final String textValue = normalizer.normalize(subValue);
         sink.listItem();
-        sink.text(String.valueOf(subValue));
+        sink.text(textValue);
         sink.listItem_();
       }
       sink.numberedList_();
     }
     else
     {
-      sink.text(stringValue);
+      final String textValue = normalizer.normalize(stringValue);
+      sink.text(textValue);
     }
   }
 

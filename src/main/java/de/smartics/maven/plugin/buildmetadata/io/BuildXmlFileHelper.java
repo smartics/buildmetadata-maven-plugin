@@ -36,6 +36,7 @@ import org.w3c.dom.Document;
 
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
 import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 import de.smartics.maven.plugin.buildmetadata.util.MojoIoUtils;
 
 /**
@@ -51,6 +52,12 @@ public final class BuildXmlFileHelper
   // --- constants ------------------------------------------------------------
 
   // --- members --------------------------------------------------------------
+
+  /**
+   * The path to the project folder on the file system. Used to trim references
+   * to project files.
+   */
+  private final String projectRootPath;
 
   /**
    * The logger to use.
@@ -91,15 +98,17 @@ public final class BuildXmlFileHelper
   /**
    * Default constructor.
    *
+   * @param projectRootPath the path to the project folder on the file system.
    * @param log the logger to use.
    * @param xmlOutputFile the file to write to.
    * @param selectedProperties the list of a system properties or environment
    *          variables to be selected by the user to include into the build
    *          meta data properties.
    */
-  public BuildXmlFileHelper(final Log log, final File xmlOutputFile,
-      final List<Property> selectedProperties)
+  public BuildXmlFileHelper(final String projectRootPath, final Log log,
+      final File xmlOutputFile, final List<Property> selectedProperties)
   {
+    this.projectRootPath = projectRootPath;
     this.log = log;
     this.xmlOutputFile = xmlOutputFile;
     this.selectedProperties = selectedProperties;
@@ -186,7 +195,8 @@ public final class BuildXmlFileHelper
   {
     final Document document = createDocument();
     final SdocBuilder builder =
-        new SdocBuilder(document, buildMetaDataProperties, selectedProperties);
+        new SdocBuilder(new FilePathNormalizer(projectRootPath), document,
+            buildMetaDataProperties, selectedProperties);
     builder.writeDocumentContent();
     MojoIoUtils.serialize(document, out);
   }

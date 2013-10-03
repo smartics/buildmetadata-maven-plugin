@@ -30,9 +30,12 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 
+import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
 import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 
 /**
  * Helper to handle the build meta data properties file.
@@ -58,6 +61,12 @@ public final class BuildPropertiesFileHelper
    */
   private final File propertiesOutputFile;
 
+  /**
+   * The normalizer to be applied to file name value to remove the base dir
+   * prefix.
+   */
+  private final FilePathNormalizer filePathNormalizer;
+
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
@@ -67,12 +76,16 @@ public final class BuildPropertiesFileHelper
    *
    * @param log the logger to use.
    * @param propertiesOutputFile the file to write to.
+   * @param filePathNormalizer the normalizer to be applied to file name value
+   *          to remove the base dir prefix.
    */
   public BuildPropertiesFileHelper(final Log log,
-      final File propertiesOutputFile)
+      final File propertiesOutputFile,
+      final FilePathNormalizer filePathNormalizer)
   {
     this.log = log;
     this.propertiesOutputFile = propertiesOutputFile;
+    this.filePathNormalizer = filePathNormalizer;
   }
 
   // ****************************** Inner Classes *****************************
@@ -111,6 +124,7 @@ public final class BuildPropertiesFileHelper
       final String comments = "Created by buildmetadata-maven-plugin.";
       final Properties sortedBuildMetaDataProperties =
           SortedProperties.createSorted(buildMetaDataProperties);
+      normalizeProperties(sortedBuildMetaDataProperties);
       sortedBuildMetaDataProperties.store(out, comments);
     }
     catch (final FileNotFoundException e)
@@ -132,6 +146,24 @@ public final class BuildPropertiesFileHelper
     }
 
     return buildMetaDataFile;
+  }
+
+  private void normalizeProperties(final Properties buildMetaDataProperties)
+  {
+    final String filters =
+        buildMetaDataProperties.getProperty(Constant.PROP_NAME_MAVEN_FILTERS);
+    if (filters != null)
+    {
+      final String slashedFilters = filters.trim().replace('\\', '/');
+      final String slashedBaseDir =
+          filePathNormalizer.getBaseDir().replace('\\', '/');
+      final String normBaseDir =
+          slashedBaseDir.endsWith("/") ? slashedBaseDir : slashedBaseDir + '/';
+      final String normFilters =
+          StringUtils.replace(slashedFilters, normBaseDir, "");
+      buildMetaDataProperties.setProperty(Constant.PROP_NAME_MAVEN_FILTERS,
+          normFilters);
+    }
   }
 
   /**
