@@ -34,7 +34,7 @@
       <meta name="DC.subject" content="Homepage of the Maven buildmetadata plugin"/>
       <meta name="DC.description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
       <meta name="DC.publisher" content="smartics"/>
-      <meta name="DC.rights" content="Copyright 2006-2012 smartics"/>
+      <meta name="DC.rights" content="Copyright ${build.copyright.year} smartics"/>
     </head>
 	<body>
     <section name="Introduction">
@@ -44,7 +44,8 @@
         The properties are written to a <a href="#Properties_File"
         title="Link to an example of a properties file containing build meta data.">properties file</a>
         that can be included in the generated artifact. The information can also be
-        added to the <a href="#Manifest_File"
+        added in an <a href="usage.html#XML_report" title="Link to an example of an XML file containing build meta data.">XML format</a>
+        or to the <a href="#Manifest_File"
         title="Link to an example of a manifest file containing build meta data.">manifest file</a>.
       </p>
       <p>
@@ -80,6 +81,7 @@
         <li>Maven execution information
           <ul>
             <li>Maven version</li>
+            <li>filter files</li>
             <li>active profiles</li>
             <li>environment properties</li>
             <li>command line and executed goals</li>
@@ -231,6 +233,35 @@ Implementation-SCM-Revision-Number: 4223]]></source>
           serve as an example.
         </p>
        </subsection>
+    </section>
+
+    <section name="One Word of Warning">
+      <p>
+        Build metadata may contain sensitive information you do not want to
+        expose. If you include the commandline to document how the build has
+        been started using
+      </p>
+      <source>-DbuildMetaData.hideCommandLineInfo=false -Ppassword=verySecret</source>
+      <p>
+        This line will be part of the report!
+      </p>
+      <p>
+        Please also note that the commandline contains the information as digested
+        by Maven. Any variable replacements or using the
+        <a href="${webroot}/alias-maven-plugin">alias-maven-plugin</a> as in
+      </p>
+      <source>p -DbuildMetaData.hideCommandLineInfo=false</source>
+      <p>
+        (for those who do not know this plugin: <p>p</p> is an alias for <code>-T 4 clean package</code>)
+        does <strong>not</strong> mask the commandline:
+      </p>
+      <source><![CDATA[<commandline>-T 4 clean package -DbuildMetaData.hideCommandLineInfo=false</commandline>]]></source>
+      <p>
+        We tried to make the default configuration very restrictive. But nonetheless
+        we advice you to double check the build metadata you include into your
+        artifacts. Especially if these artifacts are published to anonymous
+        third parties.
+      </p>
     </section>
 
     <section name="Getting Started">
