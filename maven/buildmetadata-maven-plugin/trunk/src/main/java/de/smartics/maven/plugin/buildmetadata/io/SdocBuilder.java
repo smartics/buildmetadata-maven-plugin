@@ -385,7 +385,10 @@ public final class SdocBuilder
     final String filtersString =
         buildMetaDataProperties.getProperty(Constant.PROP_NAME_MAVEN_FILTERS);
     renderFiles(filters, "filter", filtersString);
-    parent.appendChild(filters);
+    if (filters.hasChildNodes())
+    {
+      parent.appendChild(filters);
+    }
 
     final Element profiles = document.createElement("profiles");
     final String profilesString =
