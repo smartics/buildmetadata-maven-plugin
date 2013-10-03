@@ -42,7 +42,7 @@
 </plugin>]]></source>
         <p>
           Please refer to
-          <a href="https://project.smartics.de/projects/projectdoc/references/topic/systems/0010-artifact-server.html#Accessing_Artifacts">Accessing Artifacts</a>
+          <a href="${webroot-projects}/accessing-artifacts">Accessing Artifacts</a>
           on information to download the plugin.
         </p>
 
@@ -67,63 +67,63 @@
     <propertyOutputFileMapping>
       <fileMapping>
         <packaging>war</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>ear</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>sar</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>rar</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>par</packaging>
-        <outputFile>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>jar</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>ejb</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>maven-archetype</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>maven-plugin</packaging>
-        <outputFile>${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>eclipse-plugin</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>eclipse-feature</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>eclipse-repository</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>eclipse-update-site</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>targetplatform</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
         <packaging>pom</packaging>
-        <outputFile>${project.build.directory}/build.properties</outputFile>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
       </fileMapping>
     </propertyOutputFileMapping>
   </configuration>
@@ -137,6 +137,102 @@
           set <a href="provide-buildmetadata-mojo.html#activatePropertyOutputFileMapping">activatePropertyOutputFileMapping</a>
           to <code>false</code>.
         </p>
+      </subsection>
+
+      <subsection name="XML report">
+        <p>
+          The properties file with the build metadata is short and easy to parse.
+          But if you want to process the information to feed other processes,
+          an XML format is more convenient.
+        </p>
+        <p>
+          The file is created per default in the target folder of your project.
+          The properties file is created per default in the <code>META-INF</code>
+          folder and therefore included in the artifact (if the artifact is an
+          archive and contains a <code>META-INF</code> folder).
+        </p>
+        <p>
+          If you want to replace the properties file with the XML file, use the
+          following configuration:
+        </p>
+        <source><![CDATA[<plugin>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+  <executions>
+    <execution>
+      <phase>initialize</phase>
+      <goals>
+        <goal>provide-buildmetadata</goal>
+      </goals>
+      <configuration>
+        <createPropertiesReport>false</createPropertiesReport>
+        <xmlOutputFile>\${project.build.outputDirectory}/META-INF/buildmetadata.xml</xmlOutputFile>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>]]></source>
+        <p>
+          The XSDs for the generated XML file are part of the
+          <a href="${webroot}/buildmetadata">buildmetadata doctype</a>.
+        </p>
+        <p>
+          Here is an example of SNAPSHOT build of the
+          <a href="${webroot}/smartics-commons">smartics-commons</a> project:
+        </p>
+        <source><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<buildmetadata xmlns="http://www.smartics.de/project/process/implementation/buildmetadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.smartics.de/project/process/implementation/buildmetadata http://www.smartics.de/project/process/implementation/buildmetadata">
+  <name>0.5.3-20131003r15895-locally-modified-SNAPSHOT</name>
+  <version>0.5.3-SNAPSHOT</version>
+  <groupId>de.smartics.util</groupId>
+  <artifactId>smartics-commons</artifactId>
+  <date>2013-10-03T15:46:26</date>
+  <timestamp>1380807986504</timestamp>
+  <build-year>2013</build-year>
+  <copyright-year>2011-2013</copyright-year>
+  <scm>
+    <revision>15895</revision>
+    <revision-date>2013-09-21T20:39:41</revision-date>
+    <url>scm:svn:https://www.smartics.eu/svn/public/util/trunk/smartics-commons</url>
+    <locally-modified-files>
+      <file modtype="modified">pom.xml</file>
+    </locally-modified-files>
+  </scm>
+  <runtime>
+    <build-server>Midgard</build-server>
+    <build-user>robert.reiner</build-user>
+    <os>
+      <arch>amd64</arch>
+      <name>Windows 7</name>
+      <version>6.1</version>
+    </os>
+    <java>
+      <name>Java(TM) SE Runtime Environment</name>
+      <version>1.6.0_25-b06</version>
+      <vendor>Sun Microsystems Inc.</vendor>
+      <vm>Java HotSpot(TM) 64-Bit Server VM</vm>
+      <compiler>HotSpot 64-Bit Tiered Compilers</compiler>
+    </java>
+    <maven>
+      <version>3.0.5</version>
+      <execution-project>de.smartics.util:smartics-commons:jar:0.5.3-SNAPSHOT</execution-project>
+      <is-excution-root>true</is-excution-root>
+      <goals>
+        <goal>clean</goal>
+        <goal>package</goal>
+      </goals>
+      <filters/>
+      <profiles>
+        <profile source="settings.xml">nexus</profile>
+        <profile source="settings.xml">smartics</profile>
+      </profiles>
+    </maven>
+  </runtime>
+  <misc>
+    <metadata name="build.date.pattern">dd.MM.yyyy HH:mm:ss</metadata>
+    <metadata name="build.scmLocallyModified">true</metadata>
+  </misc>
+</buildmetadata>]]></source>
       </subsection>
 
       <subsection name="Use with JAR plugin">
@@ -397,7 +493,7 @@
         <source><![CDATA[<properties>
   <property>
     <name>project.coordinates</name>
-    <value>${project.groupId}:${project.artifactId}:${project.version}</value>
+    <value>\${project.groupId}:\${project.artifactId}:\${project.version}</value>
     <label>Coordinates</label>
   </property>
 </properties>]]></source>

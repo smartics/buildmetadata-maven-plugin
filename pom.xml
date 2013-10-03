@@ -49,7 +49,7 @@
   </distributionManagement>
 
   <properties>
-    <issues-component>Buildmetadata-Mojo,Report-Mojo,Documentation</issues-component>
+    <issues-component>@Product,Buildmetadata-Mojo,Report-Mojo,Documentation</issues-component>
 
     <donationId>ZNFSBTAQJ49HA</donationId>
     <ohlohProjectId>485170</ohlohProjectId>
