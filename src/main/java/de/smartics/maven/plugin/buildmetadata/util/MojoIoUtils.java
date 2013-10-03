@@ -61,7 +61,7 @@ public final class MojoIoUtils
   // --- object basics --------------------------------------------------------
 
   /**
-   * Writes the DOM document to the given stream.
+   * Writes the DOM document to the given stream in pretty print format.
    *
    * @param document the document to write.
    * @param out the stream to write to.
@@ -70,7 +70,7 @@ public final class MojoIoUtils
   public static void serialize(final Document document, final OutputStream out)
     throws TransformerException
   {
-    serialize(document, out, false);
+    serialize(document, out, true);
   }
 
   /**
