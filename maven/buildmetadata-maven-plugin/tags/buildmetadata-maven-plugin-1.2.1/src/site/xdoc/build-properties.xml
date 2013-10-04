@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2013 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Build Properties</title>
+	</properties>
+	<body>
+    <section name="Build Properties">
+      <p>
+        The following properties can be used to refer to in the POM.
+      </p>
+
+      <subsection name="SCM information">
+        <p>
+          The following revision information is extracted from the SCM
+          system.
+        </p>
+
+        <table width="98%">
+          <tr>
+            <th width="100">Property</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>build.scmRevision.id</code>
+            </td>
+            <td>
+              The latest revision number provided by the SCM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.scmRevision.date</code>
+            </td>
+            <td>
+              The date of the latest revision number provided by the
+              SCM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.scmLocallyModified</code>
+            </td>
+            <td>
+              The status of the local files. If there a local modifications
+              (that is the local sources differ from that stored in the remote
+              repository), this value is <code>true</code>. If there are no
+              differences, the value is <code>false</code>. If the status cannot
+              be determined (e.g. because of a failure) the value is
+              <code>unknown</code>. Only if this value is <code>false</code> the
+              revision number can be trusted to refer to the right files.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.scmLocallyModified.files</code>
+            </td>
+            <td>
+              The list of files that are modified locally. This property is only
+              set, if <code>build.scmLocallyModified</code> has a value of
+              <code>true</code>.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.scmRevision.url</code>
+            </td>
+            <td>
+              Stores the URL to the SCM server.
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="Build Time Information">
+        <p>
+          The following information refers to the build time.
+        </p>
+        <table width="98%">
+          <tr>
+            <th width="100">Property</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>build.date</code>
+            </td>
+            <td>
+              The date the artifact has been built.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.copyright.year</code>
+            </td>
+            <td>
+              The year information for the copyright notice. This is, if inception year and build year are the same,
+              the inception year, otherwise it is the period starting with the inception year and ending with the
+              build year. In short: ${project.inceptionYear}-${build.year}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.date.pattern</code>
+            </td>
+            <td>
+              The pattern used to format the <code>build.date</code>. This
+              format is also stored as a property to allow to parse the date.
+              It may be easier to use <code>build.timestamp.millis</code>
+              to format the build date, though.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.timestamp.millis</code>
+            </td>
+            <td>
+              A convenience value that stores the build time in
+              milliseconds.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.year</code>
+            </td>
+            <td>
+              A convenience property that stores the year of the
+              <code>build.date</code>.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.duration.[name]</code>
+            </td>
+            <td>
+              On setting <a href="build-points.html">build points</a>, the time (in milliseconds)
+              within the build process is stored for further reference. Together with the time
+              difference to the start of the build, the difference to the previous build point
+              is also stored with a <code>.diff</code> suffix.
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="Build Execution Information">
+        <p>
+          Information about the user and the system the artifact has been build
+          by.
+        </p>
+        <table width="98%">
+          <tr>
+            <th width="100">Property</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>build.user</code>
+            </td>
+            <td>
+              The name of the user/system that build the artifact. The
+              plugin grabs the value of the property specified by
+              <code></code>. If no such property value is present, the Java
+              system property <code>user.name</code> is returned.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.host.name</code>
+            </td>
+            <td>
+              The name of the host the build was executed on.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.os.name</code>
+            </td>
+            <td>
+              The name of the operating system the build was executed on.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.os.arch</code>
+            </td>
+            <td>
+              The name of the operating system's architecture the build was executed on.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.os.version</code>
+            </td>
+            <td>
+              The name of the operating system's version the build was executed on.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.java.runtime.name</code>
+            </td>
+            <td>
+              The name of the Java runtime that executes the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.java.runtime.version</code>
+            </td>
+            <td>
+              The version of the Java runtime that executes the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.java.vendor</code>
+            </td>
+            <td>
+              The name of the vendor of the Java product that executes the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.java.vm</code>
+            </td>
+            <td>
+              The name of the Java virtual machine that executes the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.java.compiler</code>
+            </td>
+            <td>
+              The name of the Java compiler used by the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.java.vendor</code>
+            </td>
+            <td>
+              The name of the vendor of the Java product that executes the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.version</code>
+            </td>
+            <td>
+              The version of the Maven tool being executed to run the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.cmdline</code>
+            </td>
+            <td>
+              The command line arguments passed to Maven.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.goals</code>
+            </td>
+            <td>
+              The goals executed by Maven on the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.isRoot</code>
+            </td>
+            <td>
+              Flag to indicate whether the project creating
+              the artifact is the one the run has been started
+              on (<code>true</code>) or if it is a sub module
+              (<code>false</code>).
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.project</code>
+            </td>
+            <td>
+              In the case of a sub module (<code>build.maven.execution.isRoot</code>
+              has a value of <code>false</code>) this provides
+              the identifier of the project the build has been started.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.opts</code>
+            </td>
+            <td>
+              The Maven options provided by the environment
+              variable <code>MAVEN_OPTS</code>.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.java.opts</code>
+            </td>
+            <td>
+              The Java options provided by the environment
+              variable <code>JAVA_OPTS</code>.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.profiles.active</code>
+            </td>
+            <td>
+              The list of profiles that had been active during
+              the build.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.maven.execution.profile.active.[profile-id]</code>
+            </td>
+            <td>
+              The source the profile has been provided in
+              (e.g. <code>settings.xml</code>).
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>execution.property.[name]</code>
+            </td>
+            <td>
+              The properties set to Maven for the build. This includes environment variables
+              as well as Maven specific properties.
+            </td>
+          </tr>
+        </table>
+        <p>
+          The system information is provided by Java system properties
+          <code>os.name</code>, <code>os.arch</code> and
+          <code>os.version</code> as well as <code>java.version</code>
+          and <code>java.vendor</code>.
+          There is no additional information added by this plugin.
+        </p>
+      </subsection>
+
+      <subsection name="Build Artifact and Version Information">
+        <p>
+          Artifact and version information for the build. This information is for
+          convenience to construct version information to be used in the
+          POM (e.g. to name the final file).
+        </p>
+        <table width="98%">
+          <tr>
+            <th width="100">Property</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>build.groupId</code>
+            </td>
+            <td>
+              This is the group ID that is read from the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.artifactId</code>
+            </td>
+            <td>
+              This is the artifact ID that is read from the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.version</code>
+            </td>
+            <td>
+              This is the artifact version that is read from the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.version.full</code>
+            </td>
+            <td>
+              The version may contain the date in a normalized form and the
+              revision number. This information is
+              controlled by the Mojo properties:
+              <ul>
+                <li>
+                  <code>addBuildDateToFullVersion</code>
+                </li>
+                <li>
+                  <code>addReleaseNumberToFullVersion</code>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="Project Information">
+        <p>
+          Project information may be helpful for operations teams that look inside
+          an artifact to find further information.
+        </p>
+        <table width="98%">
+          <tr>
+            <th width="100">Property</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>
+              <code>project.page.home.url</code>
+            </td>
+            <td>
+              The URL to the project home page.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>project.page.ops.url</code>
+            </td>
+            <td>
+              The URL to a resource that compiles resources
+              relevant for the operations team. This
+              property has to be explicitly set as a property.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>project.category</code>
+            </td>
+            <td>
+              A value to categorize the artifact. This allows tools
+              to render artifacts in multiple sections. This
+              property has to be explicitly set as a property.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>project.subcategory</code>
+            </td>
+            <td>
+              A value to further categorize the artifact. This allows tools
+              to render artifacts in multiple sections. This
+              property has to be explicitly set as a property.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>project.tags</code>
+            </td>
+            <td>
+              A value to tag the artifact. This allows tools
+              to organize multiple artifacts. This
+              property has to be explicitly set as a property.
+            </td>
+          </tr>
+        </table>
+      </subsection>
+    </section>
+  </body>
+</document>
