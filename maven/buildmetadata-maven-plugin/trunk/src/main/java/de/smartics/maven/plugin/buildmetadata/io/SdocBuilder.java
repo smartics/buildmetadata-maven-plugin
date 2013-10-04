@@ -301,7 +301,7 @@ public final class SdocBuilder
     final Element parent = document.createElement("project");
 
     createContentElement("copyright-year", Constant.PROP_NAME_COPYRIGHT_YEAR,
-        docRoot);
+        parent);
     createContentElement("home-page-url", Constant.PROP_NAME_PROJECT_HOMEPAGE,
         parent);
     createContentElement("ops-home-page-url", Constant.PROP_NAME_PROJECT_OPS,
