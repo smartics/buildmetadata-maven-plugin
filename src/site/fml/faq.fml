@@ -93,6 +93,26 @@
       </answer>
     </faq>
 
+    <faq id="noSvnNumber">
+      <question>
+        I added the plugin to the build section, but the <code>build.properties</code>
+        do not show the SVN revision number.
+      </question>
+      <answer>
+        <p>
+          Please check the <code>scm</code> section. Your SCM URL is probably
+          wrong. If you want to fail the build in this occasion, please use
+          the <a href="provide-buildmetadata-mojo.html#failOnMissingRevision">failOnMissingRevision</a> property.
+        </p>
+        <source>
+[ERROR] [snipped] Cannot fetch SCM revision. SCM connection info:
+            url=scm:svn:https://my.corp.com/svn/and/here/is/probably/a/thaipo/somewhere,
+            user=jane.doe,
+            password=**********************************************
+        </source>
+      </answer>
+    </faq>
+
     <faq id="svnNumber">
       <question>
         The plugin fetched an SVN revision that is not part of the project's
