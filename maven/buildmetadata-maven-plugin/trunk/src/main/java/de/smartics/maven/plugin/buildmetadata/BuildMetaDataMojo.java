@@ -483,9 +483,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
   // --- business -------------------------------------------------------------
 
-  /**
-   * {@inheritDoc}
-   */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
     if (!skip)
@@ -505,21 +502,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
         final Properties buildMetaDataProperties = new Properties();
         if (isBuildPropertiesToBeRebuild())
         {
-          final Date buildDate = session.getStartTime();
-
-          provideBuildUser(projectProperties, buildMetaDataProperties);
-          provideMavenMetaData(buildMetaDataProperties);
-          provideHostMetaData(buildMetaDataProperties);
-          final ScmInfo scmInfo = provideScmMetaData(buildMetaDataProperties);
-          provideBuildDateMetaData(buildMetaDataProperties, buildDate);
-
-          // The custom providers are required to be run at the end.
-          // This allows these providers to access the information generated
-          // by the built-in providers.
-          provideBuildMetaData(buildMetaDataProperties, scmInfo, providers,
-              false);
-
-          writeBuildMetaData(helper, buildMetaDataProperties);
+          createBuildProperties(helper, projectProperties,
+              buildMetaDataProperties);
         }
         else
         {
@@ -534,6 +518,28 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     {
       getLog().info("Skipping buildmetadata collection since skip=true.");
     }
+  }
+
+  private void createBuildProperties(final BuildPropertiesFileHelper helper,
+      final Properties projectProperties,
+      final Properties buildMetaDataProperties) throws MojoExecutionException,
+    MojoFailureException
+  {
+    final Date buildDate = session.getStartTime();
+
+    provideBuildUser(projectProperties, buildMetaDataProperties);
+    provideMavenMetaData(buildMetaDataProperties);
+    provideHostMetaData(buildMetaDataProperties);
+    final ScmInfo scmInfo = provideScmMetaData(buildMetaDataProperties);
+    provideBuildDateMetaData(buildMetaDataProperties, buildDate);
+
+    // The custom providers are required to be run at the end.
+    // This allows these providers to access the information generated
+    // by the built-in providers.
+    provideBuildMetaData(buildMetaDataProperties, scmInfo, providers,
+        false);
+
+    writeBuildMetaData(helper, buildMetaDataProperties);
   }
 
   private void writeBuildMetaData(final BuildPropertiesFileHelper helper,
