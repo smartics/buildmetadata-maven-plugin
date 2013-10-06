@@ -107,11 +107,6 @@ public final class BuildReportMojo extends AbstractReportMojo
   protected List<Property> properties; // NOPMD
 
   /**
-   * Flag to check if the mojo has already been initialized.
-   */
-  private boolean initialized;
-
-  /**
    * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
    * <code>build.properties</code> file should be created.
    * <p>
@@ -172,9 +167,6 @@ public final class BuildReportMojo extends AbstractReportMojo
 
   // --- business -------------------------------------------------------------
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void execute() throws MojoExecutionException
   {
@@ -187,18 +179,23 @@ public final class BuildReportMojo extends AbstractReportMojo
    */
   protected void init()
   {
-    if (!initialized)
+    if (propertiesOutputFile == null
+        || !propertiesOutputFile.canRead())
     {
       final PropertyOutputFileMapper mapper =
           new PropertyOutputFileMapper(project, propertyOutputFileMapping);
       this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
       if (createPropertiesReport)
       {
-        this.propertiesOutputFile =
+        propertiesOutputFile =
             mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
                 propertiesOutputFile);
       }
-      this.initialized = true;
+      else
+      {
+        propertiesOutputFile =
+            new File(project.getBuild().getDirectory(), "build.properties");
+      }
     }
   }
 
@@ -210,8 +207,6 @@ public final class BuildReportMojo extends AbstractReportMojo
   @Override
   protected void executeReport(final Locale locale) throws MavenReportException
   {
-    adjust();
-
     super.executeReport(locale);
 
     final Sink sink = getSink();
@@ -221,15 +216,6 @@ public final class BuildReportMojo extends AbstractReportMojo
         new BuildReportRenderer(new FilePathNormalizer(baseDir), messages,
             sink, propertiesOutputFile, properties);
     renderer.renderReport();
-  }
-
-  private void adjust()
-  {
-    if (!createPropertiesReport)
-    {
-      propertiesOutputFile =
-          new File(project.getBuild().getDirectory(), "build.properties");
-    }
   }
 
   /**
