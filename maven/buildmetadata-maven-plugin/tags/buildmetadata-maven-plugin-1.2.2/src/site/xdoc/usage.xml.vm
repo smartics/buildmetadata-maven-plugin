@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2013 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Usage</title>
+	</properties>
+	<body>
+    <section name="Usage">
+      <subsection name="POM Configuration Collector">
+        <p>Use the following to add the plugin to your POM to collect the build
+        information:</p>
+        <source><![CDATA[<plugin>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+  <executions>
+    <execution>
+      <phase>initialize</phase>
+      <goals>
+        <goal>provide-buildmetadata</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>]]></source>
+        <p>
+          Please refer to
+          <a href="${webroot-projects}/accessing-artifacts">Accessing Artifacts</a>
+          on information to download the plugin.
+        </p>
+
+        <p>
+          The file <code>buildmetadata.properties</code> is written to the
+          <code>META-INF</code> folder by default. You may change the
+          by changing the destination of the
+          <a href="provide-buildmetadata-mojo.html#propertiesOutputFile">propertiesOutputFile</a>
+          property.
+        </p>
+        <p>
+          For multi projects it is especially useful to map the output file to
+          packaging types. This is done by (following is the default configuration if
+          it is not specified):
+        </p>
+        <source><![CDATA[<plugin>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+  <configuration>
+    <addProjectInfo>true</addProjectInfo>
+    <propertyOutputFileMapping>
+      <fileMapping>
+        <packaging>war</packaging>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>ear</packaging>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>sar</packaging>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>rar</packaging>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>par</packaging>
+        <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>jar</packaging>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>ejb</packaging>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>maven-archetype</packaging>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>maven-plugin</packaging>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>eclipse-plugin</packaging>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>eclipse-feature</packaging>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>eclipse-repository</packaging>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>eclipse-update-site</packaging>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>targetplatform</packaging>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
+        <packaging>pom</packaging>
+        <outputFile>\${project.build.directory}/build.properties</outputFile>
+      </fileMapping>
+    </propertyOutputFileMapping>
+  </configuration>
+</plugin>]]></source>
+        <p>
+          Packaging types not specified here default to
+          <a href="provide-buildmetadata-mojo.html#propertiesOutputFile">propertiesOutputFile</a>.
+        </p>
+        <p>
+          If you want to disable the <code>propertyOutputFileMapping</code>,
+          set <a href="provide-buildmetadata-mojo.html#activatePropertyOutputFileMapping">activatePropertyOutputFileMapping</a>
+          to <code>false</code>.
+        </p>
+      </subsection>
+
+      <subsection name="XML report">
+        <p>
+          The properties file with the build metadata is short and easy to parse.
+          But if you want to process the information to feed other processes,
+          an XML format is more convenient.
+        </p>
+        <p>
+          The file is created per default in the target folder of your project.
+          The properties file is created per default in the <code>META-INF</code>
+          folder and therefore included in the artifact (if the artifact is an
+          archive and contains a <code>META-INF</code> folder).
+        </p>
+        <p>
+          If you want to replace the properties file with the XML file, use the
+          following configuration:
+        </p>
+        <source><![CDATA[<plugin>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+  <executions>
+    <execution>
+      <phase>initialize</phase>
+      <goals>
+        <goal>provide-buildmetadata</goal>
+      </goals>
+      <configuration>
+        <createPropertiesReport>false</createPropertiesReport>
+        <xmlOutputFile>\${project.build.outputDirectory}/META-INF/buildmetadata.xml</xmlOutputFile>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>]]></source>
+        <p>
+          The XSDs for the generated XML file are part of the
+          <a href="${webroot}/buildmetadata">buildmetadata doctype</a>.
+        </p>
+        <p>
+          Here is an example of SNAPSHOT build of the
+          <a href="${webroot}/smartics-commons">smartics-commons</a> project:
+        </p>
+        <source><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<buildmetadata xmlns="http://www.smartics.de/project/process/implementation/buildmetadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.smartics.de/project/process/implementation/buildmetadata http://www.smartics.de/project/process/implementation/buildmetadata">
+  <name>0.5.3-20131003r15895-locally-modified-SNAPSHOT</name>
+  <version>0.5.3-SNAPSHOT</version>
+  <groupId>de.smartics.util</groupId>
+  <artifactId>smartics-commons</artifactId>
+  <date>2013-10-03T15:46:26</date>
+  <timestamp>1380807986504</timestamp>
+  <build-year>2013</build-year>
+  <copyright-year>2011-2013</copyright-year>
+  <scm>
+    <revision>15895</revision>
+    <revision-date>2013-09-21T20:39:41</revision-date>
+    <url>scm:svn:https://www.smartics.eu/svn/public/util/trunk/smartics-commons</url>
+    <locally-modified-files>
+      <file modtype="modified">pom.xml</file>
+    </locally-modified-files>
+  </scm>
+  <runtime>
+    <build-server>Midgard</build-server>
+    <build-user>robert.reiner</build-user>
+    <os>
+      <arch>amd64</arch>
+      <name>Windows 7</name>
+      <version>6.1</version>
+    </os>
+    <java>
+      <name>Java(TM) SE Runtime Environment</name>
+      <version>1.6.0_25-b06</version>
+      <vendor>Sun Microsystems Inc.</vendor>
+      <vm>Java HotSpot(TM) 64-Bit Server VM</vm>
+      <compiler>HotSpot 64-Bit Tiered Compilers</compiler>
+    </java>
+    <maven>
+      <version>3.0.5</version>
+      <execution-project>de.smartics.util:smartics-commons:jar:0.5.3-SNAPSHOT</execution-project>
+      <is-excution-root>true</is-excution-root>
+      <goals>
+        <goal>clean</goal>
+        <goal>package</goal>
+      </goals>
+      <filters/>
+      <profiles>
+        <profile source="settings.xml">nexus</profile>
+        <profile source="settings.xml">smartics</profile>
+      </profiles>
+    </maven>
+  </runtime>
+  <misc>
+    <metadata name="build.date.pattern">dd.MM.yyyy HH:mm:ss</metadata>
+    <metadata name="build.scmLocallyModified">true</metadata>
+  </misc>
+</buildmetadata>]]></source>
+      </subsection>
+
+      <subsection name="Use with JAR plugin">
+        <p>
+          To use the build information with the JAR plugin that writes it
+          to the manifest file, you may use the following code:
+        </p>
+        <source><![CDATA[<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-jar-plugin</artifactId>
+  <version>2.3.1</version>
+  <configuration>
+    <archive>
+      <manifest>
+        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+      </manifest>
+      <manifestEntries>
+        <Implementation-SCM-Revision-Number>${build.scmRevision.id}</Implementation-SCM-Revision-Number>
+        <Implementation-SCM-Revision-Date>${build.scmRevision.date}</Implementation-SCM-Revision-Date>
+        <Implementation-URL>${project.url}</Implementation-URL>
+        <Implementation-Date>${build.date}</Implementation-Date>
+        <Implementation-Timestamp>${build.timestamp.millis}</Implementation-Timestamp>
+        <Implementation-DatePattern>${build.date.pattern}</Implementation-DatePattern>
+        <Implementation-Full-Version>${build.version.full}</Implementation-Full-Version>
+        <Built-Host>${build.host.name}</Built-Host>
+        <Built-OS>${os.name} / ${os.arch} / ${os.version}</Built-OS>
+        <Built-By>${build.user}</Built-By>
+        <Maven-Version>${build.maven.version}</Maven-Version>
+        <Java-Version>${java.version}</Java-Version>
+        <Java-Vendor>${java.vendor}</Java-Vendor>
+      </manifestEntries>
+    </archive>
+  </configuration>
+</plugin>]]></source>
+        <p>
+          We add the build date pattern here to be able to parse the date
+          found in the manifest to present it localized to the user.
+          But typically it is easier and faster to use the timestamp that is
+          added as <code>build.timestamp.millis</code>.
+        </p>
+        <p>
+          The same holds true for other archiver like the ear and war plugin.
+        </p>
+      </subsection>
+
+      <subsection name="POM Configuration Report">
+        <p>Use the following to add the plugin as a report to your POM:</p>
+        <source><![CDATA[<reporting>
+  <plugins>
+    ...
+    <plugin>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${project.artifactId}</artifactId>
+      <version>${project.version}</version>
+    </plugin>
+  </plugins>
+</reporting>]]></source>
+      </subsection>
+
+      <subsection name="Control generated Information">
+        <p>
+          Some properties let you control the information that is generated
+          and added as a <a href="build-properties.html">property</a> to the
+          build environment.
+        </p>
+        <ol>
+          <li><a href="provide-buildmetadata-mojo.html#addEnvInfo">addEnvInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addHostInfo">addHostInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addJavaRuntimeInfo">addJavaRuntimeInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addOsInfo">addOsInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addMavenExecutionInfo">addMavenExecutionInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addScmInfo">addScmInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addProjectInfo">addProjectInfo</a></li>
+        </ol>
+        <p>
+          Since the command line, <code>MAVEN_OPTS</code>, and <code>JAVA_OPTS</code> may
+          contain sensitive information (e.g. a password passed to a plugin), this information
+          is hidden by default by the properties
+        </p>
+        <ol>
+          <li><a href="provide-buildmetadata-mojo.html#hideCommandLineInfo">hideCommandLineInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#hideMavenOptsInfo">hideMavenOptsInfo</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#hideJavaOptsInfo">hideJavaOptsInfo</a></li>
+        </ol>
+        <p>
+          Set the <code>hideXXX</code> property to <code>false</code> to add the
+          corresponding values to the build metadata properties.
+        </p>
+      </subsection>
+
+      <subsection name="Copy Property to Build Properties">
+        <p>
+          In case you want to copy a system property, an environment variable,
+          or a Maven property to the build properties, use the
+          <code>properties</code> element
+          within the plugin's <code>configuration</code>.
+        </p>
+        <p>
+          The following property information may be provided:
+        </p>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>name</td>
+            <td>The name of the system property or environment variable to
+            copy. First the value is checked to be found as a system property,
+            then as an environment variable. The fact that no value is found
+            at either place is silently ignored.</td>
+          </tr>
+          <tr>
+            <td>mappedName</td>
+            <td>The name of the property to be used in the build meta data
+            properties. This allows to change the name of the property.</td>
+          </tr>
+          <tr>
+            <td>value</td>
+            <td>The value provided for the property. No lookup is performed.
+              Standard Maven properties are resolved.</td>
+          </tr>
+          <tr>
+            <td>section</td>
+            <td>Binds the property to be displayed in the given section.
+              This value is only relevant for reports. This value is optional
+              and if not given or invalid, the property is displayed with the
+              misc section.
+              <p>
+                The following values are allowed:
+              </p>
+             <ul>
+               <li><code>build.scm</code> - source code management information.</li>
+               <li><code>build.dateAndVersion</code> - information about build date and artifact version.</li>
+               <li><code>build.runtime</code> - information about the build runtime.</li>
+               <li><code>build.java</code> - information about the Java runtime running the build.</li>
+               <li><code>build.maven</code> - information about the Maven runtime running the build.</li>
+               <li><code>project</code> - information about the project or product.</li>
+               <li><code>build.misc</code> - miscellaneous build information (catch all category).</li>
+             </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>label</td>
+            <td>An optional label to be displayed instead of the name
+            of the property.</td>
+          </tr>
+        </table>
+        <p>
+          The following example illustrates the usage:
+        </p>
+        <source><![CDATA[<properties>
+  <property>
+    <name>user.home</name>
+    <section>build.runtime</section>
+  </property>
+</properties>]]></source>
+        <p>
+          The <code>user.home</code> property is associated with the
+          runtime section. Since no label is given the value will be
+          displayed with the property name as key.
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>unknown</name>
+    <section>build.java</section>
+  </property>
+</properties>]]></source>
+        <p>
+          The <code>unknown</code> property will not be found as a
+          system property or environment variable and is therefore
+          silently ignored.
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>file.separator</name>
+    <section>build.invalid</section>
+    <label>Separator for Files</label>
+  </property>
+</properties>]]></source>
+        <p>
+          The <code>file.separator</code> property has a label of
+          "Separator for Files" that is rendered as a key instead
+          of the property name. Since the section is invalid, the
+          property will be displayed with the misc section.
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>java.vendor.url</name>
+    <section>build.java</section>
+    <label>Vendor-URL</label>
+  </property>
+</properties>]]></source>
+        <p>
+          The <code>java.vendor.url</code> will be displayed in the
+          Java section with the label "Vendor-URL". If the value
+          is an URL starting with <code>http://</code> or
+          <code>https://</code>, it is rendered as a link.
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>PATH</name>
+  </property>
+</properties>]]></source>
+        <p>
+          This declaration copies the operating system
+          environment variable <code>PATH</code> with no label to
+          the misc section.
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>project.url</name>
+    <mappedName>project.homepage</mappedName>
+    <label>Project Homepage</label>
+  </property>
+</properties>]]></source>
+        <p>
+          The URL of the project specified in the POM is copied to the
+          build properties by the name <code>project.homepage</code>
+          instead of <code>project.url</code>.
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>ohlohProjectId</name>
+    <mappedName>project.id.ohloh</mappedName>
+    <label>Ohloh</label>
+  </property>
+</properties>]]></source>
+        <p>
+          Suppose the property <code>ohlohProjectId</code> is definied
+          in the properties section of the POM. The example above copies
+          the value to the build properties by the name <code>project.id.ohloh</code>
+          instead of <code>ohlohProjectId</code>..
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>project.my.property</name>
+  </property>
+</properties>]]></source>
+        <p>
+          Normally, if the property starts with <code>project.</code>
+          it is assumed that the property is found in the POM
+          like in <code>project.version</code> (which fetches the
+          version of the project from the POM). If the property
+          is not a property of the POM, it is looked up in the
+          properties section. The example above will find the
+          property <code>project.my.property</code> there.
+        </p>
+
+        <source><![CDATA[<properties>
+  <property>
+    <name>project.coordinates</name>
+    <value>\${project.groupId}:\${project.artifactId}:\${project.version}</value>
+    <label>Coordinates</label>
+  </property>
+</properties>]]></source>
+        <p>
+          Normally, if the property starts with <code>project.</code>
+          it is assumed that the property is found in the POM
+          like in <code>project.version</code> (which fetches the
+          version of the project from the POM). If the property
+          is not a property of the POM, it is looked up in the
+          properties section. The example above will find the
+          property <code>project.my.property</code> there.
+        </p>
+
+        <p>
+          Please note that properties specified in the
+          <code>settings.xml</code> or in activated profiles
+          are considered due to Maven's property resolution.
+        </p>
+      </subsection>
+
+      <subsection name="Custom Build Meta Data Providers">
+        <p>
+          To create your own build meta data provider, please refer to the
+          <a href="provider.html">provider</a> documentation.
+        </p>
+      </subsection>
+
+      <subsection name="Control full Version String">
+        <p>
+          Some properties let you control the construction of the full version string.
+          The full version string has per default for instance the following form:
+        </p>
+        <source>1.0.0-20100829r9217-locally-modified-SNAPSHOT</source>
+        <ol>
+          <li><a href="provide-buildmetadata-mojo.html#addBuildDateToFullVersion">addBuildDateToFullVersion</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addLocallyModifiedTagToFullVersion">addLocallyModifiedTagToFullVersion</a></li>
+          <li><a href="provide-buildmetadata-mojo.html#addReleaseNumberToFullVersion">addReleaseNumberToFullVersion</a></li>
+        </ol>
+      </subsection>
+
+      <subsection name="Validating checked out Sources">
+        <p>
+          Building from locally modified sources the generated artifact cannot be
+          tracked back to a given revision in the SCM.
+        </p>
+        <p>
+          If you want to fail the build on locally modified resources, use
+          the property <a href="provide-buildmetadata-mojo.html#failOnLocalModifications">failOnLocalModifications</a> set to <code>true</code>.
+        </p>
+        <p>
+          If you want to allow locally modified builds, use the property
+          <a href="provide-buildmetadata-mojo.html#validateCheckout">validateCheckout</a> set to <code>true</code>
+          (the default). This will provide the names of the changed files to the build properties.
+        </p>
+        <source><![CDATA[#Created by buildmetadata-maven-plugin.build.date=17.07.2010 19\:13\:00
+...
+
+build.version=0.7.0-SNAPSHOT
+build.version.full=0.7.0-20100717r8971-locally-modified-SNAPSHOT
+
+...
+
+build.scmLocallyModified=true
+build.scmLocallyModified.files=[pom.xml\:modified]
+...]]></source>
+      </subsection>
+
+      <subsection name="Speeding up the Build">
+        <p>
+          To speed up the build the file <code>buildmetadata.properties</code>
+          is reused if it exists. If you want to force the retrieval of the
+          information use the <a href="provide-buildmetadata-mojo.html#forceNewProperties">forceNewProperties</a>
+          property, which is set to <code>false</code> by default.
+        </p>
+        <p>
+          Set every add-information property for information not required to <code>false</code>,
+          especially <a href="provide-buildmetadata-mojo.html#addScmInfo">addScmInfo</a>, and set
+          <a href="provide-buildmetadata-mojo.html#validateCheckout">validateCheckout</a> to <code>false</code>, too.
+        </p>
+        <p>
+          Shortening the range of days for the changelog query
+          (<a href="provide-buildmetadata-mojo.html#queryRangeInDays">queryRangeInDays</a> defaults to 30 days)
+          may also speed up the build. Please refer to <a href="scm-algorithm.html">Revision Algorithm</a>
+          for details how the revision is calculated.
+        </p>
+        <p>
+          Per default an XML version of the buildmetadata properties file is generated.
+          You may control the destination of the file by the property
+          <a href="provide-buildmetadata-mojo.html#xmlOutputFile">xmlOutputFile</a>.
+          In case you do not need the XML version, use the property
+          <a href="provide-buildmetadata-mojo.html#createXmlReport">createXmlReport</a>
+          to skip the generation.
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>

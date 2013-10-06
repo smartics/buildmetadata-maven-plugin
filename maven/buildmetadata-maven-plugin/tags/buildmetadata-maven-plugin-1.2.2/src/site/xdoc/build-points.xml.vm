@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2013 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Build Points</title>
+	</properties>
+	<body>
+    <section name="Build Points">
+      <p>
+      	Build Points run the <a href="build-point-mojo.html">build point mojo</a> at specified
+      	phases of the build process.
+      	With build points you can
+      </p>
+      <ol>
+      	<li>add <a href="provider.html">custom providers</a> at any point of the build.
+      		This is useful if certain information is not available at the start of the build
+      		when the <a href="provide-buildmetadata-mojo.html">buildmetadata mojo</a> is run.</li>
+     	<li>send build information to a backend system at any phase
+     		of the build.</li>
+     	<li>provide time measurements at specified build points.</li>
+      </ol>
+
+      <subsection name="Setting a Build Point">
+        <p>
+          For each build point add an execution block to the plugin's section in the POM
+          and bind it to the phase to run in. Providers that run with a build point require
+          the property <code>runAtBuildPoint</code> set to <code>true</code>.
+        </p>
+        <p>
+          The following example shows how to set two sample build points.
+        </p>
+        <source><![CDATA[  <plugin>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>${project.artifactId}</artifactId>
+    <version>${project.version}</version>
+    <inherited>true</inherited>
+    <configuration>
+      <providers>
+        <provider>
+          <type>de.smartics.sandbox.provider.InitProvider</type>
+        </provider>
+        <provider>
+          <type>de.smartics.sandbox.provider.EchoProvider</type>
+          <properties>
+            <echo>Beautiful!</echo>
+            <times>3</times>
+            <runAtBuildPoint>true</runAtBuildPoint>
+          </properties>
+        </provider>
+      </providers>
+    </configuration>
+    <executions>
+      <execution>
+        <id>build-point-1</id>
+        <goals>
+          <goal>build-point</goal>
+        </goals>
+        <phase>test</phase>
+        <configuration>
+          <name>test</name>
+        </configuration>
+      </execution>
+      <execution>
+        <id>build-point-2</id>
+        <goals>
+          <goal>build-point</goal>
+        </goals>
+        <phase>verify</phase>
+        <configuration>
+          <name>promote</name>
+          <providers>
+            <provider>
+              <type>de.smartics.sandbox.provider.PromotionProvider</type>
+              <properties>
+                <runAtBuildPoint>true</runAtBuildPoint>
+              </properties>
+            </provider>
+          </providers>
+        </configuration>
+      </execution>
+    </executions>
+  </plugin>]]></source>
+
+        <p>
+          The <code>InitProvider</code> will not be run at any build point
+          since its configuration lacks the <code>runAtBuildPoint</code>
+          property. The <code>EchoProvider</code> is run at both
+          build points. The <code>PromotionProvider</code> is only run
+          at <code>build-point-2</code> which is named <code>promote</code>
+          in the <code>verify</code> phase.
+        </p>
+
+		<p>
+		  For each build point the time within the build is logged as is the
+		  difference to the last build point (tagged with the <code>diff</code> suffix).
+		  The build properties file may contain the following information due
+		  to the build point configuration above.
+		</p>
+        <source><![CDATA[build.duration.promote=20918
+build.duration.promote.diff=41
+build.duration.test=20877
+build.duration.test.diff=20877]]></source>
+		<p>
+		  All times are given in milliseconds.
+		</p>
+		<p>
+		  Please note that the properties are ordered by their name, not
+		  by the time in milliseconds.
+		</p>
+      </subsection>
+    </section>
+  </body>
+</document>
