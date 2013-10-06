@@ -140,7 +140,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * </p>
    *
    * @parameter default-value= "true"
-   * @since 1.0
+   * @since 1.2
    */
   protected boolean createPropertiesReport;
 
