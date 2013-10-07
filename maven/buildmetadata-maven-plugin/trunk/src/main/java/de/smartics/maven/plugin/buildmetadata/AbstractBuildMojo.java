@@ -94,11 +94,14 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <code>${project.build.directory}/${project.build.finalName}/META-INF/build.properties</code>
    * and for standard JAR files to
    * <code>${project.build.outputDirectory}/META-INF/build.properties</code>.
+   * <p>
+   * This property is used for the properties and XML build file.
+   * </p>
    *
    * @parameter default-value=true
    * @since 1.1
    */
-  private boolean activatePropertyOutputFileMapping;
+  private boolean activateOutputFileMapping;
 
   /**
    * Maps a packaging to a location for the build meta data properties file.
@@ -109,7 +112,18 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * @parameter
    * @since 1.1
    */
-  protected List<FileMapping> propertyOutputFileMapping;
+  private List<FileMapping> propertyOutputFileMapping;
+
+  /**
+   * Maps a packaging to a location for the build meta data XML file.
+   * <p>
+   * This mapping is especially useful for multi projects.
+   * </p>
+   *
+   * @parameter
+   * @since 1.3
+   */
+  private List<FileMapping> xmlOutputFileMapping;
 
   /**
    * The name of the XML report file to write. If you want to include the XML
@@ -117,13 +131,13 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <code>${project.build.outputDirectory}/META-INF/buildmetadata.xml</code>.
    * <p>
    * The handling is not in an analogous manner as that of the properties file.
-   * The reason is this: we want to keep the artifact as small as possible per default.
-   * Therefore we include the <code>build.properties</code> and generate the
-   * XML report (see property <code>createXmlReport</code> to the target
-   * folder (and not inside <code>META-INF</code>). The XML file can be stored
-   * to the artifact server (with a couple of other reports) by the use
-   * of the
-   * <a href="http://www.smartics.eu/projectmetadata-maven-plugin">projectmetadata-maven-plugin</a>.
+   * The reason is this: we want to keep the artifact as small as possible per
+   * default. Therefore we include the <code>build.properties</code> and
+   * generate the XML report (see property <code>createXmlReport</code> to the
+   * target folder (and not inside <code>META-INF</code>). The XML file can be
+   * stored to the artifact server (with a couple of other reports) by the use
+   * of the <a href="http://www.smartics.eu/projectmetadata-maven-plugin">
+   * projectmetadata-maven-plugin</a>.
    * </p>
    *
    * @parameter default-value= "${project.build.directory}/buildmetadata.xml"
@@ -297,26 +311,52 @@ public abstract class AbstractBuildMojo extends AbstractMojo
   public void execute() throws MojoExecutionException, MojoFailureException
   {
     // CHECKSTYLE:ON
-    adjust();
-
-    final PropertyOutputFileMapper mapper =
-        new PropertyOutputFileMapper(project, propertyOutputFileMapping);
-    this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
+    final String propertiesFileName =
+        calcFileName(propertiesOutputFile, "build.properties");
     if (createPropertiesReport)
     {
+      final PropertyOutputFileMapper mapperProperties =
+          new PropertyOutputFileMapper(project, propertyOutputFileMapping,
+              propertiesFileName);
+      this.propertyOutputFileMapping = mapperProperties.initOutputFileMapping();
       this.propertiesOutputFile =
-          mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
+          mapperProperties.getPropertiesOutputFile(activateOutputFileMapping,
               propertiesOutputFile);
+    }
+    else
+    {
+      // The properties file is required for project filtering even if only
+      // the XML file is requested by the user.
+      propertiesOutputFile =
+          new File(project.getBuild().getDirectory(), propertiesFileName);
+    }
+
+    if (createXmlReport)
+    {
+      final String xmlFileName =
+          calcFileName(xmlOutputFile, "buildmetadata.xml");
+      final PropertyOutputFileMapper mapperXml =
+          new PropertyOutputFileMapper(project, xmlOutputFileMapping,
+              xmlFileName);
+      this.xmlOutputFileMapping = mapperXml.initOutputFileMapping();
+      this.xmlOutputFile =
+          mapperXml.getPropertiesOutputFile(activateOutputFileMapping,
+              xmlOutputFile);
     }
   }
 
-  private void adjust()
+  private static String calcFileName(final File file, final String defaultName)
   {
-    if (!createPropertiesReport)
+    final String fileName;
+    if (file != null)
     {
-      propertiesOutputFile =
-          new File(project.getBuild().getDirectory(), "build.properties");
+      fileName = file.getName();
     }
+    else
+    {
+      fileName = defaultName;
+    }
+    return fileName;
   }
 
   /**
