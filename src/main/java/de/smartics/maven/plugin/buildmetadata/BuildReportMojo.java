@@ -179,12 +179,12 @@ public final class BuildReportMojo extends AbstractReportMojo
    */
   protected void init()
   {
-    if (propertiesOutputFile == null
-        || !propertiesOutputFile.canRead())
+    if (propertiesOutputFile == null || !propertiesOutputFile.canRead())
     {
       final PropertyOutputFileMapper mapper =
-          new PropertyOutputFileMapper(project, propertyOutputFileMapping);
-      this.propertyOutputFileMapping = mapper.initPropertyOutputFileMapping();
+          new PropertyOutputFileMapper(project, propertyOutputFileMapping,
+              "build.properties");
+      this.propertyOutputFileMapping = mapper.initOutputFileMapping();
       if (createPropertiesReport)
       {
         propertiesOutputFile =

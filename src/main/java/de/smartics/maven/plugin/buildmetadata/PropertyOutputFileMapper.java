@@ -46,15 +46,21 @@ final class PropertyOutputFileMapper
    */
   private List<FileMapping> propertyOutputFileMapping;
 
+  /**
+   * The name of the file to create the path for.
+   */
+  private final String fileName;
+
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
 
   PropertyOutputFileMapper(final MavenProject project,
-      final List<FileMapping> propertyOutputFileMapping)
+      final List<FileMapping> propertyOutputFileMapping, final String fileName)
   {
     this.project = project;
     this.propertyOutputFileMapping = propertyOutputFileMapping;
+    this.fileName = fileName;
   }
 
   // ****************************** Inner Classes *****************************
@@ -67,21 +73,21 @@ final class PropertyOutputFileMapper
 
   // --- business -------------------------------------------------------------
 
-  List<FileMapping> initPropertyOutputFileMapping()
+  List<FileMapping> initOutputFileMapping()
   {
     if (propertyOutputFileMapping == null)
     {
       propertyOutputFileMapping = new ArrayList<FileMapping>(10);
       final Build build = project.getBuild();
       final String classesDir = build.getOutputDirectory();
-      final File jarFile = new File(classesDir, "META-INF/build.properties");
+      final File jarFile = new File(classesDir, "META-INF/" + fileName);
       final File targetDir = new File(build.getDirectory());
       final String finalName = build.getFinalName();
       final File deploymentUnitFile =
-          new File(targetDir, finalName + "/META-INF/build.properties");
+          new File(targetDir, finalName + "/META-INF/" + fileName);
 
       propertyOutputFileMapping.add(new FileMapping("pom", new File(targetDir,
-          "build.properties"))); // NOPMD
+          fileName))); // NOPMD
       propertyOutputFileMapping.add(new FileMapping("war", deploymentUnitFile));
       propertyOutputFileMapping.add(new FileMapping("ear", deploymentUnitFile));
       propertyOutputFileMapping.add(new FileMapping("sar", deploymentUnitFile));
@@ -92,16 +98,16 @@ final class PropertyOutputFileMapper
       propertyOutputFileMapping.add(new FileMapping("maven-plugin", jarFile));
       propertyOutputFileMapping
           .add(new FileMapping("maven-archetype", jarFile));
-      propertyOutputFileMapping.add(new FileMapping("eclipse-plugin", new File(targetDir,
-      "build.properties")));
-      propertyOutputFileMapping.add(new FileMapping("eclipse-feature", new File(targetDir,
-      "build.properties")));
-      propertyOutputFileMapping.add(new FileMapping("eclipse-repository", new File(targetDir,
-      "build.properties")));
-      propertyOutputFileMapping.add(new FileMapping("eclipse-update-site", new File(targetDir,
-      "build.properties")));
-      propertyOutputFileMapping.add(new FileMapping("targetplatform", new File(targetDir,
-      "build.properties")));
+      propertyOutputFileMapping.add(new FileMapping("eclipse-plugin", new File(
+          targetDir, fileName)));
+      propertyOutputFileMapping.add(new FileMapping("eclipse-feature",
+          new File(targetDir, fileName)));
+      propertyOutputFileMapping.add(new FileMapping("eclipse-repository",
+          new File(targetDir, fileName)));
+      propertyOutputFileMapping.add(new FileMapping("eclipse-update-site",
+          new File(targetDir, fileName)));
+      propertyOutputFileMapping.add(new FileMapping("targetplatform", new File(
+          targetDir, fileName)));
       return propertyOutputFileMapping;
 
     }
