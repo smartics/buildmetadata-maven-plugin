@@ -373,7 +373,7 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <version>1.8</version>
             <configuration>
-              <debug>true</debug>
+              <debug>false</debug>
               <projectsDirectory>src/it</projectsDirectory>
               <settingsFile>src/it/settings.xml</settingsFile>
 
