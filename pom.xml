@@ -365,7 +365,8 @@
   <profiles>
     <profile>
       <id>it</id>
-      <!-- mvn -Pit integration-test -->
+      <!-- mvn -Pit integration-test
+               -Dinvoker.test=bmd-it-xxx  (selected tests to run)-->
       <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
