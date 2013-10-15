@@ -15,6 +15,7 @@
     A test case building a JAR with the buildmetadata.xml, without the
     build.properties.
   </description>
+  <inceptionYear>2013</inceptionYear>
 
   <build>
     <plugins>
