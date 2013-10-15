@@ -536,8 +536,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     // The custom providers are required to be run at the end.
     // This allows these providers to access the information generated
     // by the built-in providers.
-    provideBuildMetaData(buildMetaDataProperties, scmInfo, providers,
-        false);
+    provideBuildMetaData(buildMetaDataProperties, scmInfo, providers, false);
 
     writeBuildMetaData(helper, buildMetaDataProperties);
   }
@@ -702,8 +701,9 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
         buildYearString);
     final String inceptionYearString = project.getInceptionYear();
     final String copyrightYearString =
-        (buildYearString.equals(inceptionYearString) ? inceptionYearString
-            : inceptionYearString + '-' + buildYearString);
+        (inceptionYearString == null ? buildYearString : (buildYearString
+            .equals(inceptionYearString) ? inceptionYearString
+            : inceptionYearString + '-' + buildYearString));
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_COPYRIGHT_YEAR,
         copyrightYearString);
   }
