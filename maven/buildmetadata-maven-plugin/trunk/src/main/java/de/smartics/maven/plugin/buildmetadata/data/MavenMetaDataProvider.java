@@ -405,8 +405,12 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
       {
         final RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
         commandLine = runtime.getInputArguments().toString();
+        System.out.println("Sysprope: " + runtime.getSystemProperties());
       }
     }
+
+    System.out.println("COMMANDLINE: " + commandLine);
+
     return commandLine;
   }
 
