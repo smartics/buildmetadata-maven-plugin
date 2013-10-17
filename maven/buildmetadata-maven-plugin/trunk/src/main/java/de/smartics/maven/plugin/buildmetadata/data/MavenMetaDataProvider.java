@@ -353,8 +353,7 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
   {
     if (!selection.isHideCommandLineInfo())
     {
-      final String commandLine =
-          executionProperties.getProperty("env.MAVEN_CMD_LINE_ARGS");
+      final String commandLine = getCommandLine(executionProperties);
       if (!StringUtils.isEmpty(commandLine))
       {
         buildMetaDataProperties.setProperty(Constant.PROP_NAME_MAVEN_CMDLINE,
@@ -382,6 +381,26 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
             javaOpts);
       }
     }
+  }
+
+  private static String getCommandLine(final Properties executionProperties)
+  {
+    String commandLine =
+        executionProperties.getProperty("env.MAVEN_CMD_LINE_ARGS");
+    if (StringUtils.isBlank(commandLine))
+    {
+      commandLine = executionProperties.getProperty("sun.java.command");
+      if (commandLine != null
+          && commandLine
+              .startsWith("org.codehaus.plexus.classworlds.launcher.Launcher "))
+      {
+        commandLine =
+            commandLine
+                .substring("org.codehaus.plexus.classworlds.launcher.Launcher "
+                    .length());
+      }
+    }
+    return commandLine;
   }
 
   // --- object basics --------------------------------------------------------
