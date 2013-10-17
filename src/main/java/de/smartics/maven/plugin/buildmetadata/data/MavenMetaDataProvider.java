@@ -446,6 +446,14 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
       {
         final Process process =
             Runtime.getRuntime().exec("ps -o args -p " + pid);
+        try
+        {
+          process.waitFor();
+        }
+        catch (final InterruptedException e)
+        {
+          // continue
+        }
         final int exit = process.exitValue();
         if (exit == 0)
         {
