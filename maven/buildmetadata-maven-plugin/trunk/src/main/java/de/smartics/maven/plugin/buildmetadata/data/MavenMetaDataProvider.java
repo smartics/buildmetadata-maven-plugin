@@ -15,6 +15,8 @@
  */
 package de.smartics.maven.plugin.buildmetadata.data;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -398,6 +400,11 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
             commandLine
                 .substring("org.codehaus.plexus.classworlds.launcher.Launcher "
                     .length());
+      }
+      else
+      {
+        final RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+        commandLine = runtime.getInputArguments().toString();
       }
     }
     return commandLine;
