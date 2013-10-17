@@ -29,6 +29,7 @@ import org.apache.maven.execution.RuntimeInformation;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.wagon.util.IoUtils;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
@@ -409,13 +410,14 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
         // System.out.println("Sysprope: " + System.getProperties());
 
         final Long pid = getProcessId();
+        System.out.println("PID " + pid);
         if (pid != null)
         {
           try
           {
             final Process process =
                 Runtime.getRuntime().exec("ps -o args -p " + pid);
-            final String result = IoUtils.toString(process.getInputStream());
+            final String result = IOUtil.toString(process.getInputStream());
             commandLine = result;
           }
           catch (final IOException e)
