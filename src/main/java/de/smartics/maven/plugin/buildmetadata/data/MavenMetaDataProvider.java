@@ -17,6 +17,7 @@ package de.smartics.maven.plugin.buildmetadata.data;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -28,7 +29,6 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.RuntimeInformation;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.wagon.util.IoUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -389,51 +389,80 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
 
   private static String getCommandLine(final Properties executionProperties)
   {
-    String commandLine =
-        executionProperties.getProperty("env.MAVEN_CMD_LINE_ARGS");
-    if (StringUtils.isBlank(commandLine))
-    {
-      commandLine = executionProperties.getProperty("sun.java.command");
-      if (commandLine != null
-          && commandLine
-              .startsWith("org.codehaus.plexus.classworlds.launcher.Launcher "))
-      {
-        commandLine =
-            commandLine
-                .substring("org.codehaus.plexus.classworlds.launcher.Launcher "
-                    .length());
-      }
-      else
-      {
-        // final RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
-        // commandLine = runtime.getInputArguments().toString();
-        // System.out.println("Sysprope: " + System.getProperties());
+    String commandLine = probEnv(executionProperties);
 
-        final Long pid = getProcessId();
-        System.out.println("PID " + pid);
-        if (pid != null)
-        {
-          try
-          {
-            final Process process =
-                Runtime.getRuntime().exec("ps -o args -p " + pid);
-            final String result = IOUtil.toString(process.getInputStream());
-            commandLine = result;
-          }
-          catch (final IOException e)
-          {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-        }
-      }
+    if (StringUtils.isNotBlank(commandLine))
+    {
+      return commandLine;
     }
 
-    System.out.println("COMMANDLINE: " + commandLine);
+    commandLine = probeSunVm(executionProperties);
+
+    if (StringUtils.isNotBlank(commandLine))
+    {
+      return commandLine;
+    }
+
+    commandLine = probeLinuxPs();
+
+    if (StringUtils.isBlank(commandLine))
+    {
+      commandLine = probeJmx();
+    }
 
     return commandLine;
   }
 
+  private static String probEnv(final Properties executionProperties)
+  {
+    // Typically works on Windows
+    final String commandLine =
+        executionProperties.getProperty("env.MAVEN_CMD_LINE_ARGS");
+    return commandLine;
+  }
+
+  private static String probeSunVm(final Properties executionProperties)
+  {
+    // Might work on some machines and does not hurt too much to try ...
+    String commandLine = executionProperties.getProperty("sun.java.command");
+    if (commandLine != null)
+    {
+      final String prefix =
+          "org.codehaus.plexus.classworlds.launcher.Launcher ";
+      if (commandLine.startsWith(prefix))
+      {
+        commandLine = commandLine.substring(prefix.length());
+      }
+    }
+    return commandLine;
+  }
+
+  private static String probeLinuxPs()
+  {
+    final Long pid = getProcessId();
+    if (pid != null)
+    {
+      try
+      {
+        final Process process =
+            Runtime.getRuntime().exec("ps -o args -p " + pid);
+        final int exit = process.exitValue();
+        if (exit == 0)
+        {
+          final String commandLine = IOUtil.toString(process.getInputStream());
+          return commandLine;
+        }
+      }
+      catch (final IOException e)
+      {
+        // Silently ignore that the command failed.
+      }
+    }
+    return null;
+  }
+
+  // see
+  // http://stackoverflow.com/questions/35842/how-can-a-java-program-get-its-own-process-id
   private static Long getProcessId()
   {
     final String name = ManagementFactory.getRuntimeMXBean().getName();
@@ -447,10 +476,20 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
       }
       catch (final NumberFormatException e)
       {
+        // return null at the end
       }
     }
     return null;
   }
+
+  private static String probeJmx()
+  {
+    // Won't get too much useful, but may be better than nothing ...
+    final RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+    final String commandLine = runtime.getInputArguments().toString();
+    return commandLine;
+  }
+
   // --- object basics --------------------------------------------------------
 
 }
