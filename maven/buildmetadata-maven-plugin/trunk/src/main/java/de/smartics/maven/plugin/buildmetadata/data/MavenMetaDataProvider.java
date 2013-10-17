@@ -15,8 +15,8 @@
  */
 package de.smartics.maven.plugin.buildmetadata.data;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -28,6 +28,7 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.RuntimeInformation;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.wagon.util.IoUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
@@ -321,7 +322,7 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
   @SuppressWarnings("unchecked")
   private List<Profile> getActiveProfiles()
   {
-    return (List<Profile>) project.getActiveProfiles();
+    return project.getActiveProfiles();
   }
 
   private void provideGoals(final Properties buildMetaDataProperties)
@@ -403,9 +404,26 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
       }
       else
       {
-        final RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
-        commandLine = runtime.getInputArguments().toString();
-        System.out.println("Sysprope: " + System.getProperties());
+        // final RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+        // commandLine = runtime.getInputArguments().toString();
+        // System.out.println("Sysprope: " + System.getProperties());
+
+        final Long pid = getProcessId();
+        if (pid != null)
+        {
+          try
+          {
+            final Process process =
+                Runtime.getRuntime().exec("ps -o args -p " + pid);
+            final String result = IoUtils.toString(process.getInputStream());
+            commandLine = result;
+          }
+          catch (final IOException e)
+          {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+        }
       }
     }
 
@@ -414,6 +432,23 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
     return commandLine;
   }
 
+  private static Long getProcessId()
+  {
+    final String name = ManagementFactory.getRuntimeMXBean().getName();
+    final int index = name.indexOf('@');
+
+    if (index > 0)
+    {
+      try
+      {
+        return Long.parseLong(name.substring(0, index));
+      }
+      catch (final NumberFormatException e)
+      {
+      }
+    }
+    return null;
+  }
   // --- object basics --------------------------------------------------------
 
 }
