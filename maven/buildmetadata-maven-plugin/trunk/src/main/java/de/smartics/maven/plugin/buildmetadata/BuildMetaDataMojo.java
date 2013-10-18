@@ -247,6 +247,9 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * <p>
    * If still no result, the property is considered to be undiscoverable.
    * </p>
+   *
+   * @parameter
+   * @since 1.4
    */
   private CommandLineConfig commandLineConfig;
 
@@ -602,7 +605,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
     if (commandLineConfig == null)
     {
-      commandLineConfig = new CommandLineConfig();
+      commandLineConfig = CommandLineConfig.createDefault();
     }
     final MavenMetaDataProvider mavenMetaDataProvider =
         new MavenMetaDataProvider(project, session, runtime, selection,
