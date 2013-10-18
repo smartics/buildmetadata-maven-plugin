@@ -35,7 +35,7 @@
               <hideCommandLineInfo>false</hideCommandLineInfo>
               <commandLineConfig>
                 <psExec>${env.JAVA_HOME}/bin/jps -m -v</psExec>
-                <resultRegExp>^${pid} (.+)</resultRegExp>
+                <resultRegExp>${pid} (.+)</resultRegExp>
               </commandLineConfig>
               <!-- <hideMavenOptsInfo>false</hideMavenOptsInfo> -->
               <!-- <hideJavaOptsInfo>false</hideJavaOptsInfo> -->
