@@ -219,6 +219,38 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   private boolean hideCommandLineInfo;
 
   /**
+   * A configuration to calculate the command line. The process for calculating
+   * the command line is platform dependent. First we look for the environment
+   * variable <code>env.MAVEN_CMD_LINE_ARGS</code>. If this is not set, we give
+   * the system property <code>sun.java.command</code> a try.
+   * <p>
+   * If neither yields a result we try to execute a process with the given
+   * <code>psExec</code> line (defaults to
+   * <code>${JAVA_HOME}/bin/jps -m -v -V</code>). If this execution string
+   * contains a place holder <code>${pid}</code>, it will be replaced with the
+   * process identifier of the Maven execution request. The result will be
+   * filtered with <code>resultRegExp</code> (again may contain the place holder
+   * ${pid} that will be handled as described above).
+   * </p>
+   * <p>
+   * If the default won't work for you, and your build is run on Linux, you may
+   * specify <code>/bin/ps -o args -p ${pid}</code> for <code>psExec</code> and
+   * leave <code>resultRegExp</code> blank.
+   * </p>
+   * <p>
+   * Note that any occurrences of <code>${...}</code> will be tried to be
+   * replaced with the execution properties provided by the Maven runtime.
+   * <p>
+   * If this does not find a result, finally the RuntimeMXBean is queried for
+   * its input arguments.
+   * </p>
+   * <p>
+   * If still no result, the property is considered to be undiscoverable.
+   * </p>
+   */
+  private CommandLineConfig commandLineConfig;
+
+  /**
    * While the <code>MAVEN_OPTS</code> may be useful to refer to for a couple of
    * reasons, displaying them with the build properties is a security issue.
    * Some plugins allow to read passwords as properties from the command line
@@ -568,8 +600,13 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     selection.setHideMavenOptsInfo(hideMavenOptsInfo);
     selection.setSelectedSystemProperties(properties);
 
+    if (commandLineConfig == null)
+    {
+      commandLineConfig = new CommandLineConfig();
+    }
     final MavenMetaDataProvider mavenMetaDataProvider =
-        new MavenMetaDataProvider(project, session, runtime, selection);
+        new MavenMetaDataProvider(project, session, runtime, selection,
+            commandLineConfig);
     mavenMetaDataProvider.provideBuildMetaData(buildMetaDataProperties);
   }
 
