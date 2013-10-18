@@ -34,8 +34,8 @@
               <xmlOutputFile>${project.build.outputDirectory}/META-INF/buildmetadata.xml</xmlOutputFile>
               <hideCommandLineInfo>false</hideCommandLineInfo>
               <commandLineConfig>
-                <psExec>${env.JAVA_HOME}/bin/jps</psExec>
-                <resultRegExp></resultRegExp>
+                <psExec>${env.JAVA_HOME}/bin/jps -v</psExec>
+                <resultRegExp>^${pid} (.+)</resultRegExp>
               </commandLineConfig>
               <!-- <hideMavenOptsInfo>false</hideMavenOptsInfo> -->
               <!-- <hideJavaOptsInfo>false</hideJavaOptsInfo> -->
