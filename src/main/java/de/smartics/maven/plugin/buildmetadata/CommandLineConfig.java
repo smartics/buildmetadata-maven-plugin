@@ -218,24 +218,14 @@ public class CommandLineConfig
       final Process process = Runtime.getRuntime().exec(expandedCommand);
       try
       {
-        final String result = readInput(process);
+        final String stdin = readInput(process);
 
         try
         {
           final int exit = process.waitFor();
           if (exit == 0)
           {
-            final String commandLine;
-            if (expandedRegExp != null)
-            {
-              final Pattern pattern = Pattern.compile(expandedRegExp);
-              commandLine = grep(pattern, result);
-            }
-            else
-            {
-              commandLine = result;
-            }
-            return commandLine;
+            return parseCommandLine(expandedRegExp, stdin);
           }
         }
         catch (final InterruptedException e)
@@ -250,11 +240,25 @@ public class CommandLineConfig
     }
     catch (final IOException e)
     {
-      System.err.println(e.getMessage());
-      e.printStackTrace();
       // Silently ignore that the command failed.
     }
     return null;
+  }
+
+  private String parseCommandLine(final String expandedRegExp,
+      final String stdin)
+  {
+    final String commandLine;
+    if (expandedRegExp != null)
+    {
+      final Pattern pattern = Pattern.compile(expandedRegExp);
+      commandLine = grep(pattern, stdin);
+    }
+    else
+    {
+      commandLine = stdin;
+    }
+    return commandLine;
   }
 
   private String readInput(final Process process) throws IOException
