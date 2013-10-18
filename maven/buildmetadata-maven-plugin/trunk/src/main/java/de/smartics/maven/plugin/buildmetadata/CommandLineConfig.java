@@ -15,6 +15,7 @@
  */
 package de.smartics.maven.plugin.buildmetadata;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -217,29 +218,29 @@ public class CommandLineConfig
       final Process process = Runtime.getRuntime().exec(expandedCommand);
       try
       {
+        final String result = readInput(process);
+
         try
         {
-          process.waitFor();
+          final int exit = process.waitFor();
+          if (exit == 0)
+          {
+            final String commandLine;
+            if (expandedRegExp != null)
+            {
+              final Pattern pattern = Pattern.compile(expandedRegExp);
+              commandLine = grep(pattern, result);
+            }
+            else
+            {
+              commandLine = result;
+            }
+            return commandLine;
+          }
         }
         catch (final InterruptedException e)
         {
           // continue
-        }
-        final int exit = process.exitValue();
-        if (exit == 0)
-        {
-          final String result = IOUtil.toString(process.getInputStream());
-          final String commandLine;
-          if (expandedRegExp != null)
-          {
-            final Pattern pattern = Pattern.compile(expandedRegExp);
-            commandLine = grep(pattern, result);
-          }
-          else
-          {
-            commandLine = result;
-          }
-          return commandLine;
         }
       }
       finally
@@ -254,6 +255,28 @@ public class CommandLineConfig
       // Silently ignore that the command failed.
     }
     return null;
+  }
+
+  private String readInput(final Process process) throws IOException
+  {
+    BufferedInputStream input = null;
+    try
+    {
+      final StringBuilder buffer = new StringBuilder();
+      input = new BufferedInputStream(process.getInputStream());
+      final byte[] bytes = new byte[4096];
+      while (input.read(bytes) != -1)
+      {
+        final String chunk = new String(bytes);
+        buffer.append(chunk);
+      }
+      final String result = buffer.toString();
+      return result;
+    }
+    finally
+    {
+      IOUtil.close(input);
+    }
   }
 
   private String expand(final Properties executionProperties,
