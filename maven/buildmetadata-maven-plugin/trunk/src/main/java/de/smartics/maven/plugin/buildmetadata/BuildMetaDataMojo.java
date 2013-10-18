@@ -257,7 +257,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * <pre>
    * &lt;commandLineConfig&gt;
    *   &lt;psExec&gt;${env.JAVA_HOME}/bin/jps -m -v&lt;/psExec&gt;
-   *   &lt;resultRegExp&gt;&lt;/resultRegExp&gt;
+   *   &lt;resultRegExp&gt;${pid} (.+)&lt;/resultRegExp&gt;
    *   &lt;skip&gt;false&lt;/code&gt;
    * &lt;/commandLineConfig&gt;
    * </pre>
