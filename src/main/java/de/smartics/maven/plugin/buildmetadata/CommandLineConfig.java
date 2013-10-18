@@ -40,7 +40,8 @@ public class CommandLineConfig
   /**
    * The command to be executed per default.
    */
-  public static final String DEFAULT_PS_EXEC = "${env.JAVA_HOME}/bin/jps -m -v -V";
+  public static final String DEFAULT_PS_EXEC =
+      "${env.JAVA_HOME}/bin/jps -m -v -V";
 
   /**
    * The placeholder allowed in the {@link #psExec psExec} to be replaced by a
@@ -202,31 +203,34 @@ public class CommandLineConfig
       final Process process = Runtime.getRuntime().exec(expandedCommand);
       try
       {
-        process.waitFor();
-      }
-      catch (final InterruptedException e)
-      {
-        // continue
+        try
+        {
+          process.waitFor();
+        }
+        catch (final InterruptedException e)
+        {
+          // continue
+        }
+        final int exit = process.exitValue();
+        if (exit == 0)
+        {
+          final String result = IOUtil.toString(process.getInputStream());
+          final String commandLine;
+          if (expandedRegExp != null)
+          {
+            final Pattern pattern = Pattern.compile(expandedRegExp);
+            commandLine = grep(pattern, result);
+          }
+          else
+          {
+            commandLine = result;
+          }
+          return commandLine;
+        }
       }
       finally
       {
         process.destroy();
-      }
-      final int exit = process.exitValue();
-      if (exit == 0)
-      {
-        final String result = IOUtil.toString(process.getInputStream());
-        final String commandLine;
-        if (expandedRegExp != null)
-        {
-          final Pattern pattern = Pattern.compile(expandedRegExp);
-          commandLine = grep(pattern, result);
-        }
-        else
-        {
-          commandLine = result;
-        }
-        return commandLine;
       }
     }
     catch (final IOException e)
