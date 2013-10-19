@@ -15,9 +15,9 @@
  */
 package de.smartics.maven.plugin.buildmetadata;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.Map.Entry;
@@ -54,7 +54,8 @@ public class CommandLineConfig
   /**
    * The command to be executed per default.
    */
-  public static final String DEFAULT_RESULT_REG_EXP = "${pid} (.+)";
+  public static final String DEFAULT_RESULT_REG_EXP =
+      "^${pid} \\S+ ([\\S ]+)\\s*$";
 
   // --- members --------------------------------------------------------------
 
@@ -263,18 +264,11 @@ public class CommandLineConfig
 
   private String readInput(final Process process) throws IOException
   {
-    BufferedInputStream input = null;
+    InputStream input = null;
     try
     {
-      final StringBuilder buffer = new StringBuilder();
-      input = new BufferedInputStream(process.getInputStream());
-      final byte[] bytes = new byte[4096];
-      while (input.read(bytes) != -1)
-      {
-        final String chunk = new String(bytes);
-        buffer.append(chunk);
-      }
-      final String result = buffer.toString();
+      input = process.getInputStream();
+      final String result = IOUtil.toString(input);
       return result;
     }
     finally
@@ -332,11 +326,6 @@ public class CommandLineConfig
   private String grep(final Pattern pattern, final String result)
   {
     final String[] lines = result.split(System.getProperty("line.separator"));
-    if (lines.length == 1)
-    {
-      return lines[0];
-    }
-
     for (final String line : lines)
     {
       final Matcher matcher = pattern.matcher(line);

@@ -257,9 +257,24 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * <pre>
    * &lt;commandLineConfig&gt;
    *   &lt;psExec&gt;${env.JAVA_HOME}/bin/jps -m -v&lt;/psExec&gt;
-   *   &lt;resultRegExp&gt;${pid} (.+)&lt;/resultRegExp&gt;
+   *   &lt;resultRegExp&gt;^${pid} \\S+ ([\\S ]+)\\s*$&lt;/resultRegExp&gt;
    *   &lt;skip&gt;false&lt;/code&gt;
    * &lt;/commandLineConfig&gt;
+   * </pre>
+   * <p>
+   * Advice: Make sure that the shell script starting the Maven process stores
+   * the command line arguments. This is usually done on Windows and usually not
+   * in Linux. You may opt to correct this on Linux before undergoing the hassle
+   * of greping the PID and starting a process to scan the arguments from the
+   * process' standard input.
+   * </p>
+   * <p>
+   * These are the lines to add:
+   * </p>
+   *
+   * <pre>
+   * MAVEN_CMD_LINE_ARGS="$@"
+   * export MAVEN_CMD_LINE_ARGS
    * </pre>
    *
    * @parameter
