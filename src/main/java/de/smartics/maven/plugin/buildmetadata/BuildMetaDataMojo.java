@@ -220,11 +220,12 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
   /**
    * A configuration to calculate the command line. The process for calculating
-   * the command line is platform dependent. First we look for the environment
-   * variable <code>env.MAVEN_CMD_LINE_ARGS</code>. If this is not set, we give
-   * the system property <code>sun.java.command</code> a try.
+   * the command line is platform dependent. Per default we take a look at the
+   * environment variable <code>env.MAVEN_CMD_LINE_ARGS</code>. If this is not
+   * set, we give the system property <code>sun.java.command</code> a try.
    * <p>
-   * If neither yields a result we try to execute a process with the given
+   * If neither yields a result, and <code>probePs</code> is set to
+   * <code>true</code>, we try to execute a process with the given
    * <code>psExec</code> line (defaults to
    * <code>${env.JAVA_HOME}/bin/jps -m -v -V</code>). If this execution string
    * contains a place holder <code>${pid}</code>, it will be replaced with the
@@ -241,24 +242,27 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * Note that any occurrences of <code>${...}</code> will be checked to be
    * replaced with the execution properties provided by the Maven runtime.
    * <p>
-   * If this does not find a result, finally the RuntimeMXBean is queried for
-   * its input arguments.
+   * If this does not find a result and <code>probeJmx</code> has to be set to
+   * <code>true</code>), finally the RuntimeMXBean is queried for its input
+   * arguments.
    * </p>
    * <p>
    * If still no result, the property is considered to be undiscoverable.
    * </p>
    * <p>
-   * The ps command evaluation may be skipped by setting <code>skip</code> to
-   * <code>true</code>.
+   * The ps command evaluation and JMX probing is skipped by default, since
+   * the process is somewhat fragile and not necessary on windows boxes and
+   * the latest Linux installations. Setting <code>probePs</code> and or
+   * <code>probeJmx</code> to <code>true</code> will run this extra evaluations.
    * <p>
-   * Here is a configuration example:
+   * Here is a configuration example for probing with JPS:
    * </p>
    *
    * <pre>
    * &lt;commandLineConfig&gt;
    *   &lt;psExec&gt;${env.JAVA_HOME}/bin/jps -m -v&lt;/psExec&gt;
    *   &lt;resultRegExp&gt;^${pid} \\S+ ([\\S ]+)\\s*$&lt;/resultRegExp&gt;
-   *   &lt;skip&gt;false&lt;/code&gt;
+   *   &lt;probePs&gt;true&lt;/probePs&gt;
    * &lt;/commandLineConfig&gt;
    * </pre>
    * <p>
@@ -276,6 +280,12 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * MAVEN_CMD_LINE_ARGS="$@"
    * export MAVEN_CMD_LINE_ARGS
    * </pre>
+   *
+   * <p>
+   * Use the PS or JMX probing only, if you need the command line, you are
+   * running on Linux where the shell script is broken and you cannot fix the
+   * installation.
+   * </p>
    *
    * @parameter
    * @since 1.3.1
