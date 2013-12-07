@@ -30,9 +30,9 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * Configuration to determine the commandline configuration.
+ * Configuration to determine the command line configuration.
  */
-public class CommandLineConfig
+public final class CommandLineConfig
 {
   // ********************************* Fields *********************************
 
@@ -73,13 +73,25 @@ public class CommandLineConfig
   private String resultRegExp;
 
   /**
-   * Flag to skip the ps execution.
+   * Flag to run the ps execution.
    */
-  private boolean skip;
+  private boolean probePs;
+
+  /**
+   * Flag to run JMX probing.
+   */
+  private boolean probeJmx;
 
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
+
+  /**
+   * Default constructor.
+   */
+  public CommandLineConfig()
+  {
+  }
 
   // ****************************** Inner Classes *****************************
 
@@ -187,7 +199,7 @@ public class CommandLineConfig
 
   private String probePsExec(final Properties executionProperties)
   {
-    if (skip)
+    if (!probePs)
     {
       return null;
     }
@@ -216,7 +228,8 @@ public class CommandLineConfig
   {
     try
     {
-      final Process process = Runtime.getRuntime().exec(expandedCommand);
+      final Runtime runtime = Runtime.getRuntime();
+      final Process process = runtime.exec(expandedCommand);
       try
       {
         final String stdin = readInput(process);
@@ -366,8 +379,13 @@ public class CommandLineConfig
     return null;
   }
 
-  private static String probeJmx()
+  private String probeJmx()
   {
+    if (!probeJmx)
+    {
+      return null;
+    }
+
     // Won't get too much useful, but may be better than nothing ...
     final RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
     final String commandLine = runtime.getInputArguments().toString();
