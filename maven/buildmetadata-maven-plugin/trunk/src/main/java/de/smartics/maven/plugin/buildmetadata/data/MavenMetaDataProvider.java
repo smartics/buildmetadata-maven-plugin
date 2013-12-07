@@ -28,7 +28,6 @@ import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
-import de.smartics.maven.plugin.buildmetadata.CommandLineConfig;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
 import de.smartics.maven.plugin.buildmetadata.common.Property;
@@ -54,12 +53,6 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
    */
   private final MavenMetaDataSelection selection;
 
-  /**
-   * The helper to probe for the command line. The command line calculation may
-   * be environment dependent. This helper knows about places to look for.
-   */
-  private final CommandLineConfig commandLineConfig;
-
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
@@ -72,19 +65,16 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
    * @param runtime the runtime information of the Maven instance being executed
    *          for the build.
    * @param selection the selection of properties to be added or hidden.
-   * @param commandLineConfig the helper to probe for the command line.
    * @see de.smartics.maven.plugin.buildmetadata.data.AbstractMetaDataProvider#AbstractMetaDataProvider()
    */
   public MavenMetaDataProvider(final MavenProject project,
       final MavenSession session, final RuntimeInformation runtime,
-      final MavenMetaDataSelection selection,
-      final CommandLineConfig commandLineConfig)
+      final MavenMetaDataSelection selection)
   {
     this.project = project;
     this.session = session;
     this.runtime = runtime;
     this.selection = selection;
-    this.commandLineConfig = commandLineConfig;
   }
 
   // ****************************** Inner Classes *****************************
@@ -363,8 +353,7 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
   {
     if (!selection.isHideCommandLineInfo())
     {
-      final String commandLine =
-          commandLineConfig.calcCommandLine(executionProperties);
+      final String commandLine = calcCommandLine(executionProperties);
       if (!StringUtils.isEmpty(commandLine))
       {
         buildMetaDataProperties.setProperty(Constant.PROP_NAME_MAVEN_CMDLINE,
@@ -392,6 +381,13 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider
             javaOpts);
       }
     }
+  }
+
+  private String calcCommandLine(final Properties executionProperties)
+  {
+    final String commandLine =
+        executionProperties.getProperty("env.MAVEN_CMD_LINE_ARGS");
+    return commandLine;
   }
 
   // --- object basics --------------------------------------------------------

@@ -219,80 +219,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   private boolean hideCommandLineInfo;
 
   /**
-   * A configuration to calculate the command line. The process for calculating
-   * the command line is platform dependent. Per default we take a look at the
-   * environment variable <code>env.MAVEN_CMD_LINE_ARGS</code>. If this is not
-   * set, we give the system property <code>sun.java.command</code> a try.
-   * <p>
-   * If neither yields a result, and <code>probePs</code> is set to
-   * <code>true</code>, we try to execute a process with the given
-   * <code>psExec</code> line (defaults to
-   * <code>${env.JAVA_HOME}/bin/jps -m -v -V</code>). If this execution string
-   * contains a place holder <code>${pid}</code>, it will be replaced with the
-   * process identifier of the Maven execution request. The result will be
-   * filtered with <code>resultRegExp</code> (again may contain the place holder
-   * ${pid} that will be handled as described above).
-   * </p>
-   * <p>
-   * If the default won't work for you, and your build is run on Linux, you may
-   * specify <code>/bin/ps -o args -p ${pid}</code> for <code>psExec</code> and
-   * leave <code>resultRegExp</code> blank.
-   * </p>
-   * <p>
-   * Note that any occurrences of <code>${...}</code> will be checked to be
-   * replaced with the execution properties provided by the Maven runtime.
-   * <p>
-   * If this does not find a result and <code>probeJmx</code> has to be set to
-   * <code>true</code>), finally the RuntimeMXBean is queried for its input
-   * arguments.
-   * </p>
-   * <p>
-   * If still no result, the property is considered to be undiscoverable.
-   * </p>
-   * <p>
-   * The ps command evaluation and JMX probing is skipped by default, since
-   * the process is somewhat fragile and not necessary on windows boxes and
-   * the latest Linux installations. Setting <code>probePs</code> and or
-   * <code>probeJmx</code> to <code>true</code> will run this extra evaluations.
-   * <p>
-   * Here is a configuration example for probing with JPS:
-   * </p>
-   *
-   * <pre>
-   * &lt;commandLineConfig&gt;
-   *   &lt;psExec&gt;${env.JAVA_HOME}/bin/jps -m -v&lt;/psExec&gt;
-   *   &lt;resultRegExp&gt;^${pid} \\S+ ([\\S ]+)\\s*$&lt;/resultRegExp&gt;
-   *   &lt;probePs&gt;true&lt;/probePs&gt;
-   * &lt;/commandLineConfig&gt;
-   * </pre>
-   * <p>
-   * Advice: Make sure that the shell script starting the Maven process stores
-   * the command line arguments. This is usually done on Windows and usually not
-   * in Linux. You may opt to correct this on Linux before undergoing the hassle
-   * of greping the PID and starting a process to scan the arguments from the
-   * process' standard input.
-   * </p>
-   * <p>
-   * These are the lines to add:
-   * </p>
-   *
-   * <pre>
-   * MAVEN_CMD_LINE_ARGS="$@"
-   * export MAVEN_CMD_LINE_ARGS
-   * </pre>
-   *
-   * <p>
-   * Use the PS or JMX probing only, if you need the command line, you are
-   * running on Linux where the shell script is broken and you cannot fix the
-   * installation.
-   * </p>
-   *
-   * @parameter
-   * @since 1.3.1
-   */
-  private CommandLineConfig commandLineConfig;
-
-  /**
    * While the <code>MAVEN_OPTS</code> may be useful to refer to for a couple of
    * reasons, displaying them with the build properties is a security issue.
    * Some plugins allow to read passwords as properties from the command line
@@ -642,13 +568,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     selection.setHideMavenOptsInfo(hideMavenOptsInfo);
     selection.setSelectedSystemProperties(properties);
 
-    if (commandLineConfig == null)
-    {
-      commandLineConfig = CommandLineConfig.createDefault();
-    }
     final MavenMetaDataProvider mavenMetaDataProvider =
-        new MavenMetaDataProvider(project, session, runtime, selection,
-            commandLineConfig);
+        new MavenMetaDataProvider(project, session, runtime, selection);
     mavenMetaDataProvider.provideBuildMetaData(buildMetaDataProperties);
   }
 
