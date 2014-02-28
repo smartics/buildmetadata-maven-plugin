@@ -26,7 +26,6 @@ import org.apache.maven.project.MavenProject;
  * Maps project types to property files.
  *
  * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
 final class PropertyOutputFileMapper
 {
@@ -96,6 +95,7 @@ final class PropertyOutputFileMapper
       propertyOutputFileMapping.add(new FileMapping("jar", jarFile));
       propertyOutputFileMapping.add(new FileMapping("ejb", jarFile));
       propertyOutputFileMapping.add(new FileMapping("maven-plugin", jarFile));
+      propertyOutputFileMapping.add(new FileMapping("atlassian-plugin", jarFile));
       propertyOutputFileMapping
           .add(new FileMapping("maven-archetype", jarFile));
       propertyOutputFileMapping.add(new FileMapping("eclipse-plugin", new File(
@@ -109,7 +109,6 @@ final class PropertyOutputFileMapper
       propertyOutputFileMapping.add(new FileMapping("targetplatform", new File(
           targetDir, fileName)));
       return propertyOutputFileMapping;
-
     }
 
     return propertyOutputFileMapping;
