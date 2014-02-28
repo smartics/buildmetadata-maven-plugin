@@ -86,6 +86,10 @@
         <outputFile>\${project.build.directory}/${project.build.finalName}/META-INF/build.properties</outputFile>
       </fileMapping>
       <fileMapping>
+        <packaging>atlassian-plugin</packaging>
+        <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
+      </fileMapping>
+      <fileMapping>
         <packaging>jar</packaging>
         <outputFile>\${project.build.outputDirectory}/META-INF/build.properties</outputFile>
       </fileMapping>
