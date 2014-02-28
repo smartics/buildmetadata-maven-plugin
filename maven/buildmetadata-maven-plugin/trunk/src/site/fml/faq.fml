@@ -110,6 +110,9 @@
             user=jane.doe,
             password=**********************************************
         </source>
+        <p>
+          If it is not the SVN URL, the SVN password may be wrong.
+        </p>
       </answer>
     </faq>
 
