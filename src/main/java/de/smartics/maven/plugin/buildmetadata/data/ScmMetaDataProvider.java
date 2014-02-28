@@ -158,6 +158,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
     info.setPrivateKey(credentials.getPrivateKey());
     info.setScmConnectionUrl(scmConnection);
     info.setTagBase(scmInfo.getTagBase());
+    info.setRemoteVersion(scmInfo.getRemoteVersion());
     return info;
   }
 
@@ -230,6 +231,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider
     accessInfo.setIgnoreDotFilesInBaseDir(scmInfo.getScmControl()
         .isIgnoreDotFilesInBaseDir());
     accessInfo.setQueryRangeInDays(scmInfo.getQueryRangeInDays());
+
     return accessInfo;
   }
 

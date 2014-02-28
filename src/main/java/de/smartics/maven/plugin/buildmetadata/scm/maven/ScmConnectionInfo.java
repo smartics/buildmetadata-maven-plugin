@@ -17,6 +17,7 @@ package de.smartics.maven.plugin.buildmetadata.scm.maven;
 
 import java.io.Serializable;
 
+import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.provider.ScmProviderRepository;
 import org.apache.maven.scm.provider.ScmProviderRepositoryWithHost;
@@ -77,6 +78,13 @@ public final class ScmConnectionInfo implements Serializable
    * The url of tags base directory (used by svn protocol).
    */
   private String tagBase;
+
+  /**
+   * The branch or tag version on the remote server to compare against. If
+   * <code>null</code>, the SCM status will be used to determine the
+   * differences.
+   */
+  private ScmVersion remoteVersion;
 
   // ****************************** Initializer *******************************
 
@@ -210,6 +218,31 @@ public final class ScmConnectionInfo implements Serializable
     this.tagBase = tagBase;
   }
 
+  /**
+   * Returns the branch or tag version on the remote server to compare against.
+   * If <code>null</code>, the SCM status will be used to determine the
+   * differences.
+   *
+   * @return the branch or tag version on the remote server to compare against.
+   */
+  public ScmVersion getRemoteVersion()
+  {
+    return remoteVersion;
+  }
+
+  /**
+   * Sets the branch or tag version on the remote server to compare against. If
+   * <code>null</code>, the SCM status will be used to determine the
+   * differences.
+   *
+   * @param remoteVersion the branch or tag version on the remote server to
+   *          compare against.
+   */
+  public void setRemoteVersion(final ScmVersion remoteVersion)
+  {
+    this.remoteVersion = remoteVersion;
+  }
+
   // --- business -------------------------------------------------------------
 
   /**
@@ -305,8 +338,8 @@ public final class ScmConnectionInfo implements Serializable
   // --- object basics --------------------------------------------------------
 
   /**
-   * Returns the string representation of the object.
-   * Sensitive information is masked.
+   * Returns the string representation of the object. Sensitive information is
+   * masked.
    *
    * @return the string representation of the object.
    */

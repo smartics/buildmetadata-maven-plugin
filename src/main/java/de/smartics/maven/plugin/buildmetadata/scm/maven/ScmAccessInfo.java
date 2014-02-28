@@ -17,16 +17,25 @@ package de.smartics.maven.plugin.buildmetadata.scm.maven;
 
 import java.io.File;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.scm.ScmBranch;
 import org.apache.maven.scm.ScmFileSet;
+import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.command.changelog.ChangeLogScmResult;
 import org.apache.maven.scm.command.changelog.ChangeLogSet;
 import org.apache.maven.scm.provider.ScmProvider;
+import org.apache.maven.scm.provider.git.gitexe.command.GitCommandLineUtils;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.cli.Commandline;
 
+import de.smartics.maven.plugin.buildmetadata.scm.Revision;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
 
 /**
@@ -276,6 +285,59 @@ public final class ScmAccessInfo implements Serializable
     catch (final org.apache.maven.scm.ScmException e)
     {
       throw new ScmException("Cannot fetch change log from repository.", e);
+    }
+  }
+
+  public Revision fetchRemoteVersion(final ScmRepository repository,
+      final ScmVersion remoteVersion) throws ScmException
+  {
+    try
+    {
+      final Commandline cl =
+          GitCommandLineUtils.getBaseGitCommandLine(rootDirectory, "log");
+      cl.createArg().setLine("-n 1");
+      cl.createArg().setLine("--pretty=format:\"%H %ct\"");
+      cl.createArg().setLine(remoteVersion.getName());
+      final Process process = cl.execute();
+      try
+      {
+        process.waitFor();
+        final int exitValue = process.exitValue();
+        if (exitValue != 0)
+        {
+          throw new ScmException(
+              "Cannot fetch remote version from repository (" + exitValue
+                  + "): " + IOUtils.toString(process.getErrorStream()));
+        }
+        final String result = IOUtils.toString(process.getInputStream());
+        final Revision revision = createRevision(result);
+        return revision;
+      }
+      finally
+      {
+        process.destroy();
+      }
+    }
+    catch (final Exception e)
+    {
+      throw new ScmException("Cannot fetch remote version from repository.", e);
+    }
+  }
+
+  private Revision createRevision(final String idSpaceDate)
+  {
+    final int index = idSpaceDate.trim().lastIndexOf(' ');
+    final String id = idSpaceDate.substring(0, index);
+    final String dateString = idSpaceDate.substring(index + 1);
+    try
+    {
+      final Date date = new Date(Long.parseLong(dateString) * 1000L);
+      final Revision revision = new StringRevision(id, date);
+      return revision;
+    }
+    catch (final NumberFormatException e)
+    {
+      return new StringRevision(id, new Date(0L));
     }
   }
 

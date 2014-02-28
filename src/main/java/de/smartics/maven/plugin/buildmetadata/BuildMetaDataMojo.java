@@ -24,6 +24,7 @@ import java.util.Properties;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.scm.ScmBranch;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.StringUtils;
@@ -483,6 +484,9 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
   // --- business -------------------------------------------------------------
 
+  /**
+   * {@inheritDoc}
+   */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
     if (!skip)
@@ -619,7 +623,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     final ScmInfo scmInfo =
         new ScmInfo(scmManager, connectionType, scmDateFormat, basedir,
             scmCredentials, tagBase, queryRangeInDays, buildDatePattern,
-            scmControl);
+            scmControl, StringUtils.isNotBlank(remoteVersion) ? new ScmBranch(
+                remoteVersion) : null);
     return scmInfo;
   }
 

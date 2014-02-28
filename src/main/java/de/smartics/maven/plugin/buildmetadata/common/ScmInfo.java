@@ -17,6 +17,7 @@ package de.smartics.maven.plugin.buildmetadata.common;
 
 import java.io.File;
 
+import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.manager.ScmManager;
 
 /**
@@ -89,6 +90,13 @@ public final class ScmInfo
    */
   private final ScmControl scmControl;
 
+  /**
+   * The branch or tag version on the remote server to compare against. If
+   * <code>null</code>, the SCM status will be used to determine the
+   * differences.
+   */
+  private final ScmVersion remoteVersion;
+
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
@@ -109,14 +117,18 @@ public final class ScmInfo
    *          revision dates.
    * @param scmControl the information to control the gathering of SCM meta
    *          data.
+   * @param remoteVersion the branch or tag version on the remote server to
+   *          compare against.
    * @note This argument list is quite long. The next time we touch this class,
    *       we should provide a builder.
    */
-  public ScmInfo(final ScmManager scmManager, final String connectionType, // NOPMD
+  public ScmInfo(
+      final ScmManager scmManager,
+      final String connectionType, // NOPMD
       final String scmDateFormat, final File basedir,
       final ScmCredentials scmCrendentials, final String tagBase,
       final int queryRangeInDays, final String buildDatePattern,
-      final ScmControl scmControl)
+      final ScmControl scmControl, final ScmVersion remoteVersion)
   {
     this.scmManager = scmManager;
     this.connectionType = connectionType;
@@ -127,7 +139,9 @@ public final class ScmInfo
     this.queryRangeInDays = queryRangeInDays;
     this.buildDatePattern = buildDatePattern;
     this.scmControl = scmControl;
+    this.remoteVersion = remoteVersion;
   }
+
   // CHECKSTYLE:ON
 
   // ****************************** Inner Classes *****************************
@@ -244,6 +258,18 @@ public final class ScmInfo
   public ScmControl getScmControl()
   {
     return scmControl;
+  }
+
+  /**
+   * Returns the branch or tag version on the remote server to compare against.
+   * If <code>null</code>, the SCM status will be used to determine the
+   * differences.
+   *
+   * @return the branch or tag version on the remote server to compare against.
+   */
+  public ScmVersion getRemoteVersion()
+  {
+    return remoteVersion;
   }
 
   // --- business -------------------------------------------------------------
