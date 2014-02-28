@@ -616,7 +616,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   private ScmInfo createScmInfo()
   {
     final ScmCredentials scmCredentials =
-        new ScmCredentials(settings, userName, password, privateKey, passphrase);
+        new ScmCredentials(settingsDecrypter, settings, userName, password,
+            privateKey, passphrase);
     final ScmControl scmControl =
         new ScmControl(failOnLocalModifications, ignoreDotFilesInBaseDir,
             offline, addScmInfo, validateCheckout, failOnMissingRevision);
