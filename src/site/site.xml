@@ -17,6 +17,22 @@
 
 -->
 <project name="${project.artifactId}">
+  <publishDate position="bottom" format="dd. MMMM yyyy"/>
+  <version position="right"/>
+
+  <skin>
+    <groupId>de.smartics.maven.skins</groupId>
+    <artifactId>maven-fluido-smartics-skin</artifactId>
+    <version>${maven-fluido-smartics-skin_version}</version>
+  </skin>
+  <custom>
+    <fluidoSkin>
+      <topBarEnabled>true</topBarEnabled>
+      <sideBarEnabled>true</sideBarEnabled>
+      <navBarStyle>navbar-inverse</navBarStyle>
+    </fluidoSkin>
+  </custom>
+
   <!--
     The icon for the project is designed by
               Mattahan (Paul Davey, http://mattahan.deviantart.com)
@@ -31,6 +47,7 @@
   <bannerLeft>
     <name>${project.name}</name>
     <src>images/logos/logo.png</src>
+    <href>${project.url}</href>
     <alt>${project.name}</alt>
   </bannerLeft>
   <bannerRight>
@@ -92,10 +109,13 @@
       <item name="Project Dependencies" href="project-info.html" collapse="true">
         <item name="Dependencies"       href="dependencies.html"/>
         <item name="Plugins"            href="plugin-management.html"/>
+        <!--
         <item name="Dependency Updates" href="dependency-updates-report.html"/>
         <item name="Plugin Updates"     href="plugin-updates-report.html"/>
         <item name="Property Updates"   href="property-updates-report.html"/>
+         -->
       </item>
+      <!--
       <item name="Source File Reports"  href="project-reports.html" collapse="true">
         <item name="JavaDocs"           href="apidocs/index.html"/>
         <item name="Source"             href="xref/index.html"/>
@@ -119,7 +139,7 @@
         <item name="Javadocs"           href="testapidocs/index.html"/>
         <item name="Sources"            href="xref-test/index.html"/>
       </item>
-
+      -->
       <item name="Credits" href="credits.html"/>
     </menu>
   </body>
