@@ -213,6 +213,19 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    */
   protected boolean addToFilters;
 
+  /**
+   * The branch or tag version on the remote server to compare against. If
+   * unset, the SCM status will be used to determine the differences.
+   * <p>
+   * For SVN, leave it blank. For Git, set the version on the remote server (the
+   * project's SCM URL points to).
+   * </p>
+   *
+   * @parameter
+   * @since 1.4.0
+   */
+  protected String remoteVersion;
+
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
