@@ -41,6 +41,27 @@
   </executions>
 </plugin>]]></source>
         <p>
+          If you are using <a href="http://git-scm.com/">Git</a>, you may want
+          to add the <code>remoteVersion</code> to compare with. In the
+          following example we compare to <code>origin/master</code>:
+        </p>
+        <source><![CDATA[<plugin>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+  <executions>
+    <execution>
+      <phase>initialize</phase>
+      <goals>
+        <goal>provide-buildmetadata</goal>
+      </goals>
+      <configuration>
+        <remoteVersion>origin/master</remoteVersion>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>]]></source>
+        <p>
           Please refer to
           <a href="${webroot-projects}/accessing-artifacts">Accessing Artifacts</a>
           on information to download the plugin.
