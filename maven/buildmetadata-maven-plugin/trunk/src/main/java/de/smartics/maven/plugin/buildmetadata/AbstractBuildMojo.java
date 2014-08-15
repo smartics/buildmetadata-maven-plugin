@@ -170,6 +170,17 @@ public abstract class AbstractBuildMojo extends AbstractMojo
   protected boolean createXmlReport;
 
   /**
+   * Flag to choose whether (<code>true</code>) or not (<code>false</code>) to
+   * write protect the generated buildmetadata files. Protecting them allows to
+   * projects that copy files from different resources together to not override
+   * them by other plugins.
+   *
+   * @parameter default-value= "false"
+   * @since 1.5
+   */
+  protected boolean writeProtectFiles;
+
+  /**
    * The list of meta data providers to launch that contribute to the meta data.
    *
    * @parameter
