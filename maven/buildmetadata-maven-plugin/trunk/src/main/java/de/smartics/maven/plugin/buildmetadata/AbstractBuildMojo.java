@@ -16,6 +16,7 @@
 package de.smartics.maven.plugin.buildmetadata;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
@@ -33,6 +34,8 @@ import de.smartics.maven.plugin.buildmetadata.data.MetaDataProvider;
 import de.smartics.maven.plugin.buildmetadata.data.MetaDataProviderBuilder;
 import de.smartics.maven.plugin.buildmetadata.data.Provider;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
+import de.smartics.maven.plugin.buildmetadata.util.ManifestHelper;
+import de.smartics.maven.plugin.buildmetadata.util.MojoFileUtils;
 import de.smartics.maven.plugin.buildmetadata.util.SettingsDecrypter;
 
 /**
@@ -146,6 +149,34 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * @since 1.0
    */
   protected File xmlOutputFile;
+
+  /**
+   * The location of the Manifest file to add the buildmetadata properties to.
+   *
+   * @parameter default-value=
+   *            "${project.build.outputDirectory}/META-INF/MANIFEST.MF"
+   * @since 1.5
+   */
+  protected File manifestFile;
+
+  /**
+   * The name of the section within the Manifest file to write the
+   * buildmetadata properties to. Use "<code>Main</code>" to write the the main
+   * section.
+   *
+   * @parameter default-value="BuildMetaData"
+   * @since 1.5
+   */
+  protected String manifestSection;
+
+  /**
+   * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
+   * Manifest file should be created.
+   *
+   * @parameter default-value= "false"
+   * @since 1.5
+   */
+  protected boolean createManifestFile;
 
   /**
    * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
@@ -360,6 +391,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
   // --- business -------------------------------------------------------------
 
   // CHECKSTYLE:OFF
+  @Override
   public void execute() throws MojoExecutionException, MojoFailureException
   {
     // CHECKSTYLE:ON
@@ -451,10 +483,12 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * @param buildMetaDataProperties the properties to add to the Maven project
    *          properties.
    * @param helper the project helper to use.
+   * @throws MojoExecutionException if a requested Manifest file cannot be
+   *           created.
    */
   protected final void updateMavenEnvironment(
       final Properties buildMetaDataProperties,
-      final BuildPropertiesFileHelper helper)
+      final BuildPropertiesFileHelper helper) throws MojoExecutionException
   {
     final Properties projectProperties = helper.getProjectProperties(project);
 
@@ -463,6 +497,23 @@ public abstract class AbstractBuildMojo extends AbstractMojo
     {
       project.getBuild().addFilter(propertiesOutputFile.getAbsolutePath());
     }
+
+    if (createManifestFile)
+    {
+      final ManifestHelper manifestHelper =
+          new ManifestHelper(manifestFile, manifestSection);
+      try
+      {
+        MojoFileUtils.ensureExists(manifestFile.getParentFile());
+        manifestHelper.createManifest(buildMetaDataProperties);
+      }
+      catch (final IOException e)
+      {
+        throw new MojoExecutionException("Cannot create Manifest file: "
+                                         + manifestFile.getAbsolutePath(), e);
+      }
+    }
+
     projectProperties.putAll(buildMetaDataProperties);
   }
 
