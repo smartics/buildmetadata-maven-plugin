@@ -578,6 +578,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     final AdditionalLocationsSupport additionalLocations =
         new AdditionalLocationsSupport(project, config);
     additionalLocations.handle(propertiesFile);
+    final boolean writable = !writeProtectFiles;
+    propertiesFile.setWritable(writable);
 
     if (createXmlReport)
     {
@@ -587,6 +589,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
               properties);
       final File xmlFile = xmlHelper.writeXmlFile(buildMetaDataProperties);
       additionalLocations.handle(xmlFile);
+      xmlFile.setWritable(writable);
     }
   }
 
