@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2006-2014 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+    <head profile="http://dublincore.org/documents/dcq-html/">
+      <title>Home</title>
+
+      <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"/>
+      <link rel="DC.rights copyright" href="license.html" />
+
+      <meta name="keywords" content="build, meta data, metadata, maven plugin, build number, build version, scm revision, build information, maven"/>
+      <meta name="description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
+      <meta name="author" content="smartics"/>
+
+      <meta name="DC.title" content="buildmetadata-maven-plugin"/>
+      <meta name="DC.creator" content="smartics"/>
+      <meta name="DC.subject" content="Homepage of the Maven buildmetadata plugin"/>
+      <meta name="DC.description" content="Homepage of the Maven buildmetadata plugin. This easy-to-use plugin collects meta data about the build to be included in the generated artifacts."/>
+      <meta name="DC.publisher" content="smartics"/>
+      <meta name="DC.rights" content="Copyright ${build.copyright.year} smartics"/>
+    </head>
+	<body>
+    <section name="Introduction">
+      <p>
+        This <a href="http://maven.apache.org/">Maven</a> plugin generates build meta data
+        and provides it as Maven build properties.
+        The properties are written to a <a href="#Properties_File"
+        title="Link to an example of a properties file containing build meta data.">properties file</a>
+        that can be included in the generated artifact. The information can also be
+        added in an <a href="usage.html#XML_report" title="Link to an example of an XML file containing build meta data.">XML format</a>
+        or to the <a href="#Manifest_File"
+        title="Link to an example of a manifest file containing build meta data.">manifest file</a>.
+      </p>
+      <p>
+        The meta data includes
+      </p>
+      <ol>
+        <li>SCM information
+          <ul>
+            <li>revision number</li>
+            <li>revision date</li>
+            <li>locally modified files</li>
+            <li>URL of SCM server</li>
+          </ul>
+        </li>
+        <li>build time</li>
+        <li>operating system
+          <ul>
+            <li>name</li>
+            <li>architecture</li>
+            <li>version</li>
+          </ul>
+        </li>
+        <li>Java runtime
+          <ul>
+            <li>vendor</li>
+            <li>name</li>
+            <li>version</li>
+            <li>virtual machine</li>
+            <li>compiler</li>
+            <li><code>JAVA_OPTS</code></li>
+          </ul>
+        </li>
+        <li>Maven execution information
+          <ul>
+            <li>Maven version</li>
+            <li>filter files</li>
+            <li>active profiles</li>
+            <li>environment properties</li>
+            <li>command line and executed goals</li>
+            <li><code>MAVEN_OPTS</code></li>
+          </ul>
+        </li>
+        <li>build user</li>
+        <li>build host name</li>
+        <li>Artifact and version
+          <ul>
+            <li>group ID</li>
+            <li>artifact ID</li>
+            <li>build version</li>
+          </ul>
+        </li>
+        <li>project info
+          <ul>
+            <li>home page URL</li>
+            <li>categories</li>
+            <li>tags</li>
+          </ul>
+        </li>
+      </ol>
+      <p>
+        For detailed information about the collected meta data and the properties
+        that store them, please consult the listing of the <a href="build-properties.html">build properties</a>.
+      </p>
+      <p>
+        If your desired meta data is not included in the list, this is no show stopper!
+        The <a href="provider.html">Provider SPI</a> allows you to add own implementations
+        to provide additional meta data from any source and even export build information to
+        remote systems.
+      </p>
+
+      <subsection name="Why add Meta Data to the Artifact?">
+        <p>
+          Imagine the product is running on an application server.
+          The product manager want to know,
+        </p>
+        <ul>
+          <li>which version of which artifact is currently running on that server?</li>
+          <li>which artifact maps to which source code version in the SCM repository?</li>
+          <li>what configuration set (including profiles and environment variables) has been used to
+            generate the artifact?</li>
+          <li>on which machine was the artifact built?</li>
+          <li>when was the artifact built?</li>
+        </ul>
+        <p>
+          If you have no answers to these questions, but love to have, this tool is for you.
+          It allows you to add this information easily as meta data to all kinds of Java
+          archives.
+        </p>
+        <p>
+          The following sections show the artifacts provided by this plugin.
+        </p>
+      </subsection>
+
+      <subsection name="Properties File">
+        <p>
+          The generated properties file is per default added to the <code>META-INF</code>
+          folder of the archive and can be easily accessed at runtime.
+          It contains the following information:
+        </p>
+        <source><![CDATA[#Created by buildmetadata-maven-plugin.build.date=17.07.2010 19\:13\:00
+build.copyright.year=2008-2010
+build.date.pattern=dd.MM.yyyy HH\:mm\:ss
+build.timestamp.millis=1279386780654
+build.year=2010
+
+build.version=0.7.0
+build.version.full=0.7.0-20100717r4223
+
+build.host.name=DevBox001
+build.user=john.doe
+
+build.maven.execution.cmdline=clean package
+build.maven.execution.goals=clean, package
+build.maven.execution.isRoot=true
+build.maven.execution.opts=-Xmx2048M -XX\:MaxPermSize\=256m
+build.maven.execution.profile.active.basic=settings.xml
+build.maven.execution.profile.active.nexus=settings.xml
+build.maven.execution.profiles.active=nexus, basic
+build.maven.version=2.2.1
+
+build.scmLocallyModified=false
+build.scmRevision.date=16.07.2010 18\:12\:57
+build.scmRevision.id=4223
+build.scmRevision.url=scm\:svn\:https\://smartics.info/svn/smartics/maven/buildmetadata-maven-plugin/trunk]]></source>
+      </subsection>
+
+      <subsection name="Manifest File">
+        <p>
+          The generated information can be used in the Manifest file, using
+          the <a href="http://maven.apache.org/plugins/maven-jar-plugin/">maven-jar-plugin</a>.
+        </p>
+        <source><![CDATA[Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+
+Build-Jdk: 1.6.0_20
+Built-By: john.doe
+Built-OS: Windows 7 / amd64 / 6.1
+Built-Host: DevBox001
+Java-Vendor: Sun Microsystems Inc.
+Java-Version: 1.6.0_20
+Maven-Version: 2.2.1
+
+Specification-Vendor: smartics
+Specification-Title: buildmetadata-maven-plugin
+Specification-Version: 0.7.0
+
+Implementation-Vendor: smartics
+Implementation-Vendor-Id: de.smartics.maven.plugin
+Implementation-Title: buildmetadata-maven-plugin
+Implementation-Version: 0.7.0
+Implementation-URL: http://project.smartics.de/public/de.smartics.mave
+ n.plugin/buildmetadata-maven-plugin/0.7.0
+
+Implementation-Date: 17.07.2010 19:13:00
+Implementation-DatePattern: dd.MM.yyyy HH:mm:ss
+Implementation-Timestamp: 1279386780654
+
+Implementation-Full-Version: 0.7.0-20100717r4223
+
+Implementation-SCM-Revision-Date: 16.07.2010 18:12:57
+Implementation-SCM-Revision-Number: 4223]]></source>
+        <p>
+          The information is not added automatically, but requires to be edited
+          manually. Please refer to <a href="usage.html#Use_with_JAR_plugin"
+          title="Configuration of the maven-jar-plugin to include meta data to the manifest file within a Java archive.">Use with JAR plugin</a>
+          for details.
+        </p>
+        <p>
+          Please note that other archive type can be configured similarly
+          with e.g. the
+          <a href="http://maven.apache.org/plugins/maven-ear-plugin/">maven-ear-plugin</a>
+          or <a href="http://maven.apache.org/plugins/maven-war-plugin/">maven-war-plugin</a>.
+        </p>
+      </subsection>
+
+      <subsection name="Report">
+        <p>
+          To map a site documentation to an artifact (and vice versa), a build
+          report can be integrated into the site documentation. This report
+          contains build information like the revision and revision date.
+        </p>
+        <p>
+          The <a href="build-report.html">Build Report</a> of this project may
+          serve as an example.
+        </p>
+       </subsection>
+    </section>
+
+    <section name="One Word of Warning">
+      <p>
+        Build metadata may contain sensitive information you do not want to
+        expose. If you include the commandline to document how the build has
+        been started using
+      </p>
+      <source>-DbuildMetaData.hideCommandLineInfo=false -Ppassword=verySecret</source>
+      <p>
+        This line will be part of the report!
+      </p>
+      <p>
+        Please also note that the commandline contains the information as digested
+        by Maven. Any variable replacements or using the
+        <a href="${webroot}/alias-maven-plugin">alias-maven-plugin</a> as in
+      </p>
+      <source>p -DbuildMetaData.hideCommandLineInfo=false</source>
+      <p>
+        (for those who do not know this plugin: <p>p</p> is an alias for <code>-T 4 clean package</code>)
+        does <strong>not</strong> mask the commandline:
+      </p>
+      <source><![CDATA[<commandline>-T 4 clean package -DbuildMetaData.hideCommandLineInfo=false</commandline>]]></source>
+      <p>
+        We tried to make the default configuration very restrictive. But nonetheless
+        we advice you to double check the build metadata you include into your
+        artifacts. Especially if these artifacts are published to anonymous
+        third parties.
+      </p>
+    </section>
+
+    <section name="Getting Started">
+      <p>
+        Please have a look at the sample <a href="usage.html">usage patterns</a>.
+      </p>
+      <p>
+        The <a href="provide-buildmetadata-mojo.html">buildmetadata:provide-buildmetadata documentation</a>
+        details the configuration options.
+      </p>
+    </section>
+  </body>
+</document>
