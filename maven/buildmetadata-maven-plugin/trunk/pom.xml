@@ -5,7 +5,7 @@
 
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>buildmetadata-maven-plugin</artifactId>
-  <version>1.5.0.RC1-SNAPSHOT</version>
+  <version>1.5.0.RC1</version>
   <packaging>maven-plugin</packaging>
   <name>buildmetadata-maven-plugin</name>
   <description>
@@ -58,9 +58,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:https://www.smartics.eu/svn/public/maven/buildmetadata-maven-plugin/trunk</connection>
-    <developerConnection>scm:svn:https://www.smartics.eu/svn/public/maven/buildmetadata-maven-plugin/trunk</developerConnection>
-    <url>https://www.smartics.eu/svn/public/maven/buildmetadata-maven-plugin/trunk</url>
+    <connection>scm:svn:https://www.smartics.eu/svn/public/maven/buildmetadata-maven-plugin/tags/buildmetadata-maven-plugin-1.5.0.RC1</connection>
+    <developerConnection>scm:svn:https://www.smartics.eu/svn/public/maven/buildmetadata-maven-plugin/tags/buildmetadata-maven-plugin-1.5.0.RC1</developerConnection>
+    <url>https://www.smartics.eu/svn/public/maven/buildmetadata-maven-plugin/tags/buildmetadata-maven-plugin-1.5.0.RC1</url>
   </scm>
   <issueManagement>
     <system>${issues-vendor}</system>
