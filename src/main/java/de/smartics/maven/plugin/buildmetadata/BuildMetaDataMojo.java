@@ -264,15 +264,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   private boolean hideJavaOptsInfo;
 
   /**
-   * A simple flag to skip the generation of the build information. If set on
-   * the command line use <code>-DbuildMetaData.skip</code>.
-   *
-   * @parameter expression="${buildMetaData.skip}" default-value="false"
-   * @since 1.0
-   */
-  private boolean skip;
-
-  /**
    * If it should be checked if the local files are up-to-date with the remote
    * files in the SCM repository. If the value is <code>true</code> the result
    * of the check, including the list of changed files, is added to the build
@@ -509,7 +500,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
-    if (!skip)
+    if (!doSkip())
     {
       super.execute();
 

@@ -160,9 +160,8 @@ public abstract class AbstractBuildMojo extends AbstractMojo
   protected File manifestFile;
 
   /**
-   * The name of the section within the Manifest file to write the
-   * buildmetadata properties to. Use "<code>Main</code>" to write the the main
-   * section.
+   * The name of the section within the Manifest file to write the buildmetadata
+   * properties to. Use "<code>Main</code>" to write the the main section.
    *
    * @parameter default-value="BuildMetaData"
    * @since 1.5
@@ -295,6 +294,27 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * @since 1.4.0
    */
   protected SettingsDecrypter settingsDecrypter;
+
+  /**
+   * A simple flag to skip the generation of the build information. If set on
+   * the command line use <code>-DbuildMetaData.skip</code>.
+   * <p>
+   * Supported by the build point mojo since version 1.5.
+   * </p>
+   *
+   * @parameter expression="${buildMetaData.skip}" default-value="false"
+   * @since 1.0
+   */
+  protected boolean skip;
+
+  /**
+   * Flag to indicate that the buildmetadata must only be added for the root
+   * project. Modules will be skipped.
+   *
+   * @parameter default-value= "false"
+   * @since 1.5.0
+   */
+  protected boolean skipModules;
 
   // ****************************** Initializer *******************************
 
@@ -515,6 +535,17 @@ public abstract class AbstractBuildMojo extends AbstractMojo
     }
 
     projectProperties.putAll(buildMetaDataProperties);
+  }
+
+  /**
+   * Checks if the execution of the mojo should be skipped.
+   *
+   * @return <code>true</code> if skipping is requested, <code>false</code>
+   *         otherwise.
+   */
+  protected boolean doSkip()
+  {
+    return skip || (skipModules && !project.isExecutionRoot());
   }
 
   // --- object basics --------------------------------------------------------

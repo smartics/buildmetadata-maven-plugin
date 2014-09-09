@@ -155,6 +155,15 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
    */
   protected boolean skip;
 
+  /**
+   * Flag to indicate that the buildmetadata must only be added for the root
+   * project. Modules will be skipped.
+   *
+   * @parameter default-value= "false"
+   * @since 1.5.0
+   */
+  protected boolean skipModules;
+
   // ****************************** Initializer *******************************
 
   // ****************************** Constructors ******************************
@@ -241,7 +250,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport
   @Override
   public boolean canGenerateReport() // CHECKSTYLE:ON
   {
-    return super.canGenerateReport() && !skip;
+    return super.canGenerateReport() && !skip && !(skipModules && !project.isExecutionRoot());
   }
 
   // CHECKSTYLE:OFF

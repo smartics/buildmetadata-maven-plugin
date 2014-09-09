@@ -1,0 +1,32 @@
+import java.io.*;
+
+File file = new File(basedir, "target/build.properties");
+if (!file.isFile())
+{
+	throw new FileNotFoundException("Could not find generated build.properties: " + file);
+}
+
+File reportFile = new File(basedir, "target/site/build-report.html");
+if (!reportFile.isFile())
+{
+	throw new FileNotFoundException("Could not find generated build report: " + reportFile);
+}
+
+if(0 == reportFile.length())
+{
+	throw new FileNotFoundException("Build report file exists, but is empty: " + reportFile);
+}
+
+
+File fileForModule = new File(basedir, "bmd-it-modules-site-skip-submodule/target/classes/META-INF/build.properties");
+if (!fileForModule.isFile())
+{
+	throw new FileNotFoundException("Could not find generated build.properties for module (only report should be skipped): " + fileForModule);
+}
+
+File reportFileForModule = new File(basedir, "bmd-it-modules-site-skip-submodule/target/site/build-report.html");
+if (reportFileForModule.isFile())
+{
+	throw new FileNotFoundException("Buildmetadata generation should have been skipped, but could find generated build report for module: " + reportFileForModule);
+}
+
