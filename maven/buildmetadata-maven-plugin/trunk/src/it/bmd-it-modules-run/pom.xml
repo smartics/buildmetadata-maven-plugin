@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.smartics.test</groupId>
+  <artifactId>bmd-it-modules-run</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <description>
+    A test to check that buildmetadata is created for submodules.
+  </description>
+
+  <modules>
+    <module>bmd-it-modules-run-submodule</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>de.smartics.maven.plugin</groupId>
+        <artifactId>buildmetadata-maven-plugin</artifactId>
+        <version>@project.version@</version>
+        <executions>
+          <execution>
+            <phase>initialize</phase>
+            <goals>
+              <goal>provide-buildmetadata</goal>
+            </goals>
+            <configuration>
+              <buildDatePattern>dd.MM.yyyy HH:mm:ss</buildDatePattern>
+              <skipModules>false</skipModules> <!--  the default, but explicit -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

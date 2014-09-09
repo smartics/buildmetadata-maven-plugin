@@ -92,32 +92,39 @@ public final class BuildPointMojo extends AbstractBuildMojo
    */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
-    super.execute();
-
-    if (propertiesOutputFile.exists())
+    if (!doSkip())
     {
-      final Properties buildMetaDataProperties = new Properties();
-      final String baseDir = project.getBasedir().getAbsolutePath();
-      final FilePathNormalizer filePathNormalizer =
-          new FilePathNormalizer(baseDir);
-      final BuildPropertiesFileHelper helper =
-          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile,
-              filePathNormalizer);
-      helper.readBuildPropertiesFile(buildMetaDataProperties);
+      super.execute();
 
-      provideBuildPointInfo(buildMetaDataProperties, helper);
-      provideBuildMetaData(buildMetaDataProperties, null, providers, true);
+      if (propertiesOutputFile.exists())
+      {
+        final Properties buildMetaDataProperties = new Properties();
+        final String baseDir = project.getBasedir().getAbsolutePath();
+        final FilePathNormalizer filePathNormalizer =
+            new FilePathNormalizer(baseDir);
+        final BuildPropertiesFileHelper helper =
+            new BuildPropertiesFileHelper(getLog(), propertiesOutputFile,
+                filePathNormalizer);
+        helper.readBuildPropertiesFile(buildMetaDataProperties);
 
-      helper.writePropertiesFile(buildMetaDataProperties);
-      updateMavenEnvironment(buildMetaDataProperties, helper);
+        provideBuildPointInfo(buildMetaDataProperties, helper);
+        provideBuildMetaData(buildMetaDataProperties, null, providers, true);
+
+        helper.writePropertiesFile(buildMetaDataProperties);
+        updateMavenEnvironment(buildMetaDataProperties, helper);
+      }
+      else
+      {
+        getLog().info(
+            "Skipping build point '" + name + "' since no "
+                + propertiesOutputFile.getName()
+                + " with build meta data found.");
+      }
     }
     else
     {
-      getLog()
-          .info(
-              "Skipping build point '" + name + "' since no "
-                  + propertiesOutputFile.getName()
-                  + " with build meta data found.");
+      getLog().info(
+          "Skipping buildmetadata build point execution since skip=true.");
     }
   }
 
