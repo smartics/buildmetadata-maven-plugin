@@ -1,39 +1,35 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.maven;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.Properties;
-
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Properties;
+
 /**
  * Tests {@link MavenPropertyHelper} accessing properties from the properties
  * section of a project instance.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public class MavenPropertyHelperPropertiesTest
-{
+public class MavenPropertyHelperPropertiesTest {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -77,9 +73,11 @@ public class MavenPropertyHelperPropertiesTest
 
   // --- prepare --------------------------------------------------------------
 
+  /**
+   * Test setup.
+   */
   @Before
-  public void setup()
-  {
+  public void setup() {
     projectModel = new Model();
     project = new MavenProject(projectModel);
     uut = new MavenPropertyHelper(project);
@@ -88,8 +86,7 @@ public class MavenPropertyHelperPropertiesTest
   // --- helper ---------------------------------------------------------------
 
   private void setupParentProjectWithProperty(final String propertyName,
-      final String propertyValue)
-  {
+      final String propertyValue) {
     final Properties properties = new Properties();
     properties.setProperty(propertyName, propertyValue);
 
@@ -102,22 +99,19 @@ public class MavenPropertyHelperPropertiesTest
   // --- tests ----------------------------------------------------------------
 
   @Test(expected = NullPointerException.class)
-  public void noPropertyName()
-  {
+  public void noPropertyName() {
     uut.getProperty(null);
   }
 
   @Test
-  public void propertyNotFoundSinceThereAreNoProperties()
-  {
+  public void propertyNotFoundSinceThereAreNoProperties() {
     final String value = uut.getProperty(PROPERTY_NAME);
 
     assertNull(value);
   }
 
   @Test
-  public void propertyNotFoundSincePropertiesIsEmpty()
-  {
+  public void propertyNotFoundSincePropertiesIsEmpty() {
     projectModel.setProperties(new Properties());
 
     final String value = uut.getProperty(PROPERTY_NAME);
@@ -126,8 +120,7 @@ public class MavenPropertyHelperPropertiesTest
   }
 
   @Test
-  public void propertyFound()
-  {
+  public void propertyFound() {
     final String propertyName = PROPERTY_NAME;
     final String propertyValue = PROPERTY_VALUE;
     final Properties properties = new Properties();
@@ -140,8 +133,7 @@ public class MavenPropertyHelperPropertiesTest
   }
 
   @Test
-  public void propertyFoundEvenWithProjectPrefix()
-  {
+  public void propertyFoundEvenWithProjectPrefix() {
     final String propertyName = "project.valid";
     final String propertyValue = PROPERTY_VALUE;
     final Properties properties = new Properties();
@@ -154,8 +146,7 @@ public class MavenPropertyHelperPropertiesTest
   }
 
   @Test
-  public void propertyFoundInParentWithNullPropertiesInProject()
-  {
+  public void propertyFoundInParentWithNullPropertiesInProject() {
     final String propertyName = PROPERTY_NAME;
     final String propertyValue = PROPERTY_VALUE;
     setupParentProjectWithProperty(propertyName, propertyValue);
@@ -166,8 +157,7 @@ public class MavenPropertyHelperPropertiesTest
   }
 
   @Test
-  public void propertyFoundInParentWithPropertiesInProject()
-  {
+  public void propertyFoundInParentWithPropertiesInProject() {
     final String propertyName = PROPERTY_NAME;
     final String propertyValue = PROPERTY_VALUE;
     setupParentProjectWithProperty(propertyName, propertyValue);

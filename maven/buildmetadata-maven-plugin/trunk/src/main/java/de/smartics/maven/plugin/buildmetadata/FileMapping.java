@@ -1,17 +1,17 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata;
 
@@ -19,12 +19,8 @@ import java.io.File;
 
 /**
  * Maps an properties output file location to a packaging.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class FileMapping
-{
+public final class FileMapping {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -50,20 +46,17 @@ public final class FileMapping
   /**
    * Default constructor for Maven.
    */
-  public FileMapping()
-  {
-  }
+  public FileMapping() {}
 
   /**
    * Default constructor for Maven.
    *
    * @param packaging the project's packaging as specified in the
-   *          <code>packaging</code> element of a POM to be mapped to a location
-   *          to write the <code>build</code>.
+   *        <code>packaging</code> element of a POM to be mapped to a location
+   *        to write the <code>build</code>.
    * @param outputFile the name of the properties file to write.
    */
-  public FileMapping(final String packaging, final File outputFile)
-  {
+  public FileMapping(final String packaging, final File outputFile) {
     this.packaging = packaging;
     this.outputFile = outputFile;
   }
@@ -85,8 +78,7 @@ public final class FileMapping
    *         element of a POM to be mapped to a location to write the
    *         <code>build</code>.
    */
-  public String getPackaging()
-  {
+  public String getPackaging() {
     return packaging;
   }
 
@@ -95,8 +87,7 @@ public final class FileMapping
    *
    * @return the name of the properties file to write.
    */
-  public File getOutputFile()
-  {
+  public File getOutputFile() {
     return outputFile;
   }
 

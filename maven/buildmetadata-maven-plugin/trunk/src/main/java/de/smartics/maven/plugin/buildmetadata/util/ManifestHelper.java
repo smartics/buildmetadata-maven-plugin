@@ -1,19 +1,24 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.util;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharUtils;
+import org.apache.commons.lang.ObjectUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -25,16 +30,10 @@ import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharUtils;
-import org.apache.commons.lang.ObjectUtils;
-import org.codehaus.plexus.util.StringUtils;
-
 /**
  * Helper to write the Manifest to.
  */
-public class ManifestHelper
-{
+public class ManifestHelper {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -66,8 +65,7 @@ public class ManifestHelper
    * @param manifestFile the location to write the manifest to.
    * @param manifestSection the section to add the keys in the manifest.
    */
-  public ManifestHelper(final File manifestFile, final String manifestSection)
-  {
+  public ManifestHelper(final File manifestFile, final String manifestSection) {
     this.manifestFile = manifestFile;
     this.manifestSection = manifestSection;
   }
@@ -86,38 +84,31 @@ public class ManifestHelper
    * Creates a Manifest file based on the given properties.
    *
    * @param buildMetaDataProperties the properties to add to the Manifest file
-   *          to be written.
+   *        to be written.
    * @throws IOException on any problem writing the file.
    */
   public void createManifest(final Properties buildMetaDataProperties)
-    throws IOException
-  {
+      throws IOException {
     final Manifest manifest = createManifestInstance(buildMetaDataProperties);
 
     OutputStream out = null;
-    try
-    {
+    try {
       out = new BufferedOutputStream(new FileOutputStream(manifestFile));
       manifest.write(out);
-    }
-    finally
-    {
+    } finally {
       IOUtils.closeQuietly(out);
     }
   }
 
   private Manifest createManifestInstance(
-      final Properties buildMetaDataProperties)
-  {
+      final Properties buildMetaDataProperties) {
     final Manifest manifest = new Manifest();
     final Attributes attributes = fetchAttributes(manifest);
     manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
     for (final Map.Entry<Object, Object> entry : buildMetaDataProperties
-        .entrySet())
-    {
+        .entrySet()) {
       final String key = ObjectUtils.toString(entry.getKey(), null);
-      if (key.length() > MANIFEST_KEY_MAX_LENGTH)
-      {
+      if (key.length() > MANIFEST_KEY_MAX_LENGTH) {
         continue;
       }
 
@@ -130,35 +121,28 @@ public class ManifestHelper
     return manifest;
   }
 
-  private Attributes fetchAttributes(final Manifest manifest)
-  {
-    if (StringUtils.isBlank(manifestSection) || "Main".equals(manifestSection))
-    {
+  private Attributes fetchAttributes(final Manifest manifest) {
+    if (StringUtils.isBlank(manifestSection)
+        || "Main".equals(manifestSection)) {
       return manifest.getMainAttributes();
     }
 
     Attributes attributes = manifest.getAttributes(manifestSection);
-    if (attributes == null)
-    {
+    if (attributes == null) {
       attributes = new Attributes();
       manifest.getEntries().put(manifestSection, attributes);
     }
     return attributes;
   }
 
-  private static String normalize(final String key)
-  {
+  private static String normalize(final String key) {
     final int length = key.length();
     final StringBuilder buffer = new StringBuilder(length);
-    for (int i = 0; i < length; i++)
-    {
+    for (int i = 0; i < length; i++) {
       final char ch = key.charAt(i);
-      if (CharUtils.isAsciiAlphanumeric(ch) || ch == '-' || ch == '_')
-      {
+      if (CharUtils.isAsciiAlphanumeric(ch) || ch == '-' || ch == '_') {
         buffer.append(ch);
-      }
-      else
-      {
+      } else {
         buffer.append('_');
       }
     }

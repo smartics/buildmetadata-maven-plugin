@@ -1,22 +1,21 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.data;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.maven.execution.MavenSession;
@@ -24,16 +23,13 @@ import org.apache.maven.execution.RuntimeInformation;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
-import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
+import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * Configuration instance to create instances of {@link MetaDataProvider}.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class MetaDataProviderBuilder
-{
+public final class MetaDataProviderBuilder {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -70,13 +66,12 @@ public final class MetaDataProviderBuilder
    * @param project the Maven project.
    * @param session the Maven session instance.
    * @param runtime the runtime information of the Maven instance being executed
-   *          for the build.
+   *        for the build.
    * @param scmInfo the information for the SCM provided to the build plugin.
    */
   public MetaDataProviderBuilder(final MavenProject project,
       final MavenSession session, final RuntimeInformation runtime,
-      final ScmInfo scmInfo)
-  {
+      final ScmInfo scmInfo) {
     this.project = project;
     this.session = session;
     this.runtime = runtime;
@@ -101,8 +96,7 @@ public final class MetaDataProviderBuilder
    * @throws MojoExecutionException if the instance cannot be created.
    */
   public MetaDataProvider build(final Provider config)
-    throws MojoExecutionException
-  {
+      throws MojoExecutionException {
     final MetaDataProvider instance = create(config.getType());
     initialize(instance, config.getProperties());
     return instance;
@@ -110,27 +104,23 @@ public final class MetaDataProviderBuilder
 
   @SuppressWarnings("unchecked")
   private MetaDataProvider create(final String metaDataProviderClassName)
-    throws MojoExecutionException
-  {
-    try
-    {
+      throws MojoExecutionException {
+    try {
       final Class<? extends MetaDataProvider> metaDataProviderClass =
           (Class<? extends MetaDataProvider>) Class
               .forName(metaDataProviderClassName);
       final MetaDataProvider instance = metaDataProviderClass.newInstance();
       return instance;
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       throw new MojoExecutionException(
           "Cannot create instance for meta data provider class '"
-              + metaDataProviderClassName + "'.", e);
+              + metaDataProviderClassName + "'.",
+          e);
     }
   }
 
   private void initialize(final MetaDataProvider instance,
-      final Map<String, String> properties) throws MojoExecutionException
-  {
+      final Map<String, String> properties) throws MojoExecutionException {
     setNonNullProperty(instance, "project", project, MavenProject.class);
     setNonNullProperty(instance, "session", session, MavenSession.class);
     setNonNullProperty(instance, "runtime", runtime, RuntimeInformation.class);
@@ -141,47 +131,33 @@ public final class MetaDataProviderBuilder
 
   private void setNonNullProperty(final MetaDataProvider instance,
       final String propertyName, final Object propertyValue,
-      final Class<?> propertyType) throws MojoExecutionException
-  {
-    if (propertyValue != null)
-    {
+      final Class<?> propertyType) throws MojoExecutionException {
+    if (propertyValue != null) {
       final Class<? extends MetaDataProvider> metaDataProviderClass =
           instance.getClass();
-      try
-      {
+      try {
         final Field field = findField(metaDataProviderClass, propertyName);
         final Class<?> type = field.getType();
-        if (type.isAssignableFrom(propertyType))
-        {
+        if (type.isAssignableFrom(propertyType)) {
           field.setAccessible(true);
           field.set(instance, propertyValue);
         }
-      }
-      catch (final NoSuchFieldException e)
-      {
+      } catch (final NoSuchFieldException e) {
         // OK, no such field, so we do not set it.
-      }
-      catch (final Exception e)
-      {
+      } catch (final Exception e) {
         throw new MojoExecutionException("Cannot set property '" + propertyName
-                                         + "' for the instance of class '"
-                                         + metaDataProviderClass.getName()
-                                         + "'.", e);
+            + "' for the instance of class '" + metaDataProviderClass.getName()
+            + "'.", e);
       }
     }
   }
 
   private Field findField(final Class<?> type, final String propertyName)
-    throws NoSuchFieldException
-  {
-    try
-    {
+      throws NoSuchFieldException {
+    try {
       return type.getDeclaredField(propertyName);
-    }
-    catch (final NoSuchFieldException e)
-    {
-      if (type.getSuperclass().equals(Object.class))
-      {
+    } catch (final NoSuchFieldException e) {
+      if (type.getSuperclass().equals(Object.class)) {
         throw e;
       }
     }
@@ -189,15 +165,11 @@ public final class MetaDataProviderBuilder
   }
 
   private void setProperties(final MetaDataProvider instance,
-      final Map<String, String> properties) throws MojoExecutionException
-  {
-    if (properties != null && !properties.isEmpty())
-    {
-      for (final Map.Entry<String, String> entry : properties.entrySet())
-      {
+      final Map<String, String> properties) throws MojoExecutionException {
+    if (properties != null && !properties.isEmpty()) {
+      for (final Map.Entry<String, String> entry : properties.entrySet()) {
         final String propertyName = entry.getKey();
-        if (!Provider.RUN_AT_BUILD_POINT.equals(propertyName))
-        {
+        if (!Provider.RUN_AT_BUILD_POINT.equals(propertyName)) {
           final String propertyValue = entry.getValue();
           setProperty(instance, propertyName, propertyValue);
         }
@@ -207,26 +179,21 @@ public final class MetaDataProviderBuilder
 
   private void setProperty(final MetaDataProvider instance,
       final String propertyName, final String propertyValue)
-    throws MojoExecutionException
-  {
+          throws MojoExecutionException {
     final Class<? extends MetaDataProvider> metaDataProviderClass =
         instance.getClass();
 
-    try
-    {
+    try {
       final Field field = findField(metaDataProviderClass, propertyName);
       field.setAccessible(true);
       final Class<?> type = field.getType();
       final Object typedPropertyValue =
           ConvertUtils.convert(propertyValue, type);
       field.set(instance, typedPropertyValue);
-    }
-    catch (final Exception e)
-    {
-      throw new MojoExecutionException(
-          "Cannot set property '" + propertyName + "' to value '"
-              + propertyValue + "' for the instance of class '"
-              + metaDataProviderClass.getName() + "'.", e);
+    } catch (final Exception e) {
+      throw new MojoExecutionException("Cannot set property '" + propertyName
+          + "' to value '" + propertyValue + "' for the instance of class '"
+          + metaDataProviderClass.getName() + "'.", e);
     }
   }
 

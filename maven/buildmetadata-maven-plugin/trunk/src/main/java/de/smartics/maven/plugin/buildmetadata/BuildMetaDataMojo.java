@@ -1,34 +1,19 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata;
-
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.scm.ScmBranch;
-import org.apache.maven.scm.manager.ScmManager;
-import org.apache.maven.settings.Settings;
-import org.codehaus.plexus.util.StringUtils;
 
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.common.ScmControl;
@@ -45,6 +30,21 @@ import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
 import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.scm.ScmBranch;
+import org.apache.maven.scm.manager.ScmManager;
+import org.apache.maven.settings.Settings;
+import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+
 /**
  * Provides the build properties. This information is also written to a
  * <code>build.properties</code> file.
@@ -56,8 +56,7 @@ import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
  * @since 1.0
  * @description Provides a build meta data to the build process.
  */
-public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
-{ // NOPMD
+public final class BuildMetaDataMojo extends AbstractBuildMojo {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -311,8 +310,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   /**
    * The date pattern to use to format the build and revision dates. Please
    * refer to the <a href =
-   * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html"
-   * >SimpleDateFormat</a> class for valid patterns.
+   * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html" >
+   * SimpleDateFormat</a> class for valid patterns.
    *
    * @parameter expression="${buildMetaData.buildDate.pattern}"
    *            default-value="dd.MM.yyyy"
@@ -346,8 +345,8 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * Used to specify the date format of the log entries that are retrieved from
    * your SCM system.
    *
-   * @parameter expression="${changelog.dateFormat}"
-   *            default-value="yyyy-MM-dd HH:mm:ss"
+   * @parameter expression="${changelog.dateFormat}" default-value=
+   *            "yyyy-MM-dd HH:mm:ss"
    * @required
    * @since 1.0
    */
@@ -427,12 +426,12 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
   /**
    * The range of the query in days to fetch change log entries from the SCM. If
-   * no change logs have been found, the range is incremented up to {@value
-   * de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;#
-   * DEFAULT_RETRY_COUNT} (5) times. If no change log has been found after these
-   * {@value de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;#
-   * DEFAULT_RETRY_COUNT} (5) additional queries, the revision number will not
-   * be set with a valid value.
+   * no change logs have been found, the range is incremented up to
+   * {@value de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo#DEFAULT_RETRY_COUNT}
+   * (5) times. If no change log has been found after these
+   * {@value de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo#DEFAULT_RETRY_COUNT}
+   * (5) additional queries, the revision number will not be set with a valid
+   * value.
    *
    * @parameter expression="${buildMetaData.queryRangeInDays}"
    *            default-value="30"
@@ -495,51 +494,39 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
 
   // --- business -------------------------------------------------------------
 
-  /**
-   * {@inheritDoc}
-   */
-  public void execute() throws MojoExecutionException, MojoFailureException
-  {
-    if (!doSkip())
-    {
+  @Override
+  public void execute() throws MojoExecutionException, MojoFailureException {
+    if (!doSkip()) {
       super.execute();
 
       final String baseDir = project.getBasedir().getAbsolutePath();
       final FilePathNormalizer filePathNormalizer =
           new FilePathNormalizer(baseDir);
-      final BuildPropertiesFileHelper helper =
-          new BuildPropertiesFileHelper(getLog(), propertiesOutputFile,
-              filePathNormalizer);
+      final BuildPropertiesFileHelper helper = new BuildPropertiesFileHelper(
+          getLog(), propertiesOutputFile, filePathNormalizer);
       final Properties projectProperties = helper.getProjectProperties(project);
-      if (!isBuildPropertiesAlreadySet(projectProperties))
-      {
+      if (!isBuildPropertiesAlreadySet(projectProperties)) {
         LoggingUtils.configureLogger(getLog(), logLevel);
         final Properties buildMetaDataProperties = new Properties();
-        if (isBuildPropertiesToBeRebuild())
-        {
+        if (isBuildPropertiesToBeRebuild()) {
           createBuildProperties(helper, projectProperties,
               buildMetaDataProperties);
-        }
-        else
-        {
+        } else {
           getLog().info("Reusing previously built metadata file.");
           helper.readBuildPropertiesFile(buildMetaDataProperties);
         }
 
         updateMavenEnvironment(buildMetaDataProperties, helper);
       }
-    }
-    else
-    {
+    } else {
       getLog().info("Skipping buildmetadata collection since skip=true.");
     }
   }
 
   private void createBuildProperties(final BuildPropertiesFileHelper helper,
       final Properties projectProperties,
-      final Properties buildMetaDataProperties) throws MojoExecutionException,
-    MojoFailureException
-  {
+      final Properties buildMetaDataProperties)
+          throws MojoExecutionException, MojoFailureException {
     final Date buildDate = session.getStartTime();
 
     provideBuildUser(projectProperties, buildMetaDataProperties);
@@ -557,35 +544,31 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   }
 
   private void writeBuildMetaData(final BuildPropertiesFileHelper helper,
-      final Properties buildMetaDataProperties) throws MojoExecutionException
-  {
+      final Properties buildMetaDataProperties) throws MojoExecutionException {
     final File propertiesFile =
         helper.writePropertiesFile(buildMetaDataProperties);
 
     final AdditionalLocationsSupport.Config config =
         new AdditionalLocationsSupport.Config();
-    config.setAddToGeneratedSources(addToGeneratedSources).setAddToLocations(
-        addToLocations);
+    config.setAddToGeneratedSources(addToGeneratedSources)
+        .setAddToLocations(addToLocations);
     final AdditionalLocationsSupport additionalLocations =
         new AdditionalLocationsSupport(project, config);
     additionalLocations.handle(propertiesFile);
     final boolean writable = !writeProtectFiles;
     propertiesFile.setWritable(writable);
 
-    if (createXmlReport)
-    {
+    if (createXmlReport) {
       final String projectRootPath = project.getBasedir().getAbsolutePath();
-      final BuildXmlFileHelper xmlHelper =
-          new BuildXmlFileHelper(projectRootPath, getLog(), xmlOutputFile,
-              properties);
+      final BuildXmlFileHelper xmlHelper = new BuildXmlFileHelper(
+          projectRootPath, getLog(), xmlOutputFile, properties);
       final File xmlFile = xmlHelper.writeXmlFile(buildMetaDataProperties);
       additionalLocations.handle(xmlFile);
       xmlFile.setWritable(writable);
     }
   }
 
-  private void provideMavenMetaData(final Properties buildMetaDataProperties)
-  {
+  private void provideMavenMetaData(final Properties buildMetaDataProperties) {
     final MavenMetaDataSelection selection = new MavenMetaDataSelection();
     selection.setAddMavenExecutionInfo(addMavenExecutionInfo);
     selection.setAddEnvInfo(addEnvInfo);
@@ -603,65 +586,55 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
   }
 
   private ScmInfo provideScmMetaData(final Properties buildMetaDataProperties)
-    throws MojoFailureException
-  {
-    try
-    {
+      throws MojoFailureException {
+    try {
       final ScmInfo scmInfo = createScmInfo();
       final ScmMetaDataProvider scmMetaDataProvider =
           new ScmMetaDataProvider(project, scmInfo);
       scmMetaDataProvider.provideBuildMetaData(buildMetaDataProperties);
       return scmInfo;
-    }
-    catch (final ScmNoRevisionException e)
-    {
+    } catch (final ScmNoRevisionException e) {
       throw new MojoFailureException(e.getMessage()); // NOPMD
     }
   }
 
   private void provideHostMetaData(final Properties buildMetaDataProperties)
-    throws MojoExecutionException
-  {
-    if (addHostInfo)
-    {
+      throws MojoExecutionException {
+    if (addHostInfo) {
       final HostMetaDataProvider hostMetaData = new HostMetaDataProvider();
       hostMetaData.provideBuildMetaData(buildMetaDataProperties);
     }
   }
 
   private void provideBuildDateMetaData(
-      final Properties buildMetaDataProperties, final Date buildDate)
-  {
+      final Properties buildMetaDataProperties, final Date buildDate) {
     final String buildDateString =
         createBuildDate(buildMetaDataProperties, buildDate);
     createYears(buildMetaDataProperties, buildDate);
     createBuildVersion(buildMetaDataProperties, buildDate, buildDateString);
   }
 
-  private ScmInfo createScmInfo()
-  {
-    final ScmCredentials scmCredentials =
-        new ScmCredentials(settingsDecrypter, settings, userName, password,
-            privateKey, passphrase);
+  private ScmInfo createScmInfo() {
+    final ScmCredentials scmCredentials = new ScmCredentials(settingsDecrypter,
+        settings, userName, password, privateKey, passphrase);
     final ScmControl scmControl =
         new ScmControl(failOnLocalModifications, ignoreDotFilesInBaseDir,
             offline, addScmInfo, validateCheckout, failOnMissingRevision);
-    final ScmInfo scmInfo =
-        new ScmInfo(scmManager, connectionType, scmDateFormat, basedir,
-            scmCredentials, tagBase, queryRangeInDays, buildDatePattern,
-            scmControl, StringUtils.isNotBlank(remoteVersion) ? new ScmBranch(
-                remoteVersion) : null);
+    final ScmInfo scmInfo = new ScmInfo(scmManager, connectionType,
+        scmDateFormat, basedir, scmCredentials, tagBase, queryRangeInDays,
+        buildDatePattern, scmControl, StringUtils.isNotBlank(remoteVersion)
+            ? new ScmBranch(remoteVersion) : null);
     return scmInfo;
   }
 
-  private boolean isBuildPropertiesToBeRebuild()
-  {
+  private boolean isBuildPropertiesToBeRebuild() {
     return forceNewProperties || !propertiesOutputFile.exists();
   }
 
-  private boolean isBuildPropertiesAlreadySet(final Properties projectProperties)
-  {
-    return projectProperties.getProperty(Constant.PROP_NAME_FULL_VERSION) != null;
+  private boolean isBuildPropertiesAlreadySet(
+      final Properties projectProperties) {
+    return projectProperties
+        .getProperty(Constant.PROP_NAME_FULL_VERSION) != null;
   }
 
   /**
@@ -673,20 +646,16 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @param buildMetaDataProperties the build meta data properties.
    */
   private void provideBuildUser(final Properties projectProperties,
-      final Properties buildMetaDataProperties)
-  {
+      final Properties buildMetaDataProperties) {
     String userNameValue = System.getProperty("user.name");
-    if ((buildUserPropertyName != null))
-    {
+    if ((buildUserPropertyName != null)) {
       final String value = projectProperties.getProperty(buildUserPropertyName);
-      if (!StringUtils.isBlank(value))
-      {
+      if (!StringUtils.isBlank(value)) {
         userNameValue = value;
       }
     }
 
-    if (userNameValue != null)
-    {
+    if (userNameValue != null) {
       buildMetaDataProperties.setProperty(Constant.PROP_NAME_BUILD_USER,
           userNameValue);
     }
@@ -700,8 +669,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @return the formatted build date.
    */
   private String createBuildDate(final Properties buildMetaDataProperties,
-      final Date buildDate)
-  {
+      final Date buildDate) {
     final DateFormat format =
         new SimpleDateFormat(buildDatePattern, Locale.ENGLISH);
     final String buildDateString = format.format(buildDate);
@@ -724,17 +692,16 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @param buildDate the build date to create the build year information.
    */
   private void createYears(final Properties buildMetaDataProperties,
-      final Date buildDate)
-  {
+      final Date buildDate) {
     final DateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.ENGLISH);
     final String buildYearString = yearFormat.format(buildDate);
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_BUILD_YEAR,
         buildYearString);
     final String inceptionYearString = project.getInceptionYear();
     final String copyrightYearString =
-        (inceptionYearString == null ? buildYearString : (buildYearString
-            .equals(inceptionYearString) ? inceptionYearString
-            : inceptionYearString + '-' + buildYearString));
+        (inceptionYearString == null ? buildYearString
+            : (buildYearString.equals(inceptionYearString) ? inceptionYearString
+                : inceptionYearString + '-' + buildYearString));
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_COPYRIGHT_YEAR,
         copyrightYearString);
   }
@@ -747,8 +714,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @param buildDateString the formatted date string.
    */
   private void createBuildVersion(final Properties buildMetaDataProperties,
-      final Date buildDate, final String buildDateString)
-  {
+      final Date buildDate, final String buildDateString) {
     final String version = project.getVersion();
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION, version);
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_GROUP_ID,
@@ -773,8 +739,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
    * @return the full version string.
    */
   private String createFullVersion(final Properties buildMetaDataProperties,
-      final Date buildDate)
-  {
+      final Date buildDate) {
     final String version = project.getVersion();
 
     final DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
@@ -782,14 +747,12 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     final String revisionId =
         buildMetaDataProperties.getProperty(Constant.PROP_NAME_SCM_REVISION_ID);
 
-    final String versionPrefix, versionSuffix;
-    if (version.endsWith("-SNAPSHOT"))
-    {
+    final String versionPrefix;
+    final String versionSuffix;
+    if (version.endsWith("-SNAPSHOT")) {
       versionPrefix = version.substring(0, version.lastIndexOf('-'));
       versionSuffix = "-SNAPSHOT";
-    }
-    else
-    {
+    } else {
       versionPrefix = version;
       versionSuffix = "";
     }
@@ -797,21 +760,17 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo // NOPMD
     final String modified;
     if (addLocallyModifiedTagToFullVersion
         && "true".equals(buildMetaDataProperties
-            .getProperty(Constant.PROP_NAME_SCM_LOCALLY_MODIFIED)))
-    {
+            .getProperty(Constant.PROP_NAME_SCM_LOCALLY_MODIFIED))) {
       modified = "-locally-modified";
-    }
-    else
-    {
+    } else {
       modified = "";
     }
 
     final String fullVersion =
-        versionPrefix
-            + (addBuildDateToFullVersion ? '-' + datePart : "")
+        versionPrefix + (addBuildDateToFullVersion ? '-' + datePart : "")
             + (addReleaseNumberToFullVersion
-               && StringUtils.isNotBlank(revisionId) ? "r" + revisionId : "")
-            + modified + versionSuffix;
+                && StringUtils.isNotBlank(revisionId) ? "r" + revisionId : "")
+        + modified + versionSuffix;
 
     return fullVersion;
   }

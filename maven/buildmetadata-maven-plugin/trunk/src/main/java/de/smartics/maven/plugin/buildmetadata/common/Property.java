@@ -1,29 +1,25 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.common;
 
 /**
  * Defines a property to be selected by the user to include into the build meta
  * data properties.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class Property
-{
+public final class Property {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -88,8 +84,7 @@ public final class Property
    * @return the name of the system property to add to the build meta data
    *         properties.
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -100,8 +95,7 @@ public final class Property
    * @return the name of the property in the build meta data properties. If the
    *         mapped name is not given, the {@link #getName() name} is returned.
    */
-  public String getMappedName()
-  {
+  public String getMappedName() {
     return mappedName != null ? mappedName : getName();
   }
 
@@ -111,8 +105,7 @@ public final class Property
    *
    * @return the value provided for the property.
    */
-  public String getValue()
-  {
+  public String getValue() {
     return value;
   }
 
@@ -132,8 +125,7 @@ public final class Property
    *
    * @return the section the property is added to.
    */
-  public String getSection()
-  {
+  public String getSection() {
     return section;
   }
 
@@ -143,8 +135,7 @@ public final class Property
    *
    * @return the label used for reports.
    */
-  public String getLabel()
-  {
+  public String getLabel() {
     return label;
   }
 

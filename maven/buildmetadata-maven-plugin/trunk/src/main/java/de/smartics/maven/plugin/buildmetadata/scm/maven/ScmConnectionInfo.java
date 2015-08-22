@@ -1,21 +1,21 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.scm.maven;
 
-import java.io.Serializable;
+import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
 
 import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.manager.ScmManager;
@@ -25,16 +25,12 @@ import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.codehaus.plexus.util.StringUtils;
 
-import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
+import java.io.Serializable;
 
 /**
  * Provides the information required to connect to a SCM system.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class ScmConnectionInfo implements Serializable
-{
+public final class ScmConnectionInfo implements Serializable {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -103,8 +99,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @return the URL to connect to the SCM system.
    */
-  public String getConnectionUrl()
-  {
+  public String getConnectionUrl() {
     return connectionUrl;
   }
 
@@ -113,8 +108,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param connectionUrl the URL to connect to the SCM system.
    */
-  public void setScmConnectionUrl(final String connectionUrl)
-  {
+  public void setScmConnectionUrl(final String connectionUrl) {
     this.connectionUrl = connectionUrl;
   }
 
@@ -123,8 +117,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @return the user name to authenticate against the SCM system.
    */
-  public String getUserName()
-  {
+  public String getUserName() {
     return userName;
   }
 
@@ -133,8 +126,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param userName the user name to authenticate against the SCM system.
    */
-  public void setUserName(final String userName)
-  {
+  public void setUserName(final String userName) {
     this.userName = userName;
   }
 
@@ -143,8 +135,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @return the password to authenticate against the SCM system.
    */
-  public String getPassword()
-  {
+  public String getPassword() {
     return password;
   }
 
@@ -153,8 +144,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param password the password to authenticate against the SCM system.
    */
-  public void setPassword(final String password)
-  {
+  public void setPassword(final String password) {
     this.password = password;
   }
 
@@ -163,8 +153,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @return the private key to authenticate against the SCM system.
    */
-  public String getPrivateKey()
-  {
+  public String getPrivateKey() {
     return privateKey;
   }
 
@@ -173,8 +162,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param privateKey the private key to authenticate against the SCM system.
    */
-  public void setPrivateKey(final String privateKey)
-  {
+  public void setPrivateKey(final String privateKey) {
     this.privateKey = privateKey;
   }
 
@@ -183,8 +171,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @return the pass phrase to authenticate against the SCM system.
    */
-  public String getPassPhrase()
-  {
+  public String getPassPhrase() {
     return passPhrase;
   }
 
@@ -193,8 +180,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param passPhrase the pass phrase to authenticate against the SCM system.
    */
-  public void setPassPhrase(final String passPhrase)
-  {
+  public void setPassPhrase(final String passPhrase) {
     this.passPhrase = passPhrase;
   }
 
@@ -203,8 +189,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @return the url of tags base directory (used by svn protocol).
    */
-  public String getTagBase()
-  {
+  public String getTagBase() {
     return tagBase;
   }
 
@@ -213,8 +198,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param tagBase the url of tags base directory (used by svn protocol).
    */
-  public void setTagBase(final String tagBase)
-  {
+  public void setTagBase(final String tagBase) {
     this.tagBase = tagBase;
   }
 
@@ -225,8 +209,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @return the branch or tag version on the remote server to compare against.
    */
-  public ScmVersion getRemoteVersion()
-  {
+  public ScmVersion getRemoteVersion() {
     return remoteVersion;
   }
 
@@ -236,10 +219,9 @@ public final class ScmConnectionInfo implements Serializable
    * differences.
    *
    * @param remoteVersion the branch or tag version on the remote server to
-   *          compare against.
+   *        compare against.
    */
-  public void setRemoteVersion(final ScmVersion remoteVersion)
-  {
+  public void setRemoteVersion(final ScmVersion remoteVersion) {
     this.remoteVersion = remoteVersion;
   }
 
@@ -249,17 +231,15 @@ public final class ScmConnectionInfo implements Serializable
    * Creates and configures the SCM repository.
    *
    * @param scmManager the manager to create the repository dependent on the
-   *          {@link #getConnectionUrl() connection URL}.
+   *        {@link #getConnectionUrl() connection URL}.
    * @return the repository implementation to connect to the SCM system.
    * @throws ScmException if the repository implementation cannot be created or
-   *           configured. This happens especially if no provider exists for the
-   *           given connection URL.
+   *         configured. This happens especially if no provider exists for the
+   *         given connection URL.
    */
   public ScmRepository createRepository(final ScmManager scmManager)
-    throws ScmException
-  {
-    try
-    {
+      throws ScmException {
+    try {
       final ScmRepository repository =
           scmManager.makeScmRepository(connectionUrl);
 
@@ -267,24 +247,21 @@ public final class ScmConnectionInfo implements Serializable
           repository.getProviderRepository();
       configure(providerRepository);
 
-      if (repository.getProviderRepository() instanceof ScmProviderRepositoryWithHost)
-      {
+      if (repository
+          .getProviderRepository() instanceof ScmProviderRepositoryWithHost) {
         final ScmProviderRepositoryWithHost providerRepositoryWithHost =
             (ScmProviderRepositoryWithHost) repository.getProviderRepository();
         configure(providerRepositoryWithHost);
       }
 
       if (!StringUtils.isEmpty(tagBase)
-          && repository.getProvider().equals("svn"))
-      {
+          && repository.getProvider().equals("svn")) {
         final SvnScmProviderRepository svnRepository =
             (SvnScmProviderRepository) repository.getProviderRepository();
         configure(svnRepository);
       }
       return repository;
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       throw new ScmException("The SCM provider cannot be created.", e);
     }
   }
@@ -294,15 +271,12 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param repository the repository instance to configure.
    */
-  protected void configure(final ScmProviderRepository repository)
-  {
-    if (!StringUtils.isEmpty(userName))
-    {
+  protected void configure(final ScmProviderRepository repository) {
+    if (!StringUtils.isEmpty(userName)) {
       repository.setUser(userName);
     }
 
-    if (!StringUtils.isEmpty(password))
-    {
+    if (!StringUtils.isEmpty(password)) {
       repository.setPassword(password);
     }
   }
@@ -312,15 +286,12 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param repository the repository instance to configure.
    */
-  protected void configure(final ScmProviderRepositoryWithHost repository)
-  {
-    if (!StringUtils.isEmpty(privateKey))
-    {
+  protected void configure(final ScmProviderRepositoryWithHost repository) {
+    if (!StringUtils.isEmpty(privateKey)) {
       repository.setPrivateKey(privateKey);
     }
 
-    if (!StringUtils.isEmpty(passPhrase))
-    {
+    if (!StringUtils.isEmpty(passPhrase)) {
       repository.setPassphrase(passPhrase);
     }
   }
@@ -330,8 +301,7 @@ public final class ScmConnectionInfo implements Serializable
    *
    * @param repository the repository instance to configure.
    */
-  protected void configure(final SvnScmProviderRepository repository)
-  {
+  protected void configure(final SvnScmProviderRepository repository) {
     repository.setTagBase(tagBase);
   }
 
@@ -344,8 +314,7 @@ public final class ScmConnectionInfo implements Serializable
    * @return the string representation of the object.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     final StringBuilder buffer = new StringBuilder();
 
     buffer.append("SCM connection info: url=").append(connectionUrl);
@@ -359,25 +328,20 @@ public final class ScmConnectionInfo implements Serializable
   }
 
   private static void appendIfExists(final StringBuilder buffer,
-      final String label, final String value)
-  {
-    if (StringUtils.isNotBlank(value))
-    {
+      final String label, final String value) {
+    if (StringUtils.isNotBlank(value)) {
       buffer.append(", ").append(label).append('=').append(value);
     }
   }
 
   private static void appendSensibleDataIfExists(final StringBuilder buffer,
-      final String label, final String value)
-  {
-    if (StringUtils.isNotBlank(value))
-    {
+      final String label, final String value) {
+    if (StringUtils.isNotBlank(value)) {
       buffer.append(", ").append(label).append('=').append(mask(value));
     }
   }
 
-  private static String mask(final String input)
-  {
+  private static String mask(final String input) {
     return StringUtils.repeat("*", input.length());
   }
 }

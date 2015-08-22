@@ -1,19 +1,32 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata;
+
+import de.smartics.maven.plugin.buildmetadata.common.Constant;
+import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
+import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
+import de.smartics.maven.plugin.buildmetadata.util.NoopNormalizer;
+import de.smartics.maven.plugin.buildmetadata.util.Normalizer;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -29,27 +42,10 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.reporting.MavenReportException;
-import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.StringUtils;
-
-import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
-import de.smartics.maven.plugin.buildmetadata.common.Constant.Section;
-import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
-import de.smartics.maven.plugin.buildmetadata.util.NoopNormalizer;
-import de.smartics.maven.plugin.buildmetadata.util.Normalizer;
-
 /**
  * Renders the build report.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class BuildReportRenderer
-{ // NOPMD
+public final class BuildReportRenderer {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -109,19 +105,18 @@ public final class BuildReportRenderer
    * Default constructor.
    *
    * @param filePathNormalizer the normalizer to be applied to file name value
-   *          to remove the base dir prefix.
+   *        to remove the base dir prefix.
    * @param messages the resource bundle to access localized messages.
    * @param sink the sink to write to.
    * @param buildMetaDataPropertiesFile the properties file to read the build
-   *          information from.
+   *        information from.
    * @param properties the list of a system properties or environment variables
-   *          to be selected by the user to include into the build meta data
-   *          properties.
+   *        to be selected by the user to include into the build meta data
+   *        properties.
    */
   public BuildReportRenderer(final FilePathNormalizer filePathNormalizer,
       final ResourceBundle messages, final Sink sink,
-      final File buildMetaDataPropertiesFile, final List<Property> properties)
-  {
+      final File buildMetaDataPropertiesFile, final List<Property> properties) {
     this.filePathNormalizer = filePathNormalizer;
     this.sink = sink;
     this.messages = messages;
@@ -144,8 +139,7 @@ public final class BuildReportRenderer
    *
    * @throws MavenReportException if the report cannot be rendered.
    */
-  public void renderReport() throws MavenReportException
-  {
+  public void renderReport() throws MavenReportException {
     sink.head();
     sink.title();
     sink.text(messages.getString("report.name"));
@@ -164,8 +158,7 @@ public final class BuildReportRenderer
    *
    * @throws MavenReportException if the report cannot be rendered.
    */
-  private void renderBody() throws MavenReportException
-  {
+  private void renderBody() throws MavenReportException {
     sink.section1();
 
     sink.sectionTitle1();
@@ -184,20 +177,16 @@ public final class BuildReportRenderer
     sink.section1_();
   }
 
-  private void renderSections(final Properties buildMetaDataProperties)
-  {
-    for (final Section section : Constant.REPORT_PROPERTIES)
-    {
+  private void renderSections(final Properties buildMetaDataProperties) {
+    for (final Section section : Constant.REPORT_PROPERTIES) {
       final List<String> properties = section.getProperties();
-      if (hasPropertiesProvided(buildMetaDataProperties, properties))
-      {
+      if (hasPropertiesProvided(buildMetaDataProperties, properties)) {
         final String sectionKey = section.getTitleKey();
         sink.sectionTitle2();
         sink.text(messages.getString(sectionKey));
         sink.sectionTitle2_();
         renderTableStart();
-        for (final String key : properties)
-        {
+        for (final String key : properties) {
           renderCell(buildMetaDataProperties, key);
         }
         renderSelectedPropertiesForSection(buildMetaDataProperties, sectionKey);
@@ -209,23 +198,18 @@ public final class BuildReportRenderer
   }
 
   private boolean hasPropertiesProvided(
-      final Properties buildMetaDataProperties, final List<String> properties)
-  {
-    for (final String key : properties)
-    {
+      final Properties buildMetaDataProperties, final List<String> properties) {
+    for (final String key : properties) {
       final Object value = buildMetaDataProperties.get(key);
-      if (value != null && StringUtils.isNotBlank(String.valueOf(value)))
-      {
+      if (value != null && StringUtils.isNotBlank(String.valueOf(value))) {
         return true;
       }
     }
 
     final Set<String> selectedProperties = createSelectedProperties();
-    for (final String key : selectedProperties)
-    {
+    for (final String key : selectedProperties) {
       final Object value = buildMetaDataProperties.get(key);
-      if (value != null && StringUtils.isNotBlank(String.valueOf(value)))
-      {
+      if (value != null && StringUtils.isNotBlank(String.valueOf(value))) {
         return true;
       }
     }
@@ -234,14 +218,10 @@ public final class BuildReportRenderer
   }
 
   private void renderSelectedPropertiesForSection(
-      final Properties buildMetaDataProperties, final String sectionKey)
-  {
-    if (properties != null && !properties.isEmpty())
-    {
-      for (final Property property : properties)
-      {
-        if (sectionKey.equals(property.getSection()))
-        {
+      final Properties buildMetaDataProperties, final String sectionKey) {
+    if (properties != null && !properties.isEmpty()) {
+      for (final Property property : properties) {
+        if (sectionKey.equals(property.getSection())) {
           final String key = property.getName();
           renderCell(buildMetaDataProperties, key);
         }
@@ -250,22 +230,18 @@ public final class BuildReportRenderer
   }
 
   private void renderNonStandardProperties(
-      final Properties buildMetaDataProperties)
-  {
+      final Properties buildMetaDataProperties) {
     final Properties nonStandardProperties =
         Constant.calcNonStandardProperties(buildMetaDataProperties, properties);
-    if (!nonStandardProperties.isEmpty())
-    {
+    if (!nonStandardProperties.isEmpty()) {
       sink.sectionTitle2();
       sink.text(messages.getString(Constant.SECTION_BUILD_MISC));
       sink.sectionTitle2_();
       renderTableStart();
       for (final Enumeration<Object> en = nonStandardProperties.keys(); en
-          .hasMoreElements();)
-      {
+          .hasMoreElements();) {
         final String key = String.valueOf(en.nextElement());
-        if (Constant.isIntendedForMiscSection(key))
-        {
+        if (Constant.isIntendedForMiscSection(key)) {
           renderCell(nonStandardProperties, key);
         }
       }
@@ -273,14 +249,11 @@ public final class BuildReportRenderer
     }
   }
 
-  private Set<String> createSelectedProperties()
-  {
+  private Set<String> createSelectedProperties() {
     final Set<String> selectedProperties = new HashSet<String>();
 
-    if (properties != null)
-    {
-      for (final Property property : properties)
-      {
+    if (properties != null) {
+      for (final Property property : properties) {
         selectedProperties.add(property.getName());
       }
     }
@@ -288,13 +261,11 @@ public final class BuildReportRenderer
     return selectedProperties;
   }
 
-  private void renderTableEnd()
-  {
+  private void renderTableEnd() {
     sink.table_();
   }
 
-  private void renderTableStart()
-  {
+  private void renderTableStart() {
     sink.table();
     sink.tableRow();
     sink.tableHeaderCell("200");
@@ -312,40 +283,29 @@ public final class BuildReportRenderer
    * Renders a single cell of the table.
    *
    * @param buildMetaDataProperties build meta data properties to access the
-   *          data to be rendered.
+   *        data to be rendered.
    * @param key the key to the data to be rendered.
    */
   private void renderCell(final Properties buildMetaDataProperties,
-      final String key)
-  {
+      final String key) {
     final Object value = buildMetaDataProperties.get(key);
-    if (value != null)
-    {
+    if (value != null) {
       sink.tableRow();
       sink.tableCell();
       sink.text(getLabel(key));
       sink.tableCell_();
       sink.tableCell();
-      if (Constant.PROP_NAME_MAVEN_ACTIVE_PROFILES.equals(key))
-      {
+      if (Constant.PROP_NAME_MAVEN_ACTIVE_PROFILES.equals(key)) {
         renderMultiTupleValue(buildMetaDataProperties, value,
             Constant.MAVEN_ACTIVE_PROFILE_PREFIX);
-      }
-      else if (Constant.PROP_NAME_SCM_LOCALLY_MODIFIED_FILES.equals(key))
-      {
+      } else if (Constant.PROP_NAME_SCM_LOCALLY_MODIFIED_FILES.equals(key)) {
         final String filesValue = Constant.prettifyFilesValue(value);
         renderMultiValue(filesValue, NoopNormalizer.INSTANCE);
-      }
-      else if (Constant.PROP_NAME_MAVEN_GOALS.equals(key))
-      {
+      } else if (Constant.PROP_NAME_MAVEN_GOALS.equals(key)) {
         renderMultiValue(value, NoopNormalizer.INSTANCE);
-      }
-      else if (Constant.PROP_NAME_MAVEN_FILTERS.equals(key))
-      {
+      } else if (Constant.PROP_NAME_MAVEN_FILTERS.equals(key)) {
         renderMultiValue(value, filePathNormalizer);
-      }
-      else
-      {
+      } else {
         renderSingleValue(value);
       }
       sink.tableCell_();
@@ -353,36 +313,28 @@ public final class BuildReportRenderer
     }
   }
 
-  private void renderSingleValue(final Object value)
-  {
+  private void renderSingleValue(final Object value) {
     final String stringValue = String.valueOf(value);
-    if (stringValue != null && !isLink(stringValue))
-    {
+    if (stringValue != null && !isLink(stringValue)) {
       sink.text(stringValue);
-    }
-    else
-    {
+    } else {
       sink.link(stringValue);
       sink.text(stringValue);
       sink.link_();
     }
   }
 
-  private boolean isLink(final String input)
-  {
+  private boolean isLink(final String input) {
     return (input.startsWith("http://") || input.startsWith("https://"));
   }
 
   private void renderMultiTupleValue(final Properties buildMetaDataProperties,
-      final Object value, final String subKeyPrefix)
-  {
+      final Object value, final String subKeyPrefix) {
     final String stringValue = Constant.prettify((String) value);
-    if (hasMultipleValues(stringValue))
-    {
+    if (hasMultipleValues(stringValue)) {
       final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
       sink.numberedList(Sink.NUMBERING_DECIMAL);
-      while (tokenizer.hasMoreTokens())
-      {
+      while (tokenizer.hasMoreTokens()) {
         final String profileName = tokenizer.nextToken().trim();
         final String subKey = subKeyPrefix + '.' + profileName;
         final Object subValue = buildMetaDataProperties.get(subKey);
@@ -392,22 +344,18 @@ public final class BuildReportRenderer
         sink.listItem_();
       }
       sink.numberedList_();
-    }
-    else
-    {
+    } else {
       sink.text(String.valueOf(value));
     }
   }
 
-  private void renderMultiValue(final Object value, final Normalizer normalizer)
-  {
+  private void renderMultiValue(final Object value,
+      final Normalizer normalizer) {
     final String stringValue = Constant.prettify(ObjectUtils.toString(value));
-    if (hasMultipleValues(stringValue))
-    {
+    if (hasMultipleValues(stringValue)) {
       final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
       sink.numberedList(Sink.NUMBERING_DECIMAL);
-      while (tokenizer.hasMoreTokens())
-      {
+      while (tokenizer.hasMoreTokens()) {
         final String subValue = tokenizer.nextToken().trim();
         final String textValue = normalizer.normalize(subValue);
         sink.listItem();
@@ -415,35 +363,25 @@ public final class BuildReportRenderer
         sink.listItem_();
       }
       sink.numberedList_();
-    }
-    else
-    {
+    } else {
       final String textValue = normalizer.normalize(stringValue);
       sink.text(textValue);
     }
   }
 
-  private boolean hasMultipleValues(final String stringValue)
-  {
+  private boolean hasMultipleValues(final String stringValue) {
     return stringValue.indexOf(',') != -1;
   }
 
-  private String getLabel(final String key)
-  {
-    try
-    {
+  private String getLabel(final String key) {
+    try {
       return messages.getString(key);
-    }
-    catch (final MissingResourceException e)
-    {
-      if (properties != null)
-      {
-        for (final Property property : properties)
-        {
+    } catch (final MissingResourceException e) {
+      if (properties != null) {
+        for (final Property property : properties) {
           final String label = property.getLabel();
           if (StringUtils.isNotBlank(label)
-              && key.equals(property.getMappedName()))
-          {
+              && key.equals(property.getMappedName())) {
             return label;
           }
         }
@@ -455,11 +393,9 @@ public final class BuildReportRenderer
   /**
    * Renders the footer text.
    */
-  private void renderFooter()
-  {
+  private void renderFooter() {
     final String footerText = messages.getString("report.footer");
-    if (StringUtils.isNotBlank(footerText))
-    {
+    if (StringUtils.isNotBlank(footerText)) {
       sink.rawText(footerText);
     }
   }
@@ -470,25 +406,17 @@ public final class BuildReportRenderer
    * @return the read properties.
    * @throws MavenReportException if the properties cannot be read.
    */
-  private Properties readBuildMetaDataProperties() throws MavenReportException
-  {
+  private Properties readBuildMetaDataProperties() throws MavenReportException {
     final Properties buildMetaDataProperties = new Properties();
     InputStream inStream = null;
-    try
-    {
-      inStream =
-          new BufferedInputStream(new FileInputStream(
-              this.buildMetaDataPropertiesFile));
+    try {
+      inStream = new BufferedInputStream(
+          new FileInputStream(this.buildMetaDataPropertiesFile));
       buildMetaDataProperties.load(inStream);
-    }
-    catch (final IOException e)
-    {
+    } catch (final IOException e) {
       throw new MavenReportException("Cannot read build properties file '"
-                                     + this.buildMetaDataPropertiesFile + "'.",
-          e);
-    }
-    finally
-    {
+          + this.buildMetaDataPropertiesFile + "'.", e);
+    } finally {
       IOUtil.close(inStream);
     }
     return buildMetaDataProperties;

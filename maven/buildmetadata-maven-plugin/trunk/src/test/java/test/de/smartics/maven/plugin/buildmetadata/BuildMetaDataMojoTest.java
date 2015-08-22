@@ -1,30 +1,23 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package test.de.smartics.maven.plugin.buildmetadata;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Writer;
-import java.util.Date;
-import java.util.Properties;
+import de.smartics.maven.plugin.buildmetadata.BuildMetaDataMojo;
+import de.smartics.maven.plugin.buildmetadata.common.Constant;
+import de.smartics.maven.plugin.buildmetadata.stub.BuildMetaDataProjectStub;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Build;
@@ -37,18 +30,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.smartics.maven.plugin.buildmetadata.BuildMetaDataMojo;
-import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.stub.BuildMetaDataProjectStub;
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.util.Date;
+import java.util.Properties;
 
 /**
  * Tests {@link BuildMetaDataMojo}.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision$
  */
-public class BuildMetaDataMojoTest extends AbstractMojoTestCase
-{
+public class BuildMetaDataMojoTest extends AbstractMojoTestCase {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -58,6 +54,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * write to.
    * <p>
    * The value of this constant is {@value}.
+   * </p>
    */
   protected static final String TEST_ID = "no-properties-pom";
 
@@ -65,6 +62,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * The relative (according to the basedir) path to the test input dir.
    * <p>
    * The value of this constant is {@value}.
+   * </p>
    */
   protected static final String ROOT_DIR_SUFFIX = "target/test-" + TEST_ID;
 
@@ -73,6 +71,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * the POM is altered we will copy the POM to this location.
    * <p>
    * The value of this constant is {@value}.
+   * </p>
    */
   protected static final String INPUT_DIR_SUFFIX = ROOT_DIR_SUFFIX + "/basedir";
 
@@ -80,6 +79,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * The relative (according to the basedir) path to the test output dir.
    * <p>
    * The value of this constant is {@value}.
+   * </p>
    */
   protected static final String OUTPUT_DIR_SUFFIX = ROOT_DIR_SUFFIX + "/target";
 
@@ -116,13 +116,10 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
   // --- prepare --------------------------------------------------------------
 
   /**
-   * {@inheritDoc}
-   *
-   * @throws Exception {@inheritDoc}
+   * Test setup.
    */
   @Before
-  protected void setUp() throws Exception
-  {
+  protected void setUp() throws Exception {
     super.setUp();
 
     targetDir = createDir(OUTPUT_DIR_SUFFIX);
@@ -137,16 +134,12 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
   }
 
   /**
-   * {@inheritDoc}
-   *
-   * @throws Exception {@inheritDoc}
+   * Test tear down.
    */
   @After
-  protected void tearDown() throws Exception
-  {
+  protected void tearDown() throws Exception {
     final File rootDir = new File(getBasedir(), ROOT_DIR_SUFFIX);
-    if (rootDir.exists())
-    {
+    if (rootDir.exists()) {
       FileUtils.deleteDirectory(rootDir);
     }
 
@@ -165,8 +158,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * @return the created project.
    * @throws IOException never.
    */
-  protected MavenProject createProject() throws IOException
-  {
+  protected MavenProject createProject() throws IOException {
     final BuildMetaDataProjectStub project = new BuildMetaDataProjectStub();
     final Model model = createModel();
     project.setFile(testPomFile);
@@ -179,13 +171,10 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
     build.setOutputDirectory(new File(targetDir, "classes").getAbsolutePath());
     model.setBuild(build);
     Writer writer = null;
-    try
-    {
+    try {
       writer = new BufferedWriter(new FileWriter(testPomFile));
       project.writeModel(writer);
-    }
-    finally
-    {
+    } finally {
       IOUtil.close(writer);
     }
     return project;
@@ -196,8 +185,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    *
    * @return the model used in this test.
    */
-  protected Model createModel()
-  {
+  protected Model createModel() {
     final Model model = new Model();
     final Properties parentProperties = new Properties();
     parentProperties.setProperty("PARENT", "parentValue");
@@ -216,18 +204,15 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * @return reference to the created directory.
    * @throws IOException on any problem generating the directory.
    */
-  protected File createDir(final String fileSuffix) throws IOException
-  {
+  protected File createDir(final String fileSuffix) throws IOException {
     final File dir = new File(getBasedir(), fileSuffix);
-    if (dir.exists())
-    {
+    if (dir.exists()) {
       FileUtils.deleteDirectory(dir);
     }
     final boolean dirCreated = dir.mkdirs();
-    if (!dirCreated)
-    {
-      throw new IOException("Cannot create directory '" + dir.getAbsolutePath()
-                            + "'.");
+    if (!dirCreated) {
+      throw new IOException(
+          "Cannot create directory '" + dir.getAbsolutePath() + "'.");
     }
     return dir;
   }
@@ -239,8 +224,7 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * @return the read properties.
    * @throws IOException in any problem reading the properties.
    */
-  final Properties loadProperties() throws IOException
-  {
+  final Properties loadProperties() throws IOException {
     final File buildPropertiesFile =
         new File(targetDir, "META-INF/buildmetadata.properties");
     assertTrue("Build properties does not exists.",
@@ -248,14 +232,11 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
 
     final Properties buildProperties = new Properties();
     InputStream in = null;
-    try
-    {
+    try {
       in = new BufferedInputStream(new FileInputStream(buildPropertiesFile));
       buildProperties.load(in);
       return buildProperties;
-    }
-    finally
-    {
+    } finally {
       IOUtil.close(in);
     }
   }
@@ -268,14 +249,12 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase
    * @throws Exception never.
    */
   @Test
-  public void testBuild() throws Exception
-  {
+  public void testBuild() throws Exception {
     uut.setCreatePropertiesReport(true);
-    uut.setPropertiesOutputFile(new File(targetDir,
-        "META-INF/buildmetadata.properties"));
-    final MavenSession session =
-        new MavenSession(null, null, null, null, null, null, null, null,
-            new Date());
+    uut.setPropertiesOutputFile(
+        new File(targetDir, "META-INF/buildmetadata.properties"));
+    final MavenSession session = new MavenSession(null, null, null, null, null,
+        null, null, null, new Date());
     uut.setSession(session);
     uut.execute();
     final Properties buildProperties = loadProperties();

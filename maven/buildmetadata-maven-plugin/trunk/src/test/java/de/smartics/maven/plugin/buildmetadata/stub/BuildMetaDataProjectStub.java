@@ -1,37 +1,33 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.stub;
+
+import org.apache.maven.model.Build;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Properties;
 
-import org.apache.maven.model.Build;
-import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
-
 /**
  * A stub to use with unit tests.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision$
  */
-public final class BuildMetaDataProjectStub extends MavenProjectStub
-{
+public final class BuildMetaDataProjectStub extends MavenProjectStub {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -50,9 +46,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
   /**
    * Default constructor.
    */
-  public BuildMetaDataProjectStub()
-  {
-  }
+  public BuildMetaDataProjectStub() {}
 
   // ****************************** Inner Classes *****************************
 
@@ -67,8 +61,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    *
    * @return the properties of the model.
    */
-  public Properties getProperties()
-  {
+  public Properties getProperties() {
     return getModel().getProperties();
   }
 
@@ -76,11 +69,11 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    * Returns the version of the model.
    * <p>
    * {@inheritDoc}
+   * </p>
    *
    * @see org.apache.maven.plugin.testing.stubs.MavenProjectStub#getVersion()
    */
-  public String getVersion()
-  {
+  public String getVersion() {
     return getModel().getVersion();
   }
 
@@ -88,11 +81,11 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    * Returns the build of the model.
    * <p>
    * {@inheritDoc}
+   * </p>
    *
    * @see org.apache.maven.plugin.testing.stubs.MavenProjectStub#getBuild()
    */
-  public Build getBuild()
-  {
+  public Build getBuild() {
     return getModel().getBuild();
   }
 
@@ -101,8 +94,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    *
    * @param dir the base directory of the unit test build.
    */
-  public void setBasedir(final File dir)
-  {
+  public void setBasedir(final File dir) {
     this.baseDir = dir;
   }
 
@@ -114,8 +106,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    *
    * @see org.apache.maven.plugin.testing.stubs.MavenProjectStub#getBasedir()
    */
-  public File getBasedir()
-  {
+  public File getBasedir() {
     return baseDir;
   }
 
@@ -127,8 +118,7 @@ public final class BuildMetaDataProjectStub extends MavenProjectStub
    * @param writer the writer to write the model to.
    * @throws IOException on any problem writing to the writer.
    */
-  public void writeModel(final Writer writer) throws IOException
-  {
+  public void writeModel(final Writer writer) throws IOException {
     final MavenXpp3Writer pomWriter = new MavenXpp3Writer();
 
     pomWriter.write(writer, getModel());

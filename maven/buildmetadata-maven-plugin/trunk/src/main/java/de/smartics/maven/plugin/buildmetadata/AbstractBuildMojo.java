@@ -1,32 +1,19 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.execution.RuntimeInformation;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
-import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
 
 import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
@@ -38,14 +25,23 @@ import de.smartics.maven.plugin.buildmetadata.util.ManifestHelper;
 import de.smartics.maven.plugin.buildmetadata.util.MojoFileUtils;
 import de.smartics.maven.plugin.buildmetadata.util.SettingsDecrypter;
 
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.execution.RuntimeInformation;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+
 /**
  * Base implementation for all build mojos.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision: 9143 $
  */
-public abstract class AbstractBuildMojo extends AbstractMojo
-{
+public abstract class AbstractBuildMojo extends AbstractMojo {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -83,9 +79,9 @@ public abstract class AbstractBuildMojo extends AbstractMojo
 
   /**
    * The name of the properties file to write. Per default this value is
-   * overridden by packaging dependent locations. Please refer to <a
-   * href="#activatePropertyOutputFileMapping"
-   * >activatePropertyOutputFileMapping</a> for details.
+   * overridden by packaging dependent locations. Please refer to
+   * <a href="#activatePropertyOutputFileMapping" >
+   * activatePropertyOutputFileMapping</a> for details.
    *
    * @parameter default-value=
    *            "${project.build.outputDirectory}/META-INF/build.properties"
@@ -272,8 +268,8 @@ public abstract class AbstractBuildMojo extends AbstractMojo
   /**
    * Helper to decrypt passwords from the settings.
    *
-   * @component
-   *            role="org.sonatype.plexus.components.sec.dispatcher.SecDispatcher"
+   * @component role=
+   *            "org.sonatype.plexus.components.sec.dispatcher.SecDispatcher"
    * @since 1.4.0
    */
   private SecDispatcher securityDispatcher;
@@ -333,8 +329,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @return the Maven project.
    */
-  public final MavenProject getProject()
-  {
+  public final MavenProject getProject() {
     return project;
   }
 
@@ -343,8 +338,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param project the Maven project.
    */
-  public final void setProject(final MavenProject project)
-  {
+  public final void setProject(final MavenProject project) {
     this.project = project;
   }
 
@@ -356,8 +350,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param session the Maven session.
    */
-  public final void setSession(final MavenSession session)
-  {
+  public final void setSession(final MavenSession session) {
     this.session = session;
   }
 
@@ -369,8 +362,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param propertiesOutputFile the name of the properties file to write.
    */
-  public final void setPropertiesOutputFile(final File propertiesOutputFile)
-  {
+  public final void setPropertiesOutputFile(final File propertiesOutputFile) {
     this.propertiesOutputFile = propertiesOutputFile;
   }
 
@@ -379,6 +371,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <p>
    * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
    * <code>build. properties</code> file should be created.
+   * </p>
    * <p>
    * This will adjust the path of the <code>propertiesOutputFile</code> to
    * <code>${project.build.directory}/build.properties</code>.
@@ -386,8 +379,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @return the value for createPropertiesReport.
    */
-  public boolean isCreatePropertiesReport()
-  {
+  public boolean isCreatePropertiesReport() {
     return createPropertiesReport;
   }
 
@@ -396,6 +388,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * <p>
    * Flag to choose whether (<code>true</code>) or not (<code>false</code>) the
    * <code>build. properties</code> file should be created.
+   * </p>
    * <p>
    * This will adjust the path of the <code>propertiesOutputFile</code> to
    * <code>${project.build.directory}/build.properties</code>.
@@ -403,8 +396,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    *
    * @param createPropertiesReport the value for createPropertiesReport.
    */
-  public void setCreatePropertiesReport(final boolean createPropertiesReport)
-  {
+  public void setCreatePropertiesReport(final boolean createPropertiesReport) {
     this.createPropertiesReport = createPropertiesReport;
   }
 
@@ -412,56 +404,45 @@ public abstract class AbstractBuildMojo extends AbstractMojo
 
   // CHECKSTYLE:OFF
   @Override
-  public void execute() throws MojoExecutionException, MojoFailureException
-  {
+  public void execute() throws MojoExecutionException, MojoFailureException {
     // CHECKSTYLE:ON
     final String propertiesFileName =
         calcFileName(propertiesOutputFile, "build.properties");
-    if (createPropertiesReport)
-    {
-      settingsDecrypter =
-          securityDispatcher != null ? new SettingsDecrypter(
-              securityDispatcher, settingsSecurityLocation) : null;
+    if (createPropertiesReport) {
+      settingsDecrypter = securityDispatcher != null
+          ? new SettingsDecrypter(securityDispatcher, settingsSecurityLocation)
+          : null;
 
       final PropertyOutputFileMapper mapperProperties =
           new PropertyOutputFileMapper(project, propertyOutputFileMapping,
               propertiesFileName);
       this.propertyOutputFileMapping = mapperProperties.initOutputFileMapping();
-      this.propertiesOutputFile =
-          mapperProperties.getPropertiesOutputFile(activateOutputFileMapping,
-              propertiesOutputFile);
-    }
-    else
-    {
+      this.propertiesOutputFile = mapperProperties.getPropertiesOutputFile(
+          activateOutputFileMapping, propertiesOutputFile);
+    } else {
       // The properties file is required for project filtering even if only
       // the XML file is requested by the user.
       propertiesOutputFile =
           new File(project.getBuild().getDirectory(), propertiesFileName);
     }
 
-    if (createXmlReport)
-    {
+    if (createXmlReport) {
       final String xmlFileName =
           calcFileName(xmlOutputFile, "buildmetadata.xml");
-      final PropertyOutputFileMapper mapperXml =
-          new PropertyOutputFileMapper(project, xmlOutputFileMapping,
-              xmlFileName);
+      final PropertyOutputFileMapper mapperXml = new PropertyOutputFileMapper(
+          project, xmlOutputFileMapping, xmlFileName);
       this.xmlOutputFileMapping = mapperXml.initOutputFileMapping();
-      this.xmlOutputFile =
-          mapperXml.getPropertiesOutputFile(activateOutputFileMapping,
-              xmlOutputFile);
+      this.xmlOutputFile = mapperXml
+          .getPropertiesOutputFile(activateOutputFileMapping, xmlOutputFile);
     }
   }
 
-  private static String calcFileName(final File file, final String defaultName)
-  {
+  private static String calcFileName(final File file,
+      final String defaultName) {
     final String fileName;
-    if (file != null)
-    {
+    if (file != null) {
       fileName = file.getName();
-    }
-    else
-    {
+    } else {
       fileName = defaultName;
     }
     return fileName;
@@ -474,22 +455,18 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * @param scmInfo the information for the SCM provided to the build plugin.
    * @param providers the providers to iterate over.
    * @param runAtEndOfBuild checks if the provider is configured to be run at
-   *          the end of the build. If a provider matches this value, it is run.
+   *        the end of the build. If a provider matches this value, it is run.
    * @throws MojoExecutionException on any problem running on the providers.
    */
   protected final void provideBuildMetaData(
       final Properties buildMetaDataProperties, final ScmInfo scmInfo,
       final List<Provider> providers, final boolean runAtEndOfBuild)
-    throws MojoExecutionException
-  {
-    if (providers != null && !providers.isEmpty())
-    {
+          throws MojoExecutionException {
+    if (providers != null && !providers.isEmpty()) {
       final MetaDataProviderBuilder builder =
           new MetaDataProviderBuilder(project, session, runtime, scmInfo);
-      for (final Provider providerConfig : providers)
-      {
-        if (providerConfig.isRunAtEndOfBuild() == runAtEndOfBuild)
-        {
+      for (final Provider providerConfig : providers) {
+        if (providerConfig.isRunAtEndOfBuild() == runAtEndOfBuild) {
           final MetaDataProvider provider = builder.build(providerConfig);
           provider.provideBuildMetaData(buildMetaDataProperties);
         }
@@ -501,36 +478,31 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * Updates the Maven runtime with build properties.
    *
    * @param buildMetaDataProperties the properties to add to the Maven project
-   *          properties.
+   *        properties.
    * @param helper the project helper to use.
    * @throws MojoExecutionException if a requested Manifest file cannot be
-   *           created.
+   *         created.
    */
   protected final void updateMavenEnvironment(
       final Properties buildMetaDataProperties,
-      final BuildPropertiesFileHelper helper) throws MojoExecutionException
-  {
+      final BuildPropertiesFileHelper helper) throws MojoExecutionException {
     final Properties projectProperties = helper.getProjectProperties(project);
 
     // Filters are only added temporarily and are not written to the POM...
-    if (addToFilters)
-    {
+    if (addToFilters) {
       project.getBuild().addFilter(propertiesOutputFile.getAbsolutePath());
     }
 
-    if (createManifestFile)
-    {
+    if (createManifestFile) {
       final ManifestHelper manifestHelper =
           new ManifestHelper(manifestFile, manifestSection);
-      try
-      {
+      try {
         MojoFileUtils.ensureExists(manifestFile.getParentFile());
         manifestHelper.createManifest(buildMetaDataProperties);
-      }
-      catch (final IOException e)
-      {
-        throw new MojoExecutionException("Cannot create Manifest file: "
-                                         + manifestFile.getAbsolutePath(), e);
+      } catch (final IOException e) {
+        throw new MojoExecutionException(
+            "Cannot create Manifest file: " + manifestFile.getAbsolutePath(),
+            e);
       }
     }
 
@@ -543,8 +515,7 @@ public abstract class AbstractBuildMojo extends AbstractMojo
    * @return <code>true</code> if skipping is requested, <code>false</code>
    *         otherwise.
    */
-  protected boolean doSkip()
-  {
+  protected boolean doSkip() {
     return skip || (skipModules && !project.isExecutionRoot());
   }
 

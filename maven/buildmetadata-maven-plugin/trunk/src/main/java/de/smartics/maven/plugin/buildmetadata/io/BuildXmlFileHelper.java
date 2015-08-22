@@ -1,19 +1,29 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.io;
+
+import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
+import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
+import de.smartics.maven.plugin.buildmetadata.util.MojoIoUtils;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.util.IOUtil;
+import org.w3c.dom.Document;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -29,24 +39,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
-import org.codehaus.plexus.util.IOUtil;
-import org.w3c.dom.Document;
-
-import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
-import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
-import de.smartics.maven.plugin.buildmetadata.util.MojoIoUtils;
-
 /**
  * Helper to handle the build meta data properties file.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class BuildXmlFileHelper
-{
+public final class BuildXmlFileHelper {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -102,12 +98,11 @@ public final class BuildXmlFileHelper
    * @param log the logger to use.
    * @param xmlOutputFile the file to write to.
    * @param selectedProperties the list of a system properties or environment
-   *          variables to be selected by the user to include into the build
-   *          meta data properties.
+   *        variables to be selected by the user to include into the build meta
+   *        data properties.
    */
   public BuildXmlFileHelper(final String projectRootPath, final Log log,
-      final File xmlOutputFile, final List<Property> selectedProperties)
-  {
+      final File xmlOutputFile, final List<Property> selectedProperties) {
     this.projectRootPath = projectRootPath;
     this.log = log;
     this.xmlOutputFile = xmlOutputFile;
@@ -130,16 +125,14 @@ public final class BuildXmlFileHelper
    * @param buildMetaDataProperties the properties to write.
    * @return the reference to the written file.
    * @throws MojoExecutionException on any problem encountered while writing the
-   *           XML file.
+   *         XML file.
    */
   public File writeXmlFile(final Properties buildMetaDataProperties)
-    throws MojoExecutionException
-  {
+      throws MojoExecutionException {
     final File buildMetaDataFile = createBuildMetaDataFile(xmlOutputFile);
-    if (log.isInfoEnabled())
-    {
+    if (log.isInfoEnabled()) {
       log.info("Writing XML report '" + buildMetaDataFile.getAbsolutePath()
-               + "'...");
+          + "'...");
     }
 
     writeContent(buildMetaDataProperties, buildMetaDataFile);
@@ -148,51 +141,36 @@ public final class BuildXmlFileHelper
   }
 
   private void writeContent(final Properties buildMetaDataProperties,
-      final File buildMetaDataFile) throws MojoExecutionException
-  {
+      final File buildMetaDataFile) throws MojoExecutionException {
     OutputStream out = null;
-    try
-    {
+    try {
       out = new BufferedOutputStream(new FileOutputStream(buildMetaDataFile));
       serializeDocument(buildMetaDataProperties, out);
-    }
-    catch (final FileNotFoundException e)
-    {
-      final String message =
-          "Cannot find file '" + buildMetaDataFile
-              + "' to write XML report to.";
+    } catch (final FileNotFoundException e) {
+      final String message = "Cannot find file '" + buildMetaDataFile
+          + "' to write XML report to.";
       throw MojoUtils.createException(log, e, message);
-    }
-    catch (final IOException e)
-    {
+    } catch (final IOException e) {
       final String message =
           "Cannot write XML report to file '" + buildMetaDataFile + "'.";
       throw MojoUtils.createException(log, e, message);
-    }
-    catch (final ParserConfigurationException e)
-    {
-      final String message =
-          "Cannot create XML report to write to file '" + buildMetaDataFile
-              + "'.";
+    } catch (final ParserConfigurationException e) {
+      final String message = "Cannot create XML report to write to file '"
+          + buildMetaDataFile + "'.";
       throw MojoUtils.createException(log, e, message);
-    }
-    catch (final TransformerException e)
-    {
+    } catch (final TransformerException e) {
       final String message =
           "Cannot transform build meta data to XML to write to file '"
               + buildMetaDataFile + "'.";
       throw MojoUtils.createException(log, e, message);
-    }
-    finally
-    {
+    } finally {
       IOUtil.close(out);
     }
   }
 
   private void serializeDocument(final Properties buildMetaDataProperties,
       final OutputStream out) throws ParserConfigurationException, IOException,
-    TransformerException
-  {
+          TransformerException {
     final Document document = createDocument();
     final SdocBuilder builder =
         new SdocBuilder(new FilePathNormalizer(projectRootPath), document,
@@ -207,26 +185,22 @@ public final class BuildXmlFileHelper
    *
    * @return the file to write the build properties to.
    * @throws MojoExecutionException if the output directory is not present and
-   *           cannot be created.
+   *         cannot be created.
    */
   private File createBuildMetaDataFile(final File propertiesOutputFile)
-    throws MojoExecutionException
-  {
+      throws MojoExecutionException {
     final File outputDirectory = propertiesOutputFile.getParentFile();
-    if (!outputDirectory.exists())
-    {
+    if (!outputDirectory.exists()) {
       final boolean created = outputDirectory.mkdirs();
-      if (!created)
-      {
-        throw new MojoExecutionException("Cannot create output directory '"
-                                         + outputDirectory + "'.");
+      if (!created) {
+        throw new MojoExecutionException(
+            "Cannot create output directory '" + outputDirectory + "'.");
       }
     }
     return propertiesOutputFile;
   }
 
-  private Document createDocument() throws ParserConfigurationException
-  {
+  private Document createDocument() throws ParserConfigurationException {
     final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     final DocumentBuilder builder = factory.newDocumentBuilder();
     final Document document = builder.newDocument();

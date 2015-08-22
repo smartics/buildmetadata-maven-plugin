@@ -1,31 +1,31 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata;
 
-import java.io.File;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.reporting.MavenReportException;
 
-import de.smartics.maven.plugin.buildmetadata.common.Property;
-import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
+import java.io.File;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Generates a report about the meta data provided to the build.
@@ -37,8 +37,7 @@ import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
  * @threadSafe
  * @since 1.0
  */
-public final class BuildReportMojo extends AbstractReportMojo
-{
+public final class BuildReportMojo extends AbstractReportMojo {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -47,9 +46,9 @@ public final class BuildReportMojo extends AbstractReportMojo
 
   /**
    * The name of the properties file to write. Per default this value is
-   * overridden by packaging dependent locations. Please refer to <a
-   * href="#activatePropertyOutputFileMapping"
-   * >activatePropertyOutputFileMapping</a> for details.
+   * overridden by packaging dependent locations. Please refer to
+   * <a href="#activatePropertyOutputFileMapping" >
+   * activatePropertyOutputFileMapping</a> for details.
    *
    * @parameter default-value=
    *            "${project.build.outputDirectory}/META-INF/build.properties"
@@ -140,8 +139,7 @@ public final class BuildReportMojo extends AbstractReportMojo
    *
    * @see org.apache.maven.reporting.MavenReport#getName(java.util.Locale)
    */
-  public String getName(final Locale locale)
-  {
+  public String getName(final Locale locale) {
     return getBundle(locale).getString("report.name");
   }
 
@@ -150,8 +148,7 @@ public final class BuildReportMojo extends AbstractReportMojo
    *
    * @see org.apache.maven.reporting.MavenReport#getDescription(java.util.Locale)
    */
-  public String getDescription(final Locale locale)
-  {
+  public String getDescription(final Locale locale) {
     return getBundle(locale).getString("report.description");
   }
 
@@ -160,16 +157,14 @@ public final class BuildReportMojo extends AbstractReportMojo
    *
    * @see org.apache.maven.reporting.MavenReport#getOutputName()
    */
-  public String getOutputName()
-  {
+  public String getOutputName() {
     return "build-report";
   }
 
   // --- business -------------------------------------------------------------
 
   @Override
-  public void execute() throws MojoExecutionException
-  {
+  public void execute() throws MojoExecutionException {
     init();
     super.execute();
   }
@@ -177,22 +172,15 @@ public final class BuildReportMojo extends AbstractReportMojo
   /**
    * Initializes the Mojo.
    */
-  protected void init()
-  {
-    if (propertiesOutputFile == null || !propertiesOutputFile.canRead())
-    {
-      final PropertyOutputFileMapper mapper =
-          new PropertyOutputFileMapper(project, propertyOutputFileMapping,
-              "build.properties");
+  protected void init() {
+    if (propertiesOutputFile == null || !propertiesOutputFile.canRead()) {
+      final PropertyOutputFileMapper mapper = new PropertyOutputFileMapper(
+          project, propertyOutputFileMapping, "build.properties");
       this.propertyOutputFileMapping = mapper.initOutputFileMapping();
-      if (createPropertiesReport)
-      {
-        propertiesOutputFile =
-            mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
-                propertiesOutputFile);
-      }
-      else
-      {
+      if (createPropertiesReport) {
+        propertiesOutputFile = mapper.getPropertiesOutputFile(
+            activatePropertyOutputFileMapping, propertiesOutputFile);
+      } else {
         propertiesOutputFile =
             new File(project.getBuild().getDirectory(), "build.properties");
       }
@@ -205,16 +193,16 @@ public final class BuildReportMojo extends AbstractReportMojo
    * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
    */
   @Override
-  protected void executeReport(final Locale locale) throws MavenReportException
-  {
+  protected void executeReport(final Locale locale)
+      throws MavenReportException {
     super.executeReport(locale);
 
     final Sink sink = getSink();
     final ResourceBundle messages = getBundle(locale);
     final String baseDir = project.getBasedir().getAbsolutePath();
     final BuildReportRenderer renderer =
-        new BuildReportRenderer(new FilePathNormalizer(baseDir), messages,
-            sink, propertiesOutputFile, properties);
+        new BuildReportRenderer(new FilePathNormalizer(baseDir), messages, sink,
+            propertiesOutputFile, properties);
     renderer.renderReport();
   }
 
@@ -228,8 +216,7 @@ public final class BuildReportMojo extends AbstractReportMojo
    * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
    */
   @Override
-  public boolean canGenerateReport()
-  {
+  public boolean canGenerateReport() {
     init();
     return super.canGenerateReport() && propertiesOutputFile.canRead();
   }

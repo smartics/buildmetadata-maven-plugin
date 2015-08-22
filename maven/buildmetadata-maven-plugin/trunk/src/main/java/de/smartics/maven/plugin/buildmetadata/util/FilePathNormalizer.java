@@ -1,25 +1,24 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.util;
 
 /**
  * Simply passes through the original string.
  */
-public final class FilePathNormalizer implements Normalizer
-{
+public final class FilePathNormalizer implements Normalizer {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -46,8 +45,7 @@ public final class FilePathNormalizer implements Normalizer
    * @param baseDir the path to the root folder.
    * @throws NullPointerException if {@code baseDir} is <code>null</code>.
    */
-  public FilePathNormalizer(final String baseDir) throws NullPointerException
-  {
+  public FilePathNormalizer(final String baseDir) throws NullPointerException {
     this.baseDir = baseDir.trim();
     this.prefixLength = baseDir.length();
   }
@@ -66,8 +64,7 @@ public final class FilePathNormalizer implements Normalizer
    *
    * @return the path to the root folder.
    */
-  public String getBaseDir()
-  {
+  public String getBaseDir() {
     return baseDir;
   }
 
@@ -80,13 +77,11 @@ public final class FilePathNormalizer implements Normalizer
    * {@link #FilePathNormalizer(String)} constructor.
    * </p>
    */
-  public String normalize(final String input)
-  {
+  public String normalize(final String input) {
     final String prefixed =
         input.startsWith(baseDir) ? input.substring(prefixLength) : input;
     final String norm = prefixed.replace('\\', '/');
-    if (norm.charAt(0) == '/' && norm.length() > 1)
-    {
+    if (norm.charAt(0) == '/' && norm.length() > 1) {
       return norm.substring(1);
     }
     return norm;

@@ -1,17 +1,17 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.data;
 
@@ -21,12 +21,8 @@ import java.util.Map;
  * Configuration instance to create instances of
  * {@link de.smartics.maven.plugin.buildmetadata.data.MetaDataProvider} by the
  * {@link de.smartics.maven.plugin.buildmetadata.data.MetaDataProviderBuilder}.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public class Provider
-{
+public class Provider {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -38,6 +34,7 @@ public class Provider
    * build.
    * <p>
    * The value of this constant is {@value}.
+   * </p>
    */
   public static final String RUN_AT_BUILD_POINT = "runAtBuildPoint";
 
@@ -70,8 +67,7 @@ public class Provider
    *
    * @return the class to instantiate.
    */
-  public final String getType()
-  {
+  public final String getType() {
     return type;
   }
 
@@ -79,11 +75,11 @@ public class Provider
    * Returns the value for properties.
    * <p>
    * Properties to set.
+   * </p>
    *
    * @return the value for properties.
    */
-  public final Map<String, String> getProperties()
-  {
+  public final Map<String, String> getProperties() {
     return properties;
   }
 
@@ -95,8 +91,7 @@ public class Provider
    * @return <code>true</code> if the provider runs at the end of the build,
    *         <code>false</code> if it runs at the start.
    */
-  public final boolean isRunAtEndOfBuild()
-  {
+  public final boolean isRunAtEndOfBuild() {
     return ("true".equals(properties.get(RUN_AT_BUILD_POINT)));
   }
 
