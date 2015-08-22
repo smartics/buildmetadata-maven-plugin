@@ -7,12 +7,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.smartics.test</groupId>
-  <artifactId>bmd-it-plugin-config</artifactId>
+  <artifactId>bmd-it-pluginmgmt-config</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <description>
-    A test case building properties with plugin configuration information.
+    A test case building properties with plugin configuration information
+    from the plugin management block.
   </description>
 
   <properties>
@@ -20,6 +21,18 @@
   </properties>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>de.smartics.maven.plugin</groupId>
@@ -51,11 +64,6 @@
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler-plugin.version}</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
       </plugin>
     </plugins>
   </build>
