@@ -26,6 +26,7 @@ import de.smartics.maven.plugin.buildmetadata.data.ScmMetaDataProvider;
 import de.smartics.maven.plugin.buildmetadata.io.AdditionalLocationsSupport;
 import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
 import de.smartics.maven.plugin.buildmetadata.io.BuildXmlFileHelper;
+import de.smartics.maven.plugin.buildmetadata.maven.MavenPluginProperties;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
 import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
@@ -534,6 +535,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
     provideHostMetaData(buildMetaDataProperties);
     final ScmInfo scmInfo = provideScmMetaData(buildMetaDataProperties);
     provideBuildDateMetaData(buildMetaDataProperties, buildDate);
+    providePluginMetaData(buildMetaDataProperties);
 
     // The custom providers are required to be run at the end.
     // This allows these providers to access the information generated
@@ -541,6 +543,14 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
     provideBuildMetaData(buildMetaDataProperties, scmInfo, providers, false);
 
     writeBuildMetaData(helper, buildMetaDataProperties);
+  }
+
+  private void providePluginMetaData(Properties buildMetaDataProperties) {
+    final MavenPluginProperties helper = new MavenPluginProperties(project);
+    for (final PluginSelector selector : getPluginSelectors()) {
+      final Properties pluginProperties = helper.fetchProperties(selector);
+      buildMetaDataProperties.putAll(pluginProperties);
+    }
   }
 
   private void writeBuildMetaData(final BuildPropertiesFileHelper helper,

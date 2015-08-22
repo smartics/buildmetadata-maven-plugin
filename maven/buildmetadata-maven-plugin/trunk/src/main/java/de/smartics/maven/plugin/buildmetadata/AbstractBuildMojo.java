@@ -35,6 +35,7 @@ import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -114,6 +115,46 @@ public abstract class AbstractBuildMojo extends AbstractMojo {
    * @since 1.1
    */
   private List<FileMapping> propertyOutputFileMapping;
+
+  /**
+   * Selects properties from plugin configurations.
+   * <p>
+   * Add a list of selectors like this:
+   * </p>
+   *
+   * <pre>
+      &lt;pluginSelectors&gt;
+        &lt;selector&gt;
+          &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+          &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+          &lt;keyPrefix&gt;build.runtime.java.compiler.&lt;/keyPrefix&gt;
+          &lt;properties&gt;
+            &lt;property&gt;source&lt;/property&gt;
+            &lt;property&gt;target&lt;/property&gt;
+          &lt;/properties&gt;
+        &lt;/selector&gt;
+        &lt;selector&gt;
+          ...
+        &lt;/selector&gt;
+      &lt;/pluginSelectors&gt;
+   * </pre>
+   * <ul>
+   * <li><code>groupId</code> - the group identifier of the plugin to select
+   * </li>
+   * <li><code>artifactId</code> - the artifact identifier of the plugin to
+   * select</li>
+   * <li><code>keyPrefix</code> - the optional prefix to add to the config
+   * property</li>
+   * <li><code>properties</code> - the list of config properties to select</li>
+   * </ul>
+   * <p>
+   * Currently only simple key value pairs are selectable.
+   * </p>
+   *
+   * @parameter
+   * @since 1.5
+   */
+  private List<PluginSelector> pluginSelectors;
 
   /**
    * Maps a packaging to a location for the build meta data XML file.
@@ -400,12 +441,15 @@ public abstract class AbstractBuildMojo extends AbstractMojo {
     this.createPropertiesReport = createPropertiesReport;
   }
 
+  @SuppressWarnings("unchecked")
+  protected List<PluginSelector> getPluginSelectors() {
+    return pluginSelectors != null ? pluginSelectors : Collections.EMPTY_LIST;
+  }
+
   // --- business -------------------------------------------------------------
 
-  // CHECKSTYLE:OFF
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    // CHECKSTYLE:ON
     final String propertiesFileName =
         calcFileName(propertiesOutputFile, "build.properties");
     if (createPropertiesReport) {

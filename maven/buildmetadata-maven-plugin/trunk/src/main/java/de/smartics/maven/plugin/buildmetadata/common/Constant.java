@@ -346,6 +346,26 @@ public final class Constant {
   public static final String PROP_NAME_JAVA_COMPILER = "build.java.compiler";
 
   /**
+   * The name of the property that stores the target version for the Java source
+   * files.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   */
+  public static final String PROP_NAME_JAVA_COMPILER_SOURCE =
+      "build.runtime.java.compiler.source";
+
+  /**
+   * The name of the property that stores the target version for the Java class
+   * files.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   */
+  public static final String PROP_NAME_JAVA_COMPILER_TARGET =
+      "build.runtime.java.compiler.target";
+
+  /**
    * The name of the property that stores the version of Maven being executed
    * for the build.
    * <p>
@@ -533,10 +553,11 @@ public final class Constant {
         PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER);
     sections.add(buildRuntime);
 
-    final Section buildJava =
-        new Section(SECTION_BUILD_JAVA, PROP_NAME_JAVA_VENDOR,
-            PROP_NAME_JAVA_RUNTIME_NAME, PROP_NAME_JAVA_RUNTIME_VERSION,
-            PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS);
+    final Section buildJava = new Section(SECTION_BUILD_JAVA,
+        PROP_NAME_JAVA_VENDOR, PROP_NAME_JAVA_RUNTIME_NAME,
+        PROP_NAME_JAVA_RUNTIME_VERSION, PROP_NAME_JAVA_VM,
+        PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_COMPILER_SOURCE,
+        PROP_NAME_JAVA_COMPILER_TARGET, PROP_NAME_JAVA_OPTS);
     sections.add(buildJava);
 
     final Section buildMaven = new Section(SECTION_BUILD_MAVEN,
@@ -562,10 +583,11 @@ public final class Constant {
             PROP_NAME_HOSTNAME, PROP_NAME_OS_NAME, PROP_NAME_OS_ARCH,
             PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER, PROP_NAME_JAVA_VENDOR,
             PROP_NAME_JAVA_RUNTIME_NAME, PROP_NAME_JAVA_RUNTIME_VERSION,
-            PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS,
-            PROP_NAME_MAVEN_VERSION, PROP_NAME_MAVEN_CMDLINE,
-            PROP_NAME_MAVEN_GOALS, PROP_NAME_MAVEN_OPTS,
-            PROP_NAME_MAVEN_EXECUTION_PROJECT,
+            PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER,
+            PROP_NAME_JAVA_COMPILER_SOURCE, PROP_NAME_JAVA_COMPILER_TARGET,
+            PROP_NAME_JAVA_OPTS, PROP_NAME_MAVEN_VERSION,
+            PROP_NAME_MAVEN_CMDLINE, PROP_NAME_MAVEN_GOALS,
+            PROP_NAME_MAVEN_OPTS, PROP_NAME_MAVEN_EXECUTION_PROJECT,
             PROP_NAME_MAVEN_IS_EXECUTION_ROOT, PROP_NAME_MAVEN_FILTERS,
             PROP_NAME_MAVEN_ACTIVE_PROFILES, PROP_NAME_PROJECT_HOMEPAGE,
             PROP_NAME_PROJECT_OPS}));

@@ -348,6 +348,15 @@ public final class SdocBuilder {
     createContentElement("vm", Constant.PROP_NAME_JAVA_VM, parent);
     createContentElement("compiler", Constant.PROP_NAME_JAVA_COMPILER, parent);
     createContentElement("options", Constant.PROP_NAME_JAVA_OPTS, parent);
+
+    for (final String key : buildMetaDataProperties.stringPropertyNames()) {
+      final String prefix = "build.runtime.java.";
+      if (key.startsWith(prefix)) {
+        final String shortenedKey = key.substring(prefix.length());
+        createContentElement(shortenedKey, key, parent);
+      }
+    }
+
     if (parent.hasChildNodes()) {
       runtime.appendChild(parent);
     }
