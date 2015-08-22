@@ -1,30 +1,30 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata;
 
-import java.util.Date;
-import java.util.Properties;
+import de.smartics.maven.plugin.buildmetadata.common.Constant;
+import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
 
-import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.io.BuildPropertiesFileHelper;
-import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
+import java.util.Date;
+import java.util.Properties;
 
 /**
  * Adds the build time to the properties file and runs all providers flagged
@@ -44,8 +44,7 @@ import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
  *              information (such as the duration of the build) may or may not
  *              packaged with the artifacts.
  */
-public final class BuildPointMojo extends AbstractBuildMojo
-{
+public final class BuildPointMojo extends AbstractBuildMojo {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -87,24 +86,18 @@ public final class BuildPointMojo extends AbstractBuildMojo
 
   // --- business -------------------------------------------------------------
 
-  /**
-   * {@inheritDoc}
-   */
-  public void execute() throws MojoExecutionException, MojoFailureException
-  {
-    if (!doSkip())
-    {
+  @Override
+  public void execute() throws MojoExecutionException, MojoFailureException {
+    if (!doSkip()) {
       super.execute();
 
-      if (propertiesOutputFile.exists())
-      {
+      if (propertiesOutputFile.exists()) {
         final Properties buildMetaDataProperties = new Properties();
         final String baseDir = project.getBasedir().getAbsolutePath();
         final FilePathNormalizer filePathNormalizer =
             new FilePathNormalizer(baseDir);
-        final BuildPropertiesFileHelper helper =
-            new BuildPropertiesFileHelper(getLog(), propertiesOutputFile,
-                filePathNormalizer);
+        final BuildPropertiesFileHelper helper = new BuildPropertiesFileHelper(
+            getLog(), propertiesOutputFile, filePathNormalizer);
         helper.readBuildPropertiesFile(buildMetaDataProperties);
 
         provideBuildPointInfo(buildMetaDataProperties, helper);
@@ -112,25 +105,18 @@ public final class BuildPointMojo extends AbstractBuildMojo
 
         helper.writePropertiesFile(buildMetaDataProperties);
         updateMavenEnvironment(buildMetaDataProperties, helper);
+      } else {
+        getLog().info("Skipping build point '" + name + "' since no "
+            + propertiesOutputFile.getName() + " with build meta data found.");
       }
-      else
-      {
-        getLog().info(
-            "Skipping build point '" + name + "' since no "
-                + propertiesOutputFile.getName()
-                + " with build meta data found.");
-      }
-    }
-    else
-    {
+    } else {
       getLog().info(
           "Skipping buildmetadata build point execution since skip=true.");
     }
   }
 
   private void provideBuildPointInfo(final Properties buildMetaDataProperties,
-      final BuildPropertiesFileHelper helper)
-  {
+      final BuildPropertiesFileHelper helper) {
     final Date start = session.getStartTime();
     final Date end = new Date();
     final long duration = end.getTime() - start.getTime();
@@ -141,24 +127,19 @@ public final class BuildPointMojo extends AbstractBuildMojo
         durationPropertyName);
   }
 
-  private void setTimeDifference(
-      final BuildPropertiesFileHelper helper, // NOPMD
+  private void setTimeDifference(final BuildPropertiesFileHelper helper, // NOPMD
       final Properties buildMetaDataProperties, final Date currentEnd,
-      final String durationString, final String durationPropertyName)
-  {
+      final String durationString, final String durationPropertyName) {
     final Properties projectProperties = helper.getProjectProperties(project);
     final String previousDurationEnd =
         projectProperties.getProperty(TMP_BUILD_END);
     final String diffPropertyName = durationPropertyName + ".diff";
-    if (StringUtils.isNotBlank(previousDurationEnd))
-    {
+    if (StringUtils.isNotBlank(previousDurationEnd)) {
       final long previousTimestamp = Long.parseLong(previousDurationEnd);
       final long difference = currentEnd.getTime() - previousTimestamp;
       buildMetaDataProperties.setProperty(diffPropertyName,
           String.valueOf(difference));
-    }
-    else
-    {
+    } else {
       buildMetaDataProperties.setProperty(diffPropertyName, durationString);
     }
 
@@ -166,10 +147,8 @@ public final class BuildPointMojo extends AbstractBuildMojo
         String.valueOf(currentEnd.getTime()));
   }
 
-  private String createDurationPropertyName()
-  {
-    if (StringUtils.isNotBlank(name))
-    {
+  private String createDurationPropertyName() {
+    if (StringUtils.isNotBlank(name)) {
       return Constant.PROP_NAME_BUILD_DURATION + '.' + name;
     }
     return Constant.PROP_NAME_BUILD_DURATION;

@@ -1,19 +1,33 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.io;
+
+import de.smartics.maven.plugin.buildmetadata.common.Constant;
+import de.smartics.maven.plugin.buildmetadata.common.Property;
+import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
+
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.plexus.util.StringUtils;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -27,31 +41,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.codehaus.plexus.util.StringUtils;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-
-import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.common.Property;
-import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
-import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
-
 /**
  * Creates an XML report with the build meta data. The report contains the same
  * information as the <code>build.properties</code> file. It is useful for use
  * cases where the build meta data information will be further processed by XSL
  * transformations which require XML documents as input.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class SdocBuilder
-{ // NOPMD
+public final class SdocBuilder {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -144,17 +140,16 @@ public final class SdocBuilder
    * Default constructor.
    *
    * @param filePathNormalizer the normalizer to be applied to file name value
-   *          to remove the base dir prefix.
+   *        to remove the base dir prefix.
    * @param document the empty document to write to.
    * @param buildMetaDataProperties the properties to write to the XML report.
    * @param selectedProperties the list of a system properties or environment
-   *          variables to be selected by the user to include into the build
-   *          meta data properties.
+   *        variables to be selected by the user to include into the build meta
+   *        data properties.
    */
   public SdocBuilder(final FilePathNormalizer filePathNormalizer,
       final Document document, final Properties buildMetaDataProperties,
-      final List<Property> selectedProperties)
-  {
+      final List<Property> selectedProperties) {
     this.filePathNormalizer = filePathNormalizer;
     this.document = document;
     this.buildMetaDataProperties = buildMetaDataProperties;
@@ -177,8 +172,7 @@ public final class SdocBuilder
    * @return the written XML document.
    * @throws IOException on any problem writing to the XML document.
    */
-  public Document writeDocumentContent() throws IOException
-  {
+  public Document writeDocumentContent() throws IOException {
     final Element docRoot = createDocRoot();
 
     createContentElement(GI_NAME, Constant.PROP_NAME_FULL_VERSION, docRoot);
@@ -205,42 +199,33 @@ public final class SdocBuilder
     return document;
   }
 
-  private void createTagsElement(final Element docRoot)
-  {
+  private void createTagsElement(final Element docRoot) {
     final Element tags = document.createElement("tags");
     final String tagsString =
         buildMetaDataProperties.getProperty(Constant.PROP_NAME_PROJECT_TAGS);
     renderList(tags, "tag", tagsString);
-    if (tags.hasChildNodes())
-    {
+    if (tags.hasChildNodes()) {
       docRoot.appendChild(tags);
     }
   }
 
-  private String formatDate(final String datePropertyKey)
-  {
+  private String formatDate(final String datePropertyKey) {
     final String originalDateString =
         buildMetaDataProperties.getProperty(datePropertyKey);
-    if (StringUtils.isNotBlank(originalDateString))
-    {
-      try
-      {
-        final String originalPattern =
-            buildMetaDataProperties
-                .getProperty(Constant.PROP_NAME_BUILD_DATE_PATTERN);
+    if (StringUtils.isNotBlank(originalDateString)) {
+      try {
+        final String originalPattern = buildMetaDataProperties
+            .getProperty(Constant.PROP_NAME_BUILD_DATE_PATTERN);
         final DateFormat format =
             new SimpleDateFormat(originalPattern, Locale.ENGLISH);
         final Date date = format.parse(originalDateString);
         final String dateString =
             DateFormatUtils.ISO_DATETIME_FORMAT.format(date);
         return dateString;
-      }
-      catch (final ParseException e)
-      {
-        if (LOG.isDebugEnabled())
-        {
+      } catch (final ParseException e) {
+        if (LOG.isDebugEnabled()) {
           LOG.debug("Cannot parse date of property '" + datePropertyKey + "': "
-                    + originalDateString + ". Skipping...");
+              + originalDateString + ". Skipping...");
         }
         return null;
       }
@@ -248,10 +233,10 @@ public final class SdocBuilder
     return null;
   }
 
-  private void createScmElement(final Element docRoot)
-  {
+  private void createScmElement(final Element docRoot) {
     final Element parent = document.createElement("scm");
-    createContentElement("revision", Constant.PROP_NAME_SCM_REVISION_ID, parent);
+    createContentElement("revision", Constant.PROP_NAME_SCM_REVISION_ID,
+        parent);
     final String date = formatDate(Constant.PROP_NAME_SCM_REVISION_DATE);
     createValueElement("revision-date", date, parent);
     createContentElement("url", Constant.PROP_NAME_SCM_URL, parent);
@@ -259,14 +244,11 @@ public final class SdocBuilder
     docRoot.appendChild(parent);
   }
 
-  private void createLocallyModifiedFiles(final Element scm)
-  {
-    final String value =
-        buildMetaDataProperties
-            .getProperty(Constant.PROP_NAME_SCM_LOCALLY_MODIFIED_FILES);
+  private void createLocallyModifiedFiles(final Element scm) {
+    final String value = buildMetaDataProperties
+        .getProperty(Constant.PROP_NAME_SCM_LOCALLY_MODIFIED_FILES);
 
-    if (StringUtils.isNotBlank(value))
-    {
+    if (StringUtils.isNotBlank(value)) {
       final Element parent = document.createElement("locally-modified-files");
 
       final String filesValue = Constant.prettifyFilesValue(value);
@@ -275,20 +257,16 @@ public final class SdocBuilder
     }
   }
 
-  private void renderFiles(final Element lmf, final String value)
-  {
+  private void renderFiles(final Element lmf, final String value) {
     final String stringValue = Constant.prettify(value);
     final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
-    while (tokenizer.hasMoreTokens())
-    {
+    while (tokenizer.hasMoreTokens()) {
       final String subValue = tokenizer.nextToken();
       final int colonIndex = subValue.indexOf(':');
-      if (colonIndex > -1)
-      {
+      if (colonIndex > -1) {
         final String filePath = subValue.substring(0, colonIndex);
         final Element file = createValueElement("file", filePath, lmf);
-        if (file != null && colonIndex < subValue.length() - 1)
-        {
+        if (file != null && colonIndex < subValue.length() - 1) {
           final String modType = subValue.substring(colonIndex + 1).trim();
           file.setAttribute("modtype", modType);
         }
@@ -296,8 +274,21 @@ public final class SdocBuilder
     }
   }
 
-  private void createProjectElement(final Element docRoot)
-  {
+  private void renderFiles(final Element parent, final String itemTag,
+      final String value) {
+    if (StringUtils.isNotBlank(value)) {
+      final String stringValue = Constant.prettify(value);
+      final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
+      while (tokenizer.hasMoreTokens()) {
+        final String item = tokenizer.nextToken();
+        final String itemTrimmed = item.trim();
+        final String itemNorm = filePathNormalizer.normalize(itemTrimmed);
+        createValueElement(itemTag, itemNorm, parent);
+      }
+    }
+  }
+
+  private void createProjectElement(final Element docRoot) {
     final Element parent = document.createElement("project");
 
     createContentElement("copyright-year", Constant.PROP_NAME_COPYRIGHT_YEAR,
@@ -307,29 +298,24 @@ public final class SdocBuilder
     createContentElement("ops-home-page-url", Constant.PROP_NAME_PROJECT_OPS,
         parent);
 
-    if (parent.hasChildNodes())
-    {
+    if (parent.hasChildNodes()) {
       docRoot.appendChild(parent);
     }
   }
 
   private void renderList(final Element tags, final String itemTag,
-      final String value)
-  {
-    if (StringUtils.isNotBlank(value))
-    {
+      final String value) {
+    if (StringUtils.isNotBlank(value)) {
       final String stringValue = Constant.prettify(value);
       final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
-      while (tokenizer.hasMoreTokens())
-      {
+      while (tokenizer.hasMoreTokens()) {
         final String item = tokenizer.nextToken();
         createValueElement(itemTag, item.trim(), tags);
       }
     }
   }
 
-  private void createRuntimeElement(final Element docRoot)
-  {
+  private void createRuntimeElement(final Element docRoot) {
     final Element parent = document.createElement("runtime");
 
     createContentElement("build-server", Constant.PROP_NAME_HOSTNAME, parent);
@@ -343,20 +329,17 @@ public final class SdocBuilder
     docRoot.appendChild(parent);
   }
 
-  private void createOsElement(final Element runtime)
-  {
+  private void createOsElement(final Element runtime) {
     final Element parent = document.createElement("os");
     createContentElement("arch", Constant.PROP_NAME_OS_ARCH, parent);
     createContentElement(GI_NAME, Constant.PROP_NAME_OS_NAME, parent);
     createContentElement(GI_VERSION, Constant.PROP_NAME_OS_VERSION, parent);
-    if (parent.hasChildNodes())
-    {
+    if (parent.hasChildNodes()) {
       runtime.appendChild(parent);
     }
   }
 
-  private void createJavaElement(final Element runtime)
-  {
+  private void createJavaElement(final Element runtime) {
     final Element parent = document.createElement("java");
     createContentElement(GI_NAME, Constant.PROP_NAME_JAVA_RUNTIME_NAME, parent);
     createContentElement(GI_VERSION, Constant.PROP_NAME_JAVA_RUNTIME_VERSION,
@@ -365,14 +348,12 @@ public final class SdocBuilder
     createContentElement("vm", Constant.PROP_NAME_JAVA_VM, parent);
     createContentElement("compiler", Constant.PROP_NAME_JAVA_COMPILER, parent);
     createContentElement("options", Constant.PROP_NAME_JAVA_OPTS, parent);
-    if (parent.hasChildNodes())
-    {
+    if (parent.hasChildNodes()) {
       runtime.appendChild(parent);
     }
   }
 
-  private void createMavenElement(final Element runtime)
-  {
+  private void createMavenElement(final Element runtime) {
     final Element parent = document.createElement("maven");
     createContentElement(GI_VERSION, Constant.PROP_NAME_MAVEN_VERSION, parent);
 
@@ -393,56 +374,32 @@ public final class SdocBuilder
     final String filtersString =
         buildMetaDataProperties.getProperty(Constant.PROP_NAME_MAVEN_FILTERS);
     renderFiles(filters, "filter", filtersString);
-    if (filters.hasChildNodes())
-    {
+    if (filters.hasChildNodes()) {
       parent.appendChild(filters);
     }
 
     final Element profiles = document.createElement("profiles");
-    final String profilesString =
-        buildMetaDataProperties
-            .getProperty(Constant.PROP_NAME_MAVEN_ACTIVE_PROFILES);
-    if (StringUtils.isNotBlank(profilesString))
-    {
+    final String profilesString = buildMetaDataProperties
+        .getProperty(Constant.PROP_NAME_MAVEN_ACTIVE_PROFILES);
+    if (StringUtils.isNotBlank(profilesString)) {
       renderProfiles(profiles, profilesString);
       parent.appendChild(profiles);
     }
 
     createContentElement("options", Constant.PROP_NAME_MAVEN_OPTS, parent);
-    if (parent.hasChildNodes())
-    {
+    if (parent.hasChildNodes()) {
       runtime.appendChild(parent);
     }
   }
 
-  private void renderFiles(final Element parent, final String itemTag,
-      final String value)
-  {
-    if (StringUtils.isNotBlank(value))
-    {
-      final String stringValue = Constant.prettify(value);
-      final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
-      while (tokenizer.hasMoreTokens())
-      {
-        final String item = tokenizer.nextToken();
-        final String itemTrimmed = item.trim();
-        final String itemNorm = filePathNormalizer.normalize(itemTrimmed);
-        createValueElement(itemTag, itemNorm, parent);
-      }
-    }
-  }
-
-  private void renderProfiles(final Element profiles, final String value)
-  {
+  private void renderProfiles(final Element profiles, final String value) {
     final String stringValue = Constant.prettify(value);
     final StringTokenizer tokenizer = new StringTokenizer(stringValue, ",");
-    while (tokenizer.hasMoreTokens())
-    {
+    while (tokenizer.hasMoreTokens()) {
       final String profileName = tokenizer.nextToken().trim();
       final Element profile =
           createValueElement("profile", profileName, profiles);
-      if (profile != null)
-      {
+      if (profile != null) {
         final String profileSourceKey =
             Constant.MAVEN_ACTIVE_PROFILE_PREFIX + '.' + profileName;
         final String source =
@@ -452,45 +409,36 @@ public final class SdocBuilder
     }
   }
 
-  private void createEnvElement(final Element runtime)
-  {
+  private void createEnvElement(final Element runtime) {
     final Element parent = document.createElement("env");
 
     final Properties sorted =
         SortedProperties.createSorted(buildMetaDataProperties);
     final String matchPrefix = Constant.MAVEN_EXECUTION_PROPERTIES_PREFIX + '.';
-    for (final Map.Entry<Object, Object> entry : sorted.entrySet())
-    {
+    for (final Map.Entry<Object, Object> entry : sorted.entrySet()) {
       final String key = String.valueOf(entry.getKey());
-      if (key.startsWith(matchPrefix))
-      {
+      if (key.startsWith(matchPrefix)) {
         final String value = String.valueOf(entry.getValue());
         final Element env = createValueElement("var", value, parent);
-        if (env != null)
-        {
+        if (env != null) {
           env.setAttribute(GI_NAME, key);
         }
       }
     }
 
-    if (parent.hasChildNodes())
-    {
+    if (parent.hasChildNodes()) {
       runtime.appendChild(parent);
     }
   }
 
-  private void createMiscElement(final Element docRoot)
-  {
-    final Properties nonStandardProperties =
-        Constant.calcNonStandardProperties(buildMetaDataProperties,
-            selectedProperties);
-    if (!nonStandardProperties.isEmpty())
-    {
+  private void createMiscElement(final Element docRoot) {
+    final Properties nonStandardProperties = Constant
+        .calcNonStandardProperties(buildMetaDataProperties, selectedProperties);
+    if (!nonStandardProperties.isEmpty()) {
       final Element parent = document.createElement("misc");
 
       for (final Enumeration<Object> en = nonStandardProperties.keys(); en
-          .hasMoreElements();)
-      {
+          .hasMoreElements();) {
         final String key = String.valueOf(en.nextElement());
         createMetaDataElement(parent, key);
       }
@@ -498,20 +446,16 @@ public final class SdocBuilder
     }
   }
 
-  private void createMetaDataElement(final Element parent, final String key)
-  {
-    if (Constant.isIntendedForMiscSection(key))
-    {
+  private void createMetaDataElement(final Element parent, final String key) {
+    if (Constant.isIntendedForMiscSection(key)) {
       final Element metadata = createContentElement("metadata", key, parent);
-      if (metadata != null)
-      {
+      if (metadata != null) {
         metadata.setAttribute(GI_NAME, key);
       }
     }
   }
 
-  private Element createDocRoot() throws DOMException
-  {
+  private Element createDocRoot() throws DOMException {
     final Element docRoot = document.createElement("buildmetadata");
     docRoot.setAttribute("xmlns:xsi", XML_SCHEMA_INSTANCE);
     docRoot.setAttribute("xmlns", CODE_URI);
@@ -521,17 +465,14 @@ public final class SdocBuilder
   }
 
   private Element createContentElement(final String gi,
-      final String propertyKey, final Element parent)
-  {
+      final String propertyKey, final Element parent) {
     final String content = buildMetaDataProperties.getProperty(propertyKey);
     return createValueElement(gi, content, parent);
   }
 
   private Element createValueElement(final String gi, final String value,
-      final Element parent)
-  {
-    if (value != null)
-    {
+      final Element parent) {
+    if (value != null) {
       final Element element = document.createElement(gi);
       final Text text = document.createTextNode(value);
       element.appendChild(text);

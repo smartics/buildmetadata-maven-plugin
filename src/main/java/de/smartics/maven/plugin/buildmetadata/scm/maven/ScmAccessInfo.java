@@ -1,24 +1,22 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.scm.maven;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import de.smartics.maven.plugin.buildmetadata.scm.Revision;
+import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.scm.ScmBranch;
@@ -32,17 +30,15 @@ import org.apache.maven.scm.repository.ScmRepository;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 
-import de.smartics.maven.plugin.buildmetadata.scm.Revision;
-import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
+import java.io.File;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Provides access information to retrieve revision information from the SCM.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class ScmAccessInfo implements Serializable
-{
+public final class ScmAccessInfo implements Serializable {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -60,6 +56,7 @@ public final class ScmAccessInfo implements Serializable
    * to return a non empty set.
    * <p>
    * The value of this constant is {@value}.
+   * </p>
    */
   public static final int DEFAULT_RETRY_COUNT = 5;
 
@@ -108,9 +105,7 @@ public final class ScmAccessInfo implements Serializable
   /**
    * Default constructor.
    */
-  public ScmAccessInfo()
-  {
-  }
+  public ScmAccessInfo() {}
 
   // ****************************** Inner Classes *****************************
 
@@ -125,8 +120,7 @@ public final class ScmAccessInfo implements Serializable
    *
    * @return the format of the dates understood by the SCM system.
    */
-  public String getDateFormat()
-  {
+  public String getDateFormat() {
     return dateFormat;
   }
 
@@ -135,8 +129,7 @@ public final class ScmAccessInfo implements Serializable
    *
    * @param dateFormat the format of the dates understood by the SCM system.
    */
-  public void setDateFormat(final String dateFormat)
-  {
+  public void setDateFormat(final String dateFormat) {
     this.dateFormat = dateFormat;
   }
 
@@ -145,8 +138,7 @@ public final class ScmAccessInfo implements Serializable
    *
    * @return the root directory that contains the files under SCM control.
    */
-  public File getRootDirectory()
-  {
+  public File getRootDirectory() {
     return rootDirectory;
   }
 
@@ -154,10 +146,9 @@ public final class ScmAccessInfo implements Serializable
    * Sets the root directory that contains the files under SCM control.
    *
    * @param rootDirectory the root directory that contains the files under SCM
-   *          control.
+   *        control.
    */
-  public void setRootDirectory(final File rootDirectory)
-  {
+  public void setRootDirectory(final File rootDirectory) {
     this.rootDirectory = rootDirectory;
   }
 
@@ -171,8 +162,7 @@ public final class ScmAccessInfo implements Serializable
    * @return the range of the query in days to fetch change log entries from the
    *         SCM.
    */
-  public int getQueryRangeInDays()
-  {
+  public int getQueryRangeInDays() {
     return queryRangeInDays;
   }
 
@@ -184,10 +174,9 @@ public final class ScmAccessInfo implements Serializable
    * will not be set with a valid value.
    *
    * @param queryRangeInDays the range of the query in days to fetch change log
-   *          entries from the SCM.
+   *        entries from the SCM.
    */
-  public void setQueryRangeInDays(final int queryRangeInDays)
-  {
+  public void setQueryRangeInDays(final int queryRangeInDays) {
     this.queryRangeInDays = queryRangeInDays;
   }
 
@@ -199,8 +188,7 @@ public final class ScmAccessInfo implements Serializable
    *
    * @return the flag to fail if local modifications have been found.
    */
-  public boolean isFailOnLocalModifications()
-  {
+  public boolean isFailOnLocalModifications() {
     return failOnLocalModifications;
   }
 
@@ -211,10 +199,10 @@ public final class ScmAccessInfo implements Serializable
    * fact is only to be noted in the build properties.
    *
    * @param failOnLocalModifications the flag to fail if local modifications
-   *          have been found.
+   *        have been found.
    */
-  public void setFailOnLocalModifications(final boolean failOnLocalModifications)
-  {
+  public void setFailOnLocalModifications(
+      final boolean failOnLocalModifications) {
     this.failOnLocalModifications = failOnLocalModifications;
   }
 
@@ -228,8 +216,7 @@ public final class ScmAccessInfo implements Serializable
    * @return the flag to ignore files and directories starting with a dot for
    *         checking modified files.
    */
-  public boolean isIgnoreDotFilesInBaseDir()
-  {
+  public boolean isIgnoreDotFilesInBaseDir() {
     return ignoreDotFilesInBaseDir;
   }
 
@@ -241,10 +228,10 @@ public final class ScmAccessInfo implements Serializable
    * <code>false</code>, dot files are respected.
    *
    * @param ignoreDotFilesInBaseDir the flag to ignore files and directories
-   *          starting with a dot for checking modified files.
+   *        starting with a dot for checking modified files.
    */
-  public void setIgnoreDotFilesInBaseDir(final boolean ignoreDotFilesInBaseDir)
-  {
+  public void setIgnoreDotFilesInBaseDir(
+      final boolean ignoreDotFilesInBaseDir) {
     this.ignoreDotFilesInBaseDir = ignoreDotFilesInBaseDir;
   }
 
@@ -260,80 +247,69 @@ public final class ScmAccessInfo implements Serializable
    * @throws ScmException if the change log cannot be fetched.
    */
   public ChangeLogScmResult fetchChangeLog(final ScmRepository repository,
-      final ScmProvider provider) throws ScmException
-  {
-    try
-    {
+      final ScmProvider provider) throws ScmException {
+    try {
       ChangeLogScmResult result = null;
       int currentRange = queryRangeInDays;
-      for (int i = 0; i <= DEFAULT_RETRY_COUNT; i++)
-      {
-        result =
-            provider.changeLog(repository, createFileSet(), null, null,
-                currentRange, (ScmBranch) null, dateFormat);
-        if (!isEmpty(result))
-        {
+      for (int i = 0; i <= DEFAULT_RETRY_COUNT; i++) {
+        result = provider.changeLog(repository, createFileSet(), null, null,
+            currentRange, (ScmBranch) null, dateFormat);
+        if (!isEmpty(result)) {
           return result;
         }
         currentRange += queryRangeInDays;
       }
       return result;
-    }
-    catch (final org.apache.maven.scm.ScmException e)
-    {
+    } catch (final org.apache.maven.scm.ScmException e) {
       throw new ScmException("Cannot fetch change log from repository.", e);
     }
   }
 
-  public Revision fetchRemoteVersion(final ScmRepository repository,
-      final ScmVersion remoteVersion) throws ScmException
-  {
-    try
-    {
+  /**
+   * Fetches the version from the remote Git repository. The implementation uses
+   * the Git Command Line Utils.
+   *
+   * @param repository the reference to the repository (currently not used).
+   * @param remoteVersion the version to fetch.
+   * @return the revision information.
+   * @throws ScmException on any problem accessing the remote repository.
+   */
+  public Revision fetchRemoteGitVersion(final ScmRepository repository,
+      final ScmVersion remoteVersion) throws ScmException {
+    try {
       final Commandline cl =
           GitCommandLineUtils.getBaseGitCommandLine(rootDirectory, "log");
       cl.createArg().setLine("-n 1");
       cl.createArg().setLine("--pretty=format:\"%H %ct\"");
       cl.createArg().setLine(remoteVersion.getName());
       final Process process = cl.execute();
-      try
-      {
+      try {
         process.waitFor();
         final int exitValue = process.exitValue();
-        if (exitValue != 0)
-        {
-          throw new ScmException(
-              "Cannot fetch remote version from repository (" + exitValue
-                  + "): " + IOUtils.toString(process.getErrorStream()));
+        if (exitValue != 0) {
+          throw new ScmException("Cannot fetch remote version from repository ("
+              + exitValue + "): " + IOUtils.toString(process.getErrorStream()));
         }
         final String result = IOUtils.toString(process.getInputStream());
         final Revision revision = createRevision(result);
         return revision;
-      }
-      finally
-      {
+      } finally {
         process.destroy();
       }
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       throw new ScmException("Cannot fetch remote version from repository.", e);
     }
   }
 
-  private Revision createRevision(final String idSpaceDate)
-  {
+  private Revision createRevision(final String idSpaceDate) {
     final int index = idSpaceDate.trim().lastIndexOf(' ');
     final String id = idSpaceDate.substring(0, index);
     final String dateString = idSpaceDate.substring(index + 1);
-    try
-    {
+    try {
       final Date date = new Date(Long.parseLong(dateString) * 1000L);
       final Revision revision = new StringRevision(id, date);
       return revision;
-    }
-    catch (final NumberFormatException e)
-    {
+    } catch (final NumberFormatException e) {
       return new StringRevision(id, new Date(0L));
     }
   }
@@ -351,24 +327,19 @@ public final class ScmAccessInfo implements Serializable
    *         <code>null</code> or the set is empty.
    * @see de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo#isEmpty(org.apache.maven.scm.command.changelog.ChangeLogSet)
    */
-  private boolean isEmpty(final ChangeLogScmResult result)
-  {
-    if (result != null)
-    {
+  private boolean isEmpty(final ChangeLogScmResult result) {
+    if (result != null) {
       final ChangeLogSet changeLogSet = result.getChangeLog();
-      if (changeLogSet != null)
-      {
+      if (changeLogSet != null) {
         return isEmpty(changeLogSet);
       }
     }
     return false;
   }
 
-  private boolean isEmpty(final ChangeLogSet changeLogSet)
-  {
+  private boolean isEmpty(final ChangeLogSet changeLogSet) {
     final List<?> changeLogSets = changeLogSet.getChangeSets();
-    if (changeLogSets != null)
-    {
+    if (changeLogSets != null) {
       return changeLogSets.isEmpty();
     }
 
@@ -380,8 +351,7 @@ public final class ScmAccessInfo implements Serializable
    *
    * @return the file set on the root directory of the checked out project.
    */
-  protected ScmFileSet createFileSet()
-  {
+  protected ScmFileSet createFileSet() {
     return new ScmFileSet(rootDirectory);
   }
 
@@ -393,8 +363,7 @@ public final class ScmAccessInfo implements Serializable
    *         modified files that are to be considered for a check),
    *         <code>false</code> if there are none.
    */
-  public boolean isFailIndicated()
-  {
+  public boolean isFailIndicated() {
     return isFailOnLocalModifications() && !isIgnoreDotFilesInBaseDir();
   }
 
@@ -408,13 +377,13 @@ public final class ScmAccessInfo implements Serializable
    * @see java.lang.StringBuilder#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     final StringBuilder buffer = new StringBuilder();
 
     buffer.append("SCM access info: rootDirectory=").append(rootDirectory);
     appendIfExists(buffer, "dateFormat", dateFormat);
-    appendIfExists(buffer, "queryRangeInDays", String.valueOf(queryRangeInDays));
+    appendIfExists(buffer, "queryRangeInDays",
+        String.valueOf(queryRangeInDays));
     appendIfExists(buffer, "failOnLocalModifications",
         String.valueOf(failOnLocalModifications));
     appendIfExists(buffer, "ignoreDotFilesInBaseDir",
@@ -424,10 +393,8 @@ public final class ScmAccessInfo implements Serializable
   }
 
   private static void appendIfExists(final StringBuilder buffer,
-      final String label, final String value)
-  {
-    if (StringUtils.isNotBlank(value))
-    {
+      final String label, final String value) {
+    if (StringUtils.isNotBlank(value)) {
       buffer.append(", ").append(label).append('=').append(value);
     }
   }

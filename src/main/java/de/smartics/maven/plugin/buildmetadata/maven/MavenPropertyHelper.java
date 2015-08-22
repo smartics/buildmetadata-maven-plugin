@@ -1,25 +1,25 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.maven;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Properties;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.maven.project.MavenProject;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
 
 /**
  * Fetches properties from a Maven project. This includes properties of the
@@ -30,12 +30,8 @@ import org.apache.maven.project.MavenProject;
  * changed within a call of this instance. No synchronization is cared for by
  * this instance.
  * </p>
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class MavenPropertyHelper
-{
+public final class MavenPropertyHelper {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -75,10 +71,8 @@ public final class MavenPropertyHelper
    *
    * @param project the project to fetch properties from.
    */
-  public MavenPropertyHelper(final MavenProject project)
-  {
-    if (project == null)
-    {
+  public MavenPropertyHelper(final MavenProject project) {
+    if (project == null) {
       throw new NullPointerException(
           "The property helper requires the project reference to be not 'null'.");
     }
@@ -101,49 +95,39 @@ public final class MavenPropertyHelper
    * @param name the name of the property to return.
    * @return the property value for the given {@code name}.
    */
-  public String getProperty(final String name)
-  {
-    if (name == null)
-    {
+  public String getProperty(final String name) {
+    if (name == null) {
       throw new NullPointerException(
           "Name of requested property must not be 'null'");
     }
 
     String value = null;
-    if (isProjectProperty(name))
-    {
+    if (isProjectProperty(name)) {
       value = getProjectProperty(name);
     }
-    if (value == null)
-    {
+    if (value == null) {
       value = getPropertiesProperty(name);
     }
     return value;
   }
 
-  private boolean isProjectProperty(final String name)
-  {
+  private boolean isProjectProperty(final String name) {
     return name != null && name.length() >= PROJECT_PROPERTY_NAME_PREFIX_LENGTH
-           && name.startsWith(PROJECT_PROPERTY_NAME_PREFIX);
+        && name.startsWith(PROJECT_PROPERTY_NAME_PREFIX);
   }
 
   /**
    * Returns a property from the project instance.
    */
-  private String getProjectProperty(final String name)
-  {
+  private String getProjectProperty(final String name) {
     final String projectName =
         name.substring(PROJECT_PROPERTY_NAME_PREFIX_LENGTH);
-    if (PropertyUtils.isReadable(project, projectName))
-    {
-      try
-      {
+    if (PropertyUtils.isReadable(project, projectName)) {
+      try {
         return getProjectProperty(project, projectName);
-      }
-      catch (final Exception e)
-      {
-        throw new IllegalStateException("Cannot access project property '"
-                                        + name + "'.");
+      } catch (final Exception e) {
+        throw new IllegalStateException(
+            "Cannot access project property '" + name + "'.");
       }
     }
 
@@ -152,17 +136,12 @@ public final class MavenPropertyHelper
 
   private static String getProjectProperty(final MavenProject project,
       final String projectName) throws IllegalAccessException,
-    InvocationTargetException, NoSuchMethodException
-  {
-    if (project != null)
-    {
+          InvocationTargetException, NoSuchMethodException {
+    if (project != null) {
       final Object value = PropertyUtils.getProperty(project, projectName);
-      if (value != null)
-      {
+      if (value != null) {
         return String.valueOf(value);
-      }
-      else
-      {
+      } else {
         return getProjectProperty(project.getParent(), projectName);
       }
     }
@@ -172,23 +151,19 @@ public final class MavenPropertyHelper
   /**
    * Returns a property from the <code>properties</code> section.
    */
-  private String getPropertiesProperty(final String name)
-  {
+  private String getPropertiesProperty(final String name) {
     return getPropertiesProperty(project, name);
   }
 
   private static String getPropertiesProperty(final MavenProject project,
-      final String name)
-  {
+      final String name) {
     String value = null;
     final Properties properties = project.getProperties();
-    if (properties != null)
-    {
+    if (properties != null) {
       value = properties.getProperty(name);
     }
 
-    if (value == null)
-    {
+    if (value == null) {
       value = getPropertiesPropertyFromParent(project, name);
     }
 
@@ -196,16 +171,12 @@ public final class MavenPropertyHelper
   }
 
   private static String getPropertiesPropertyFromParent(
-      final MavenProject project, final String name)
-  {
+      final MavenProject project, final String name) {
     final String value;
     final MavenProject parentProject = project.getParent();
-    if (parentProject != null)
-    {
+    if (parentProject != null) {
       value = getPropertiesProperty(parentProject, name);
-    }
-    else
-    {
+    } else {
       value = null;
     }
     return value;

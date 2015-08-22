@@ -1,21 +1,19 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.util;
-
-import java.io.File;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
@@ -29,14 +27,12 @@ import org.apache.maven.doxia.site.decoration.Skin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
+import java.io.File;
+
 /**
  * Utilities for Maven for generating reports.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class ReportUtils
-{
+public final class ReportUtils {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -50,9 +46,7 @@ public final class ReportUtils
   /**
    * Utility class pattern.
    */
-  private ReportUtils()
-  {
-  }
+  private ReportUtils() {}
 
   // ****************************** Inner Classes *****************************
 
@@ -79,14 +73,11 @@ public final class ReportUtils
    * @throws MojoExecutionException if the skin artifact cannot be resolved.
    */
   public static File getSkinArtifactFile(final MavenProject project,
-      final ArtifactRepository localRepository,
-      final ArtifactResolver resolver, final ArtifactFactory factory)
-    throws MojoExecutionException
-  {
+      final ArtifactRepository localRepository, final ArtifactResolver resolver,
+      final ArtifactFactory factory) throws MojoExecutionException {
     final Skin skin = Skin.getDefaultSkin();
     final String version = determineVersion(skin);
-    try
-    {
+    try {
       final VersionRange versionSpec =
           VersionRange.createFromVersionSpec(version);
       final Artifact artifact =
@@ -96,20 +87,15 @@ public final class ReportUtils
           localRepository);
 
       return artifact.getFile();
-    }
-    catch (final InvalidVersionSpecificationException e)
-    {
-      throw new MojoExecutionException("The skin version '" + version
-                                       + "' is not valid: " + e.getMessage(), e);
-    }
-    catch (final ArtifactResolutionException e)
-    {
+    } catch (final InvalidVersionSpecificationException e) {
+      throw new MojoExecutionException(
+          "The skin version '" + version + "' is not valid: " + e.getMessage(),
+          e);
+    } catch (final ArtifactResolutionException e) {
       throw new MojoExecutionException("Unable to find skin", e);
-    }
-    catch (final ArtifactNotFoundException e)
-    {
-      throw new MojoExecutionException("The skin does not exist: "
-                                       + e.getMessage(), e);
+    } catch (final ArtifactNotFoundException e) {
+      throw new MojoExecutionException(
+          "The skin does not exist: " + e.getMessage(), e);
     }
   }
 
@@ -121,11 +107,9 @@ public final class ReportUtils
    * @return the version of the skin or {@link Artifact#RELEASE_VERSION} as
    *         default.
    */
-  private static String determineVersion(final Skin skin)
-  {
+  private static String determineVersion(final Skin skin) {
     String version = skin.getVersion();
-    if (version == null)
-    {
+    if (version == null) {
       version = Artifact.RELEASE_VERSION;
     }
     return version;

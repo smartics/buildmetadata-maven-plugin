@@ -1,19 +1,21 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.common;
+
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,16 +26,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.codehaus.plexus.util.StringUtils;
-
 /**
  * Constants used in this package.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision: 8936 $
  */
-public final class Constant
-{
+public final class Constant {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -516,30 +512,25 @@ public final class Constant
 
   // ****************************** Initializer *******************************
 
-  static
-  {
+  static {
     final List<Section> sections = new ArrayList<Section>();
-    final Section scm =
-        new Section(SECTION_BUILD_SCM, PROP_NAME_SCM_REVISION_ID,
-            PROP_NAME_SCM_REVISION_DATE, PROP_NAME_SCM_URL,
-            PROP_NAME_SCM_LOCALLY_MODIFIED_FILES);
+    final Section scm = new Section(SECTION_BUILD_SCM,
+        PROP_NAME_SCM_REVISION_ID, PROP_NAME_SCM_REVISION_DATE,
+        PROP_NAME_SCM_URL, PROP_NAME_SCM_LOCALLY_MODIFIED_FILES);
     sections.add(scm);
 
-    final Section artifact =
-        new Section(SECTION_ARTIFACT, PROP_NAME_GROUP_ID,
-            PROP_NAME_ARTIFACT_ID, PROP_NAME_VERSION, PROP_NAME_FULL_VERSION);
+    final Section artifact = new Section(SECTION_ARTIFACT, PROP_NAME_GROUP_ID,
+        PROP_NAME_ARTIFACT_ID, PROP_NAME_VERSION, PROP_NAME_FULL_VERSION);
     sections.add(artifact);
 
-    final Section dateAndVersion =
-        new Section(SECTION_BUILD_DATE, PROP_NAME_BUILD_DATE,
-            PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_BUILD_YEAR,
-            PROP_NAME_COPYRIGHT_YEAR, DEFAULT_DATE_PATTERN);
+    final Section dateAndVersion = new Section(SECTION_BUILD_DATE,
+        PROP_NAME_BUILD_DATE, PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_BUILD_YEAR,
+        PROP_NAME_COPYRIGHT_YEAR, DEFAULT_DATE_PATTERN);
     sections.add(dateAndVersion);
 
-    final Section buildRuntime =
-        new Section(SECTION_BUILD_RUNTIME, PROP_NAME_HOSTNAME,
-            PROP_NAME_OS_NAME, PROP_NAME_OS_ARCH, PROP_NAME_OS_VERSION,
-            PROP_NAME_BUILD_USER);
+    final Section buildRuntime = new Section(SECTION_BUILD_RUNTIME,
+        PROP_NAME_HOSTNAME, PROP_NAME_OS_NAME, PROP_NAME_OS_ARCH,
+        PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER);
     sections.add(buildRuntime);
 
     final Section buildJava =
@@ -548,12 +539,11 @@ public final class Constant
             PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS);
     sections.add(buildJava);
 
-    final Section buildMaven =
-        new Section(SECTION_BUILD_MAVEN, PROP_NAME_MAVEN_VERSION,
-            PROP_NAME_MAVEN_CMDLINE, PROP_NAME_MAVEN_GOALS,
-            PROP_NAME_MAVEN_OPTS, PROP_NAME_MAVEN_EXECUTION_PROJECT,
-            PROP_NAME_MAVEN_IS_EXECUTION_ROOT, PROP_NAME_MAVEN_FILTERS,
-            PROP_NAME_MAVEN_ACTIVE_PROFILES);
+    final Section buildMaven = new Section(SECTION_BUILD_MAVEN,
+        PROP_NAME_MAVEN_VERSION, PROP_NAME_MAVEN_CMDLINE, PROP_NAME_MAVEN_GOALS,
+        PROP_NAME_MAVEN_OPTS, PROP_NAME_MAVEN_EXECUTION_PROJECT,
+        PROP_NAME_MAVEN_IS_EXECUTION_ROOT, PROP_NAME_MAVEN_FILTERS,
+        PROP_NAME_MAVEN_ACTIVE_PROFILES);
     sections.add(buildMaven);
 
     final Section project =
@@ -562,22 +552,23 @@ public final class Constant
             PROP_NAME_PROJECT_SUBCATEGORY, PROP_NAME_PROJECT_TAGS);
     sections.add(project);
 
-    final Set<String> properties =
-        new HashSet<String>(Arrays.asList(new String[]
-        { PROP_NAME_SCM_REVISION_ID, PROP_NAME_SCM_REVISION_DATE,
-         PROP_NAME_SCM_URL, PROP_NAME_SCM_LOCALLY_MODIFIED_FILES,
-         PROP_NAME_BUILD_DATE, PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_BUILD_YEAR,
-         PROP_NAME_COPYRIGHT_YEAR, DEFAULT_DATE_PATTERN, PROP_NAME_GROUP_ID,
-         PROP_NAME_ARTIFACT_ID, PROP_NAME_VERSION, PROP_NAME_FULL_VERSION,
-         PROP_NAME_HOSTNAME, PROP_NAME_OS_NAME, PROP_NAME_OS_ARCH,
-         PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER, PROP_NAME_JAVA_VENDOR,
-         PROP_NAME_JAVA_RUNTIME_NAME, PROP_NAME_JAVA_RUNTIME_VERSION,
-         PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS,
-         PROP_NAME_MAVEN_VERSION, PROP_NAME_MAVEN_CMDLINE,
-         PROP_NAME_MAVEN_GOALS, PROP_NAME_MAVEN_OPTS,
-         PROP_NAME_MAVEN_EXECUTION_PROJECT, PROP_NAME_MAVEN_IS_EXECUTION_ROOT,
-         PROP_NAME_MAVEN_FILTERS, PROP_NAME_MAVEN_ACTIVE_PROFILES,
-         PROP_NAME_PROJECT_HOMEPAGE, PROP_NAME_PROJECT_OPS }));
+    final Set<String> properties = new HashSet<String>(
+        Arrays.asList(new String[] {PROP_NAME_SCM_REVISION_ID,
+            PROP_NAME_SCM_REVISION_DATE, PROP_NAME_SCM_URL,
+            PROP_NAME_SCM_LOCALLY_MODIFIED_FILES, PROP_NAME_BUILD_DATE,
+            PROP_NAME_BUILD_TIMESTAMP, PROP_NAME_BUILD_YEAR,
+            PROP_NAME_COPYRIGHT_YEAR, DEFAULT_DATE_PATTERN, PROP_NAME_GROUP_ID,
+            PROP_NAME_ARTIFACT_ID, PROP_NAME_VERSION, PROP_NAME_FULL_VERSION,
+            PROP_NAME_HOSTNAME, PROP_NAME_OS_NAME, PROP_NAME_OS_ARCH,
+            PROP_NAME_OS_VERSION, PROP_NAME_BUILD_USER, PROP_NAME_JAVA_VENDOR,
+            PROP_NAME_JAVA_RUNTIME_NAME, PROP_NAME_JAVA_RUNTIME_VERSION,
+            PROP_NAME_JAVA_VM, PROP_NAME_JAVA_COMPILER, PROP_NAME_JAVA_OPTS,
+            PROP_NAME_MAVEN_VERSION, PROP_NAME_MAVEN_CMDLINE,
+            PROP_NAME_MAVEN_GOALS, PROP_NAME_MAVEN_OPTS,
+            PROP_NAME_MAVEN_EXECUTION_PROJECT,
+            PROP_NAME_MAVEN_IS_EXECUTION_ROOT, PROP_NAME_MAVEN_FILTERS,
+            PROP_NAME_MAVEN_ACTIVE_PROFILES, PROP_NAME_PROJECT_HOMEPAGE,
+            PROP_NAME_PROJECT_OPS}));
 
     STANDARD_PROPERTIES = Collections.unmodifiableSet(properties);
     REPORT_PROPERTIES = Collections.unmodifiableList(sections);
@@ -588,17 +579,14 @@ public final class Constant
   /**
    * Constant pattern.
    */
-  private Constant()
-  {
-  }
+  private Constant() {}
 
   // ****************************** Inner Classes *****************************
 
   /**
    * The section allows to group build meta data properties.
    */
-  public static final class Section
-  {
+  public static final class Section {
     /**
      * The resource key to access the title of the section.
      */
@@ -614,10 +602,9 @@ public final class Constant
      *
      * @param titleKey the resource key to access the title of the section.
      * @param properties the build meta data properties to be displayed in this
-     *          section.
+     *        section.
      */
-    private Section(final String titleKey, final String... properties)
-    {
+    private Section(final String titleKey, final String... properties) {
       this.titleKey = titleKey;
       this.properties = Arrays.asList(properties);
     }
@@ -627,8 +614,7 @@ public final class Constant
      *
      * @return the resource key to access the title of the section.
      */
-    public String getTitleKey()
-    {
+    public String getTitleKey() {
       return titleKey;
     }
 
@@ -637,8 +623,7 @@ public final class Constant
      *
      * @return the build meta data properties to be displayed in this section.
      */
-    public List<String> getProperties()
-    {
+    public List<String> getProperties() {
       return properties;
     }
   }
@@ -659,8 +644,7 @@ public final class Constant
    * @return <code>true</code> if the property is to be rendered in a misc
    *         section, <code>false</code> otherwise.
    */
-  public static boolean isIntendedForMiscSection(final String name)
-  {
+  public static boolean isIntendedForMiscSection(final String name) {
     return !name.startsWith(MAVEN_ACTIVE_PROFILE_PREFIX);
   }
 
@@ -669,25 +653,22 @@ public final class Constant
    *
    * @param buildMetaDataProperties the build meta data.
    * @param userProperties the list of a system properties or environment
-   *          variables to be selected by the user to include into the build
-   *          meta data properties.
+   *        variables to be selected by the user to include into the build meta
+   *        data properties.
    * @return the non standard properties.
    */
   public static Properties calcNonStandardProperties(
       final Properties buildMetaDataProperties,
-      final List<Property> userProperties)
-  {
+      final List<Property> userProperties) {
     final SortedProperties nonStandardProperties = new SortedProperties();
     final Set<String> selectedProperties =
         createSelectedPropertiesExcludeMiscSection(userProperties);
 
     for (final Map.Entry<Object, Object> entry : buildMetaDataProperties
-        .entrySet())
-    {
+        .entrySet()) {
       final String key = String.valueOf(entry.getKey());
       if (!Constant.STANDARD_PROPERTIES.contains(key)
-          && !selectedProperties.contains(key))
-      {
+          && !selectedProperties.contains(key)) {
         nonStandardProperties.put(key, entry.getValue());
       }
     }
@@ -695,16 +676,12 @@ public final class Constant
   }
 
   private static Set<String> createSelectedPropertiesExcludeMiscSection(
-      final List<Property> userProperties)
-  {
+      final List<Property> userProperties) {
     final Set<String> selectedProperties = new HashSet<String>();
 
-    if (userProperties != null)
-    {
-      for (final Property property : userProperties)
-      {
-        if (isNotTargetedForMiscSection(property.getSection()))
-        {
+    if (userProperties != null) {
+      for (final Property property : userProperties) {
+        if (isNotTargetedForMiscSection(property.getSection())) {
           selectedProperties.add(property.getName());
         }
       }
@@ -712,13 +689,12 @@ public final class Constant
     return selectedProperties;
   }
 
-  private static boolean isNotTargetedForMiscSection(final String section)
-  {
+  private static boolean isNotTargetedForMiscSection(final String section) {
     return SECTION_BUILD_SCM.equals(section)
-           || SECTION_BUILD_DATE.equals(section)
-           || SECTION_BUILD_RUNTIME.equals(section)
-           || SECTION_BUILD_JAVA.equals(section)
-           || SECTION_BUILD_MAVEN.equals(section);
+        || SECTION_BUILD_DATE.equals(section)
+        || SECTION_BUILD_RUNTIME.equals(section)
+        || SECTION_BUILD_JAVA.equals(section)
+        || SECTION_BUILD_MAVEN.equals(section);
   }
 
   /**
@@ -728,12 +704,10 @@ public final class Constant
    * @param string the string to prettify.
    * @return the prettified string.
    */
-  public static String prettify(final String string)
-  {
+  public static String prettify(final String string) {
     final String trimmed = string.trim();
     final int end = trimmed.length() - 1;
-    if (trimmed.charAt(0) == '[' && trimmed.charAt(end) == ']')
-    {
+    if (trimmed.charAt(0) == '[' && trimmed.charAt(end) == ']') {
       return trimmed.substring(1, end);
     }
     return trimmed;
@@ -746,20 +720,16 @@ public final class Constant
    * @param value the object whose string representation is to be prettified.
    * @return the prettified string.
    */
-  public static String prettifyFilesValue(final Object value)
-  {
-    if (value == null)
-    {
+  public static String prettifyFilesValue(final Object value) {
+    if (value == null) {
       return null;
     }
 
     String string = String.valueOf(value);
-    if (StringUtils.isNotBlank(string))
-    {
+    if (StringUtils.isNotBlank(string)) {
       string = string.replace(']', ' ');
       string = string.replace('[', ',');
-      if (string.indexOf(0) == ',')
-      {
+      if (string.indexOf(0) == ',') {
         return string.substring(1);
       }
     }

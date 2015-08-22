@@ -1,33 +1,29 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.common;
-
-import java.io.File;
 
 import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.manager.ScmManager;
 
+import java.io.File;
+
 /**
  * Bundles the SCM information to be passed to meta data providers.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class ScmInfo
-{
+public final class ScmInfo {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -80,8 +76,8 @@ public final class ScmInfo
   /**
    * The date pattern to use to format the build and revision dates. Please
    * refer to the <a href =
-   * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html"
-   * >SimpleDateFormat</a> class for valid patterns.
+   * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html" >
+   * SimpleDateFormat</a> class for valid patterns.
    */
   private final String buildDatePattern;
 
@@ -101,7 +97,6 @@ public final class ScmInfo
 
   // ****************************** Constructors ******************************
 
-  // CHECKSTYLE:OFF
   /**
    * Default constructor.
    *
@@ -112,24 +107,21 @@ public final class ScmInfo
    * @param scmCrendentials the authentication for the SCM server.
    * @param tagBase the url of tags base directory (used by svn protocol).
    * @param queryRangeInDays the range of the query in days to fetch change log
-   *          entries from the SCM.
+   *        entries from the SCM.
    * @param buildDatePattern the date pattern to use to format the build and
-   *          revision dates.
+   *        revision dates.
    * @param scmControl the information to control the gathering of SCM meta
-   *          data.
+   *        data.
    * @param remoteVersion the branch or tag version on the remote server to
-   *          compare against.
+   *        compare against.
    * @note This argument list is quite long. The next time we touch this class,
    *       we should provide a builder.
    */
-  public ScmInfo(
-      final ScmManager scmManager,
-      final String connectionType, // NOPMD
+  public ScmInfo(final ScmManager scmManager, final String connectionType, // NOPMD
       final String scmDateFormat, final File basedir,
       final ScmCredentials scmCrendentials, final String tagBase,
       final int queryRangeInDays, final String buildDatePattern,
-      final ScmControl scmControl, final ScmVersion remoteVersion)
-  {
+      final ScmControl scmControl, final ScmVersion remoteVersion) {
     this.scmManager = scmManager;
     this.connectionType = connectionType;
     this.scmDateFormat = scmDateFormat;
@@ -141,8 +133,6 @@ public final class ScmInfo
     this.scmControl = scmControl;
     this.remoteVersion = remoteVersion;
   }
-
-  // CHECKSTYLE:ON
 
   // ****************************** Inner Classes *****************************
 
@@ -158,8 +148,7 @@ public final class ScmInfo
    *
    * @return the manager instance to access the SCM system.
    */
-  public ScmManager getScmManager()
-  {
+  public ScmManager getScmManager() {
     return scmManager;
   }
 
@@ -168,11 +157,11 @@ public final class ScmInfo
    * <p>
    * Allows the user to choose which scm connection to use when connecting to
    * the scm. Can either be "connection" or "developerConnection".
+   * </p>
    *
    * @return the value for connectionType.
    */
-  public String getConnectionType()
-  {
+  public String getConnectionType() {
     return connectionType;
   }
 
@@ -181,11 +170,11 @@ public final class ScmInfo
    * <p>
    * Used to specify the date format of the log entries that are retrieved from
    * your SCM system.
+   * </p>
    *
    * @return the value for scmDateFormat.
    */
-  public String getScmDateFormat()
-  {
+  public String getScmDateFormat() {
     return scmDateFormat;
   }
 
@@ -193,11 +182,11 @@ public final class ScmInfo
    * Returns the value for basedir.
    * <p>
    * Input dir. Directory where the files under SCM control are located.
+   * </p>
    *
    * @return the value for basedir.
    */
-  public File getBasedir()
-  {
+  public File getBasedir() {
     return basedir;
   }
 
@@ -206,8 +195,7 @@ public final class ScmInfo
    *
    * @return the authentication for the SCM server.
    */
-  public ScmCredentials getScmCrendentials()
-  {
+  public ScmCredentials getScmCrendentials() {
     return scmCrendentials;
   }
 
@@ -216,8 +204,7 @@ public final class ScmInfo
    *
    * @return the url of tags base directory (used by svn protocol).
    */
-  public String getTagBase()
-  {
+  public String getTagBase() {
     return tagBase;
   }
 
@@ -232,21 +219,19 @@ public final class ScmInfo
    * @return the range of the query in days to fetch change log entries from the
    *         SCM.
    */
-  public int getQueryRangeInDays()
-  {
+  public int getQueryRangeInDays() {
     return queryRangeInDays;
   }
 
   /**
    * Returns the date pattern to use to format the build and revision dates.
    * Please refer to the <a href =
-   * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html"
-   * >SimpleDateFormat</a> class for valid patterns.
+   * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html" >
+   * SimpleDateFormat</a> class for valid patterns.
    *
    * @return the date pattern to use to format the build and revision dates.
    */
-  public String getBuildDatePattern()
-  {
+  public String getBuildDatePattern() {
     return buildDatePattern;
   }
 
@@ -255,8 +240,7 @@ public final class ScmInfo
    *
    * @return the information to control the gathering of SCM meta data.
    */
-  public ScmControl getScmControl()
-  {
+  public ScmControl getScmControl() {
     return scmControl;
   }
 
@@ -267,8 +251,7 @@ public final class ScmInfo
    *
    * @return the branch or tag version on the remote server to compare against.
    */
-  public ScmVersion getRemoteVersion()
-  {
+  public ScmVersion getRemoteVersion() {
     return remoteVersion;
   }
 

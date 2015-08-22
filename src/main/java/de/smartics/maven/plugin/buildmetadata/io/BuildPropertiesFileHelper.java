@@ -1,19 +1,30 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.io;
+
+import de.smartics.maven.plugin.buildmetadata.common.Constant;
+import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
+import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
+import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -26,25 +37,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.StringUtils;
-
-import de.smartics.maven.plugin.buildmetadata.common.Constant;
-import de.smartics.maven.plugin.buildmetadata.common.MojoUtils;
-import de.smartics.maven.plugin.buildmetadata.common.SortedProperties;
-import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
-
 /**
  * Helper to handle the build meta data properties file.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class BuildPropertiesFileHelper
-{
+public final class BuildPropertiesFileHelper {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -77,12 +73,11 @@ public final class BuildPropertiesFileHelper
    * @param log the logger to use.
    * @param propertiesOutputFile the file to write to.
    * @param filePathNormalizer the normalizer to be applied to file name value
-   *          to remove the base dir prefix.
+   *        to remove the base dir prefix.
    */
   public BuildPropertiesFileHelper(final Log log,
       final File propertiesOutputFile,
-      final FilePathNormalizer filePathNormalizer)
-  {
+      final FilePathNormalizer filePathNormalizer) {
     this.log = log;
     this.propertiesOutputFile = propertiesOutputFile;
     this.filePathNormalizer = filePathNormalizer;
@@ -104,56 +99,44 @@ public final class BuildPropertiesFileHelper
    * @param buildMetaDataProperties the properties to write.
    * @return the reference to the written file.
    * @throws MojoExecutionException on any problem encountered while writing the
-   *           properties.
+   *         properties.
    */
   public File writePropertiesFile(final Properties buildMetaDataProperties)
-    throws MojoExecutionException
-  {
+      throws MojoExecutionException {
     final File buildMetaDataFile =
         createBuildMetaDataFile(propertiesOutputFile);
-    if (log.isInfoEnabled())
-    {
+    if (log.isInfoEnabled()) {
       log.info("Writing properties '" + buildMetaDataFile.getAbsolutePath()
-               + "'...");
+          + "'...");
     }
 
     OutputStream out = null;
-    try
-    {
+    try {
       out = new BufferedOutputStream(new FileOutputStream(buildMetaDataFile));
       final String comments = "Created by buildmetadata-maven-plugin.";
       final Properties sortedBuildMetaDataProperties =
           SortedProperties.createSorted(buildMetaDataProperties);
       normalizeProperties(sortedBuildMetaDataProperties);
       sortedBuildMetaDataProperties.store(out, comments);
-    }
-    catch (final FileNotFoundException e)
-    {
-      final String message =
-          "Cannot find file '" + buildMetaDataFile
-              + "' to write properties to.";
+    } catch (final FileNotFoundException e) {
+      final String message = "Cannot find file '" + buildMetaDataFile
+          + "' to write properties to.";
       throw MojoUtils.createException(log, e, message);
-    }
-    catch (final IOException e)
-    {
+    } catch (final IOException e) {
       final String message =
           "Cannot write properties to file '" + buildMetaDataFile + "'.";
       throw MojoUtils.createException(log, e, message);
-    }
-    finally
-    {
+    } finally {
       IOUtil.close(out);
     }
 
     return buildMetaDataFile;
   }
 
-  private void normalizeProperties(final Properties buildMetaDataProperties)
-  {
+  private void normalizeProperties(final Properties buildMetaDataProperties) {
     final String filters =
         buildMetaDataProperties.getProperty(Constant.PROP_NAME_MAVEN_FILTERS);
-    if (filters != null)
-    {
+    if (filters != null) {
       final String slashedFilters = filters.trim().replace('\\', '/');
       final String slashedBaseDir =
           filePathNormalizer.getBaseDir().replace('\\', '/');
@@ -172,19 +155,16 @@ public final class BuildPropertiesFileHelper
    *
    * @return the file to write the build properties to.
    * @throws MojoExecutionException if the output directory is not present and
-   *           cannot be created.
+   *         cannot be created.
    */
   private File createBuildMetaDataFile(final File propertiesOutputFile)
-    throws MojoExecutionException
-  {
+      throws MojoExecutionException {
     final File outputDirectory = propertiesOutputFile.getParentFile();
-    if (!outputDirectory.exists())
-    {
+    if (!outputDirectory.exists()) {
       final boolean created = outputDirectory.mkdirs();
-      if (!created)
-      {
-        throw new MojoExecutionException("Cannot create output directory '"
-                                         + outputDirectory + "'.");
+      if (!created) {
+        throw new MojoExecutionException(
+            "Cannot create output directory '" + outputDirectory + "'.");
       }
     }
     return propertiesOutputFile;
@@ -196,27 +176,20 @@ public final class BuildPropertiesFileHelper
    * constructor} {@code propertiesOutputFile}.
    *
    * @param buildMetaDataProperties the properties instance to append the read
-   *          properties to.
+   *        properties to.
    * @throws MojoExecutionException if the properties cannot be read.
    */
   public void readBuildPropertiesFile(final Properties buildMetaDataProperties)
-    throws MojoExecutionException
-  {
+      throws MojoExecutionException {
     InputStream inStream = null;
-    try
-    {
+    try {
       inStream =
           new BufferedInputStream(new FileInputStream(propertiesOutputFile));
       buildMetaDataProperties.load(inStream);
-    }
-    catch (final IOException e)
-    {
-      throw new MojoExecutionException(
-          "Cannot read provided properties file: "
-              + propertiesOutputFile.getAbsolutePath(), e);
-    }
-    finally
-    {
+    } catch (final IOException e) {
+      throw new MojoExecutionException("Cannot read provided properties file: "
+          + propertiesOutputFile.getAbsolutePath(), e);
+    } finally {
       IOUtil.close(inStream);
     }
   }
@@ -228,11 +201,9 @@ public final class BuildPropertiesFileHelper
    * @param project the project whose properties are requested.
    * @return the properties of the project.
    */
-  public Properties getProjectProperties(final MavenProject project)
-  {
+  public Properties getProjectProperties(final MavenProject project) {
     Properties projectProperties = project.getProperties();
-    if (projectProperties == null)
-    {
+    if (projectProperties == null) {
       projectProperties = new Properties();
       project.getModel().setProperties(projectProperties);
     }

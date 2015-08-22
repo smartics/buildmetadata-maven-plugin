@@ -1,28 +1,24 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.common;
 
 /**
  * Information to control the gathering of SCM meta data.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public final class ScmControl
-{
+public final class ScmControl {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -89,7 +85,7 @@ public final class ScmControl
    *
    * @param failOnLocalModifications the value for failOnLocalModifications.
    * @param ignoreDotFilesInBaseDir the flag to ignore files and directories
-   *          starting with a dot for checking modified files.
+   *        starting with a dot for checking modified files.
    * @param offline the value for offline.
    * @param addScmInfo the value for addScmInfo.
    * @param validateCheckout the value for validateCheckout.
@@ -99,8 +95,7 @@ public final class ScmControl
       final boolean failOnLocalModifications,
       final boolean ignoreDotFilesInBaseDir, final boolean offline,
       final boolean addScmInfo, final boolean validateCheckout,
-      final boolean failOnMissingRevision)
-  {
+      final boolean failOnMissingRevision) {
     this.failOnLocalModifications = failOnLocalModifications;
     this.ignoreDotFilesInBaseDir = ignoreDotFilesInBaseDir;
     this.offline = offline;
@@ -130,8 +125,7 @@ public final class ScmControl
    *
    * @return the value for failOnLocalModifications.
    */
-  public boolean isFailOnLocalModifications()
-  {
+  public boolean isFailOnLocalModifications() {
     return failOnLocalModifications;
   }
 
@@ -145,8 +139,7 @@ public final class ScmControl
    * @return the flag to ignore files and directories starting with a dot for
    *         checking modified files.
    */
-  public boolean isIgnoreDotFilesInBaseDir()
-  {
+  public boolean isIgnoreDotFilesInBaseDir() {
     return ignoreDotFilesInBaseDir;
   }
 
@@ -158,8 +151,7 @@ public final class ScmControl
    *
    * @return the value for offline.
    */
-  public boolean isOffline()
-  {
+  public boolean isOffline() {
     return offline;
   }
 
@@ -173,8 +165,7 @@ public final class ScmControl
    *
    * @return the value for addScmInfo.
    */
-  public boolean isAddScmInfo()
-  {
+  public boolean isAddScmInfo() {
     return addScmInfo;
   }
 
@@ -189,8 +180,7 @@ public final class ScmControl
    *
    * @return the value for validateCheckout.
    */
-  public boolean isValidateCheckout()
-  {
+  public boolean isValidateCheckout() {
     return validateCheckout;
   }
 
@@ -209,8 +199,7 @@ public final class ScmControl
    *
    * @return the value for failOnMissingRevision.
    */
-  public boolean isFailOnMissingRevision()
-  {
+  public boolean isFailOnMissingRevision() {
     return failOnMissingRevision;
   }
 

@@ -1,39 +1,38 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.io;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import de.smartics.maven.plugin.buildmetadata.util.MojoFileUtils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
-import de.smartics.maven.plugin.buildmetadata.util.MojoFileUtils;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Helper to copy buildmetadata files to additional locations to be grabbed by
  * secondary packers. For instance this will copy the file to
  * <code>generated-sources</code>.
  */
-public class AdditionalLocationsSupport
-{
+public class AdditionalLocationsSupport {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -61,8 +60,7 @@ public class AdditionalLocationsSupport
    * @param config the configuration from the plugin.
    */
   public AdditionalLocationsSupport(final MavenProject project,
-      final Config config)
-  {
+      final Config config) {
     this.project = project;
     this.config = config;
   }
@@ -72,8 +70,7 @@ public class AdditionalLocationsSupport
   /**
    * Collects the configuration for the plugin.
    */
-  public static class Config
-  {
+  public static class Config {
     /**
      * The flag to control whether or not to copy to
      * <code>generated-sources</code>.
@@ -91,11 +88,11 @@ public class AdditionalLocationsSupport
      * <code>generated-sources</code>.
      *
      * @param addToGeneratedSources the flag to control whether or not to copy
-     *          to <code>generated-sources</code>.
+     *        to <code>generated-sources</code>.
      * @return a reference to this configuration.
      */
-    public Config setAddToGeneratedSources(final boolean addToGeneratedSources)
-    {
+    public Config setAddToGeneratedSources(
+        final boolean addToGeneratedSources) {
       this.addToGeneratedSources = addToGeneratedSources;
       return this;
     }
@@ -105,11 +102,10 @@ public class AdditionalLocationsSupport
      * not absolute, the subfolder <code>META-INF</code> is appended.
      *
      * @param addToLocations the list of locations the report files are to be
-     *          copied to.
+     *        copied to.
      * @return a reference to this configuration.
      */
-    public Config setAddToLocations(final List<String> addToLocations)
-    {
+    public Config setAddToLocations(final List<String> addToLocations) {
       this.addToLocations = addToLocations;
       return this;
     }
@@ -129,37 +125,29 @@ public class AdditionalLocationsSupport
    * @param file the file to copy.
    * @throws MojoExecutionException on any copy problem.
    */
-  public void handle(final File file) throws MojoExecutionException
-  {
-    if (isToAttachSources())
-    {
+  public void handle(final File file) throws MojoExecutionException {
+    if (isToAttachSources()) {
       addFileToSources(file, "generated-sources", true);
     }
 
-    if (config.addToLocations != null)
-    {
-      for (final String location : config.addToLocations)
-      {
+    if (config.addToLocations != null) {
+      for (final String location : config.addToLocations) {
         addFileToSources(file, location, false);
       }
     }
   }
 
   @SuppressWarnings("unchecked")
-  private boolean isToAttachSources()
-  {
-    if (!config.addToGeneratedSources)
-    {
+  private boolean isToAttachSources() {
+    if (!config.addToGeneratedSources) {
       return false;
     }
 
     final Map<String, Plugin> plugins = project.getBuild().getPluginsAsMap();
 
-    final Plugin sourcesPlugin =
-        plugins.get(Plugin.constructKey("org.apache.maven.plugins",
-            "maven-source-plugin"));
-    if (sourcesPlugin != null)
-    {
+    final Plugin sourcesPlugin = plugins.get(
+        Plugin.constructKey("org.apache.maven.plugins", "maven-source-plugin"));
+    if (sourcesPlugin != null) {
       // TODO: Should we check if the plugin is to be run?
       return true;
     }
@@ -169,37 +157,29 @@ public class AdditionalLocationsSupport
 
   private void addFileToSources(final File propertiesFile,
       final String targetLocation, final boolean attach)
-    throws MojoExecutionException
-  {
+          throws MojoExecutionException {
     final File testFile = new File(targetLocation);
     final File targetLocationDir;
     final File generatedSourcesMetaInfDir;
-    if (testFile.isAbsolute())
-    {
+    if (testFile.isAbsolute()) {
       targetLocationDir = null;
       generatedSourcesMetaInfDir = testFile;
-    }
-    else
-    {
+    } else {
       targetLocationDir =
           new File(project.getBuild().getDirectory(), targetLocation);
       generatedSourcesMetaInfDir = new File(targetLocationDir, "META-INF");
     }
 
     MojoFileUtils.ensureExists(generatedSourcesMetaInfDir);
-    try
-    {
+    try {
       final File propertiesFileInSources =
           new File(generatedSourcesMetaInfDir, propertiesFile.getName());
       FileUtils.copyFile(propertiesFile, propertiesFileInSources);
 
-      if (attach && targetLocationDir != null)
-      {
+      if (attach && targetLocationDir != null) {
         project.addCompileSourceRoot(targetLocationDir.getAbsolutePath());
       }
-    }
-    catch (final IOException e)
-    {
+    } catch (final IOException e) {
       throw new MojoExecutionException(
           "Cannot copy properties to generated sources.", e);
     }

@@ -1,17 +1,17 @@
 /*
  * Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package de.smartics.maven.plugin.buildmetadata.maven;
 
@@ -27,12 +27,8 @@ import org.junit.Test;
 /**
  * Tests {@link MavenPropertyHelper} for accessing properties of the project
  * instance.
- *
- * @author <a href="mailto:robert.reiner@smartics.de">Robert Reiner</a>
- * @version $Revision:591 $
  */
-public class MavenPropertyHelperProjectPropertyTest
-{
+public class MavenPropertyHelperProjectPropertyTest {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -68,9 +64,11 @@ public class MavenPropertyHelperProjectPropertyTest
 
   // --- prepare --------------------------------------------------------------
 
+  /**
+   * Test setup.
+   */
   @Before
-  public void setup()
-  {
+  public void setup() {
     projectModel = new Model();
     project = new MavenProject(projectModel);
     uut = new MavenPropertyHelper(project);
@@ -81,24 +79,21 @@ public class MavenPropertyHelperProjectPropertyTest
   // --- tests ----------------------------------------------------------------
 
   @Test
-  public void propertyNotFoundSinceNoSuchProperty()
-  {
+  public void propertyNotFoundSinceNoSuchProperty() {
     final String value = uut.getProperty("project.invalidName");
 
     assertNull(value);
   }
 
   @Test
-  public void propertyNotFoundSincePropertyNotSet()
-  {
+  public void propertyNotFoundSincePropertyNotSet() {
     final String value = uut.getProperty(PROJECT_VERSION_NAME);
 
     assertNull(value);
   }
 
   @Test
-  public void propertyFoundSincePropertyIsSet()
-  {
+  public void propertyFoundSincePropertyIsSet() {
     final String version = "1.0.0";
     projectModel.setVersion(version);
 
@@ -108,8 +103,7 @@ public class MavenPropertyHelperProjectPropertyTest
   }
 
   @Test
-  public void propertyFoundSincePropertyIsSetInParent()
-  {
+  public void propertyFoundSincePropertyIsSetInParent() {
     final String version = "1.0.0";
     final Model parentProjectModel = new Model();
     parentProjectModel.setVersion(version);
@@ -122,8 +116,7 @@ public class MavenPropertyHelperProjectPropertyTest
   }
 
   @Test
-  public void nestedPropertyFoundSincePropertyIsSet()
-  {
+  public void nestedPropertyFoundSincePropertyIsSet() {
     final String finalName = "buildmetadata-maven-plugin-1.0.0.jar";
     final Build build = new Build();
     build.setFinalName(finalName);
