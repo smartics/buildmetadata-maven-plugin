@@ -15,7 +15,6 @@
  */
 package de.smartics.maven.plugin.buildmetadata;
 
-import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
 import de.smartics.maven.plugin.buildmetadata.util.ReportUtils;
 
 import org.apache.commons.lang.LocaleUtils;
@@ -225,8 +224,6 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
       return;
     }
 
-    LoggingUtils.configureLogger(log, logLevel);
-
     provideSink();
   }
 
@@ -234,21 +231,6 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
   public boolean canGenerateReport() {
     return super.canGenerateReport() && !skip
         && !(skipModules && !project.isExecutionRoot());
-  }
-
-  /**
-   * {@inheritDoc}
-   * <p>
-   * Configures the plugin logger.
-   * </p>
-   *
-   * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
-   */
-  @Override
-  protected void executeReport(final Locale locale)
-      throws MavenReportException {
-    final Log log = getLog();
-    LoggingUtils.configureLogger(log, logLevel);
   }
 
   /**
