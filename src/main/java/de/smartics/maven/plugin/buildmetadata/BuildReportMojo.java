@@ -187,15 +187,9 @@ public final class BuildReportMojo extends AbstractReportMojo {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
-   */
   @Override
   protected void executeReport(final Locale locale)
       throws MavenReportException {
-    super.executeReport(locale);
 
     final Sink sink = getSink();
     final ResourceBundle messages = getBundle(locale);

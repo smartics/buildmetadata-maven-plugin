@@ -29,7 +29,6 @@ import de.smartics.maven.plugin.buildmetadata.io.BuildXmlFileHelper;
 import de.smartics.maven.plugin.buildmetadata.maven.MavenPluginProperties;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
 import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
-import de.smartics.maven.plugin.buildmetadata.util.LoggingUtils;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -276,18 +275,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
   private boolean validateCheckout;
 
   /**
-   * Specifies the log level used for this plugin.
-   * <p>
-   * Allowed values are <code>SEVERE</code>, <code>WARNING</code>,
-   * <code>INFO</code> and <code>FINEST</code>.
-   * </p>
-   *
-   * @parameter expression="${buildMetaData.logLevel}"
-   * @since 1.0
-   */
-  private String logLevel;
-
-  /**
    * The manager instance to access the SCM system. Provides access to the
    * repository and the provider information.
    *
@@ -507,7 +494,6 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
           getLog(), propertiesOutputFile, filePathNormalizer);
       final Properties projectProperties = helper.getProjectProperties(project);
       if (!isBuildPropertiesAlreadySet(projectProperties)) {
-        LoggingUtils.configureLogger(getLog(), logLevel);
         final Properties buildMetaDataProperties = new Properties();
         if (isBuildPropertiesToBeRebuild()) {
           createBuildProperties(helper, projectProperties,
