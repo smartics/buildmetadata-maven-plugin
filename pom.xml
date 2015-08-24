@@ -58,32 +58,55 @@
     <system>${issues-vendor}</system>
     <url>${issues-url}</url>
   </issueManagement>
+  <!--
   <ciManagement>
     <system>hudson</system>
     <url>${ci-url}</url>
-  </ciManagement>
+  </ciManagement> -->
 
   <distributionManagement>
     <repository>
       <id>${project-visibility}</id>
       <name>internal smartics release repository</name>
-      <url>${repo.server.upload}/${project-visibility}</url>
+      <url>${build.server.repo.upload}/${project-visibility}</url>
     </repository>
     <snapshotRepository>
       <uniqueVersion>false</uniqueVersion>
       <id>${project-visibility}-snapshot</id>
       <name>internal smartics snapshot repository</name>
-      <url>${repo.server.upload}/${project-visibility}-snapshot</url>
+      <url>${build.server.repo.upload}/${project-visibility}-snapshot</url>
     </snapshotRepository>
     <site>
       <id>${project-visibility}-site</id>
       <name>documentation site</name>
-      <url>${site.root}/${project.groupId}/${project.artifactId}/${project.version}</url>
+      <url>${build.server.site.upload}/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
   </distributionManagement>
 
+  <repositories>
+    <repository>
+      <id>smartics-${project-visibility}</id>
+      <url>${info.server.repo.group}</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>smartics-${project-visibility}-snapshot</id>
+      <url>${info.server.repo.group}</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <properties>
-    <project-visibility>public</project-visibility>
     <issues.classification>Build Management</issues.classification>
     <issues-product>${project.artifactId}</issues-product>
     <issues-component>@Product,Buildmetadata-Mojo,Report-Mojo,Documentation</issues-component>
@@ -97,15 +120,18 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <server.name>www.smartics.eu</server.name>
-    <build.server.name>www.smartics.eu</build.server.name>
-    <!-- The server prefix is used by projects with modules. -->
-    <repo.server>http://${server.name}/nexus</repo.server> <!-- HTTP -->
-    <repo.server.prefix>${repo.server}/content</repo.server.prefix>
-    <repo.server.upload>dav:${repo.server.prefix}/repositories</repo.server.upload>
-    <site.root>scp://${build.server.name}/home/smartics/public_html/${project-visibility}</site.root>
-    <site.url>${site.root}/${project.groupId}/${project.artifactId}/${project.version}</site.url>
-    <scm.url>scm:svn:https://${build.server.name}/svn/public</scm.url>
+    <info.project.visibility>public</info.project.visibility>
+
+    <info.server.web>https://www.smartics.eu/confluence/display</info.server.web>
+    <info.server.issues>https://www.smartics.eu/jira/projects</info.server.issues>
+    <info.server.repo>https://www.smartics.eu/nexus</info.server.repo>
+    <info.server.scm>https://www.smartics.eu/svn/public</info.server.scm>
+
+    <info.server.repo.prefix>${info.server.repo}/content</info.server.repo.prefix>
+    <info.server.repo.group>${info.server.repo.prefix}/groups/public-group</info.server.repo.group>
+
+    <build.server.site.upload>scp://www.smartics.eu/home/smartics/public_html/${info.project.visibility}</build.server.site.upload>
+    <build.server.repo.upload>dav:${info.server.repo.prefix}/repositories</build.server.repo.upload>
 
     <!-- The following properties are accessible from site documentation and therefore contain no dots. -->
     <webroot>https://${build.server.name}</webroot>
