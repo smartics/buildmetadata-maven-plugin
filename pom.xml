@@ -64,18 +64,18 @@
 
   <distributionManagement>
     <repository>
-      <id>${project-visibility}</id>
+      <id>${info.project.visibility}</id>
       <name>internal smartics release repository</name>
-      <url>${build.server.repo.upload}/${project-visibility}</url>
+      <url>${build.server.repo.upload}/${info.project.visibility}</url>
     </repository>
     <snapshotRepository>
       <uniqueVersion>false</uniqueVersion>
-      <id>${project-visibility}-snapshot</id>
+      <id>${info.project.visibility}-snapshot</id>
       <name>internal smartics snapshot repository</name>
-      <url>${build.server.repo.upload}/${project-visibility}-snapshot</url>
+      <url>${build.server.repo.upload}/${info.project.visibility}-snapshot</url>
     </snapshotRepository>
     <site>
-      <id>${project-visibility}-site</id>
+      <id>${info.project.visibility}-site</id>
       <name>documentation site</name>
       <url>${build.server.site.upload}/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
@@ -83,7 +83,7 @@
 
   <repositories>
     <repository>
-      <id>smartics-${project-visibility}</id>
+      <id>smartics-${info.project.visibility}</id>
       <url>${info.server.repo.group}</url>
       <releases>
         <enabled>true</enabled>
@@ -93,7 +93,7 @@
       </snapshots>
     </repository>
     <repository>
-      <id>smartics-${project-visibility}-snapshot</id>
+      <id>smartics-${info.project.visibility}-snapshot</id>
       <url>${info.server.repo.group}</url>
       <releases>
         <enabled>false</enabled>
@@ -134,7 +134,7 @@
     <!-- The following properties are accessible from site documentation and therefore contain no dots. -->
     <webroot>https://${build.server.name}</webroot>
     <weburl>${webroot}/${project.groupId}/${project.artifactId}/${project.version}</weburl>
-    <scm-weburl>https://${build.server.name}/svn/public</scm-weburl> <!-- No subdir ${project-visibility} currently. -->
+    <scm-weburl>https://${build.server.name}/svn/public</scm-weburl> <!-- No subdir ${info.project.visibility} currently. -->
     <issues-vendor>bugzilla</issues-vendor>
     <issues-url>http://${build.server.name}/bugzilla</issues-url>
     <ci-url>http://${build.server.name}/hudson</ci-url>
