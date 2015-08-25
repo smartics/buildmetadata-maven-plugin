@@ -7,7 +7,8 @@
   <artifactId>buildmetadata-maven-plugin</artifactId>
   <version>1.6.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
-  <name>buildmetadata-maven-plugin</name>
+
+  <name>Buildmetadata Maven Plugin</name>
   <description>
     Generates metadata on a project collected on build time.
   </description>
