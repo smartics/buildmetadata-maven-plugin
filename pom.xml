@@ -163,7 +163,7 @@
     <version.maven-surefire-report-plugin>2.16</version.maven-surefire-report-plugin>
     <version.maven-plugin-plugin>3.4</version.maven-plugin-plugin>
 
-    <version.prev.buildmetadata-maven-plugin>1.4.0</version.prev.buildmetadata-maven-plugin>
+    <version.prev.buildmetadata-maven-plugin>1.5.1</version.prev.buildmetadata-maven-plugin>
 
     <version.maven-scm>1.9</version.maven-scm>
   </properties>
@@ -454,9 +454,9 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>de.smartics.maven.plugin</groupId>
-                    <artifactId>buildmetadata-maven-plugin</artifactId>
-                    <versionRange>[0.0.0,)</versionRange>
+                      <groupId>com.redhat.rcm.maven.plugin</groupId>
+                      <artifactId>buildmetadata-maven-plugin</artifactId>
+                      <versionRange>[0.0.0,)</versionRange>
                     <goals>
                       <goal>provide-buildmetadata</goal>
                     </goals>
@@ -500,7 +500,7 @@
 
     <plugins>
       <plugin>
-        <groupId>de.smartics.maven.plugin</groupId>
+        <groupId>com.redhat.rcm.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
         <version>${version.prev.buildmetadata-maven-plugin}</version>
         <executions>
@@ -611,7 +611,7 @@
       </plugin>
 
       <plugin>
-        <groupId>de.smartics.maven.plugin</groupId>
+        <groupId>com.redhat.rcm.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
         <version>${version.prev.buildmetadata-maven-plugin}</version>
       </plugin>
