@@ -164,8 +164,6 @@
     <version.maven-surefire-report-plugin>2.16</version.maven-surefire-report-plugin>
     <version.maven-plugin-plugin>3.4</version.maven-plugin-plugin>
 
-    <version.prev.buildmetadata-maven-plugin>1.5.0.RC1</version.prev.buildmetadata-maven-plugin>
-
     <version.maven-scm>1.9</version.maven-scm>
   </properties>
 
@@ -518,7 +516,7 @@
       <plugin>
         <groupId>de.smartics.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
-        <version>${version.prev.buildmetadata-maven-plugin}</version>
+        <version>${project.version}</version>
         <executions>
           <execution>
             <phase>initialize</phase>
@@ -629,7 +627,7 @@
       <plugin>
         <groupId>de.smartics.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
-        <version>${version.prev.buildmetadata-maven-plugin}</version>
+        <version>${project.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
