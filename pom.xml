@@ -5,7 +5,7 @@
 
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>buildmetadata-maven-plugin</artifactId>
-  <version>1.6.0-SNAPSHOT</version>
+  <version>1.6.0</version>
   <packaging>maven-plugin</packaging>
 
   <name>Buildmetadata Maven Plugin</name>
@@ -52,7 +52,7 @@
     <connection>scm:git:git@github.com:smartics/buildmetadata-maven-plugin</connection>
     <developerConnection>scm:git:git@github.com:smartics/buildmetadata-maven-plugin</developerConnection>
     <url>https://github.com/smartics/buildmetadata-maven-plugin</url>
-    <tag>HEAD</tag>
+    <tag>buildmetadata-maven-plugin-1.6.0</tag>
   </scm>
 
   <issueManagement>
@@ -504,7 +504,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
