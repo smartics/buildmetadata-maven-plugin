@@ -39,7 +39,7 @@
 	<body>
     <section name="Introduction">
       <p>
-        This <a href="http://maven.apache.org/">Maven</a> plugin generates build meta data
+        This plugin for <a href="http://maven.apache.org/">Maven</a> generates build meta data
         and provides it as Maven build properties.
         The properties are written to a <a href="#Properties_File"
         title="Link to an example of a properties file containing build meta data.">properties file</a>

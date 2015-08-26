@@ -73,7 +73,6 @@
       <item name="Goals"               href="plugin-info.html"/>
       <item name="Usage"               href="usage.html"/>
       <item name="FAQ"                 href="faq.html"/>
-      <item name="Project Blog"        href="${webroot-projects}/documentation-a-ware/${project.artifactId}"/>
       <item name="Accessing Artifacts" href="${webroot-projects}/accessing-artifacts"/>
       <item name="All Versions"        href="${webroot}/${project.groupId}/${project.artifactId}/"/>
     </menu>
@@ -86,13 +85,6 @@
       <item name="License Plugin"      href="license-plugin.html"/>
     </menu>
 
-    <menu name="Release Information">
-      <item name="New and Noteworthy"  href="new-and-noteworthy.html"/>
-      <item name="Release Notes"       href="release-notes-report.html"/>
-      <item name="Breaking News"       href="breaking-news.html"/>
-      <item name="Release Plan"        href="release-plan-report.html"/>
-    </menu>
-
     <menu name="Project Documentation">
       <item name="Project Information"  href="project-info.html" collapse="true">
         <item name="Summary"            href="project-summary.html"/>
@@ -103,8 +95,8 @@
       <item name="Information Systems"  href="project-info.html" collapse="true">
         <item name="Source Repository"  href="source-repository.html"/>
         <item name="Issue Management"   href="issue-tracking.html"/>
-        <item name="CI Server"          href="integration.html"/>
-        <item name="Sonar"              href="${sonar-url-project}"/>
+<!--         <item name="CI Server"          href="integration.html"/>
+        <item name="Sonar"              href="${sonar-url-project}"/> -->
       </item>
       <item name="Project Dependencies" href="project-info.html" collapse="true">
         <item name="Dependencies"       href="dependencies.html"/>
