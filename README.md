@@ -1,7 +1,7 @@
 Buildmetadata Maven Plugin
 ==========================
 
-<img align="right" src="https://raw.githubusercontent.com/smartics/buildmetadata-maven-plugin/master/src/site/resources/images/logos/icon-128x128.png" alt="Projectmetadata Logo" hspace="5">
+<img align="right" src="https://raw.githubusercontent.com/smartics/buildmetadata-maven-plugin/master/src/site/resources/images/logos/icon-128x128.png" alt="Project Logo" hspace="5">
 
 Generates metadata on a project collected on build time.
 
