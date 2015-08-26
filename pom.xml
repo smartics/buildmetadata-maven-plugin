@@ -143,11 +143,10 @@
 
     <maven-fluido-smartics-skin_version>2.1.0</maven-fluido-smartics-skin_version>
     <version.issues-maven-plugin>0.4.4</version.issues-maven-plugin>
-    <version.hudson-maven-plugin>0.2.8</version.hudson-maven-plugin>
     <version.config-smartics-hudson>0.3.0</version.config-smartics-hudson>
-    <version.bugzilla-maven-plugin>0.7.0</version.bugzilla-maven-plugin>
     <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
     <version.maven-source-plugin>2.2.1</version.maven-source-plugin>
+    <version.maven-javadoc-plugin>2.10.3</version.maven-javadoc-plugin>
     <version.maven-clean-plugin>2.5</version.maven-clean-plugin>
     <version.maven-dependency-plugin>2.8</version.maven-dependency-plugin>
     <version.maven-resources-plugin>2.6</version.maven-resources-plugin>
@@ -322,29 +321,6 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>de.smartics.maven.plugin</groupId>
-          <artifactId>bugzilla-maven-plugin</artifactId>
-          <version>${version.bugzilla-maven-plugin}</version>
-          <configuration>
-            <classification>Build Management</classification>
-            <initialOwner>${user.email}</initialOwner>
-          </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>de.smartics.ci</groupId>
-          <artifactId>hudson-maven-plugin</artifactId>
-          <version>${version.hudson-maven-plugin}</version>
-          <dependencies>
-            <dependency>
-              <groupId>de.smartics.config</groupId>
-              <artifactId>config-smartics-hudson</artifactId>
-              <version>${version.config-smartics-hudson}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-
-        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
           <version>${version.maven-clean-plugin}</version>
@@ -375,6 +351,14 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${version.maven-source-plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${version.maven-javadoc-plugin}</version>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
