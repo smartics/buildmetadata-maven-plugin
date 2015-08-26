@@ -5,7 +5,7 @@
 
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>buildmetadata-maven-plugin</artifactId>
-  <version>1.6.1-SNAPSHOT</version>
+  <version>1.6.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Buildmetadata Maven Plugin</name>
@@ -164,7 +164,7 @@
     <version.maven-surefire-report-plugin>2.16</version.maven-surefire-report-plugin>
     <version.maven-plugin-plugin>3.4</version.maven-plugin-plugin>
 
-    <version.buildmetadata-maven-plugin>1.5.0</version.buildmetadata-maven-plugin>
+    <version.prev.buildmetadata-maven-plugin>1.4.0</version.prev.buildmetadata-maven-plugin>
 
     <version.maven-scm>1.9</version.maven-scm>
   </properties>
@@ -470,7 +470,7 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>com.redhat.rcm.maven.plugin</groupId>
+                    <groupId>de.smartics.maven.plugin</groupId>
                     <artifactId>buildmetadata-maven-plugin</artifactId>
                     <versionRange>[0.0.0,)</versionRange>
                     <goals>
@@ -504,7 +504,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -516,9 +516,9 @@
 
     <plugins>
       <plugin>
-        <groupId>com.redhat.rcm.maven.plugin</groupId>
+        <groupId>de.smartics.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
-        <version>${version.buildmetadata-maven-plugin}</version>
+        <version>${version.prev.buildmetadata-maven-plugin}</version>
         <executions>
           <execution>
             <phase>initialize</phase>
@@ -627,9 +627,9 @@
       </plugin>
 
       <plugin>
-        <groupId>com.redhat.rcm.maven.plugin</groupId>
+        <groupId>de.smartics.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
-        <version>${version.buildmetadata-maven-plugin}</version>
+        <version>${version.prev.buildmetadata-maven-plugin}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
