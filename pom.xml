@@ -142,8 +142,6 @@
     <webroot-projects>http://www.smartics.de/projects</webroot-projects>
 
     <maven-fluido-smartics-skin_version>2.1.0</maven-fluido-smartics-skin_version>
-    <version.issues-maven-plugin>0.4.4</version.issues-maven-plugin>
-    <version.config-smartics-hudson>0.3.0</version.config-smartics-hudson>
     <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
     <version.maven-source-plugin>2.2.1</version.maven-source-plugin>
     <version.maven-javadoc-plugin>2.10.3</version.maven-javadoc-plugin>
@@ -459,19 +457,6 @@
                       <versionRange>[0.0.0,)</versionRange>
                     <goals>
                       <goal>provide-buildmetadata</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>de.smartics.maven.plugin</groupId>
-                    <artifactId>alias-maven-plugin</artifactId>
-                    <versionRange>[0.0.0,)</versionRange>
-                    <goals>
-                      <goal>alias</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>
