@@ -172,7 +172,8 @@ public final class BuildPropertiesFileHelper {
 
   /**
    * Reads the build properties file from stream. The properties file is passed
-   * to this instance via the {@link #BuildPropertiesFileHelper(Log, File)
+   * to this instance via the
+   * {@link #BuildPropertiesFileHelper(Log, File, FilePathNormalizer)
    * constructor} {@code propertiesOutputFile}.
    *
    * @param buildMetaDataProperties the properties instance to append the read
