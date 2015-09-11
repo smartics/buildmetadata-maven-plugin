@@ -47,6 +47,14 @@
         at the <a href="dependencies.html#Licenses">Dependencies' Licenses</a> for details.
       </answer>
     </faq>
+    <faq id="where">
+      <question>
+        Where can I get this software?
+      </question>
+      <answer>
+      	You can download it from the <a href="http://search.maven.org/">Maven Central Repository</a>.
+      </answer>
+    </faq>
     <faq id="similar">
       <question>
         What are similar projects?
