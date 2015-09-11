@@ -440,7 +440,7 @@
           <configuration>
             <useReleaseProfile>false</useReleaseProfile>
             <releaseProfiles>release</releaseProfiles>
-            <goals>deploy</goals>
+            <goals>deploy site-deploy</goals>
           </configuration>
           </plugin>
         <plugin>
@@ -660,9 +660,18 @@
   <profiles>
     <profile>
       <id>release</id>
+
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+
       <build>
         <plugins>
           <plugin>
+            <inherited>true</inherited>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
             <version>${version.maven-source-plugin}</version>
@@ -676,6 +685,7 @@
             </executions>
           </plugin>
           <plugin>
+            <inherited>true</inherited>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <version>${version.maven-javadoc-plugin}</version>
@@ -689,6 +699,15 @@
             </executions>
           </plugin>
           <plugin>
+            <inherited>true</inherited>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>${version.maven-deploy-plugin}</version>
+            <configuration>
+              <updateReleaseInfo>true</updateReleaseInfo>
+            </configuration>
+          </plugin>
+          <plugin>
+            <inherited>true</inherited>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>${version.maven-gpg-plugin}</version>
@@ -705,6 +724,7 @@
         </plugins>
       </build>
     </profile>
+
     <profile>
       <id>it</id>
       <!-- mvn -Pit integration-test
