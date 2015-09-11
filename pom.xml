@@ -671,7 +671,6 @@
       <build>
         <plugins>
           <plugin>
-            <inherited>true</inherited>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
             <version>${version.maven-source-plugin}</version>
@@ -685,7 +684,6 @@
             </executions>
           </plugin>
           <plugin>
-            <inherited>true</inherited>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <version>${version.maven-javadoc-plugin}</version>
@@ -699,7 +697,6 @@
             </executions>
           </plugin>
           <plugin>
-            <inherited>true</inherited>
             <artifactId>maven-deploy-plugin</artifactId>
             <version>${version.maven-deploy-plugin}</version>
             <configuration>
@@ -707,7 +704,6 @@
             </configuration>
           </plugin>
           <plugin>
-            <inherited>true</inherited>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>${version.maven-gpg-plugin}</version>
