@@ -96,6 +96,7 @@
     <info.project.visibility>public</info.project.visibility>
 
     <info.server.web>https://www.smartics.eu/confluence/display</info.server.web>
+    <homepage>${info.server.web}/BMMP</homepage>
     <info.server.issues>https://www.smartics.eu/jira/projects</info.server.issues>
     <info.server.repo>https://www.smartics.eu/nexus</info.server.repo>
     <info.server.scm>https://www.smartics.eu/svn/public</info.server.scm>

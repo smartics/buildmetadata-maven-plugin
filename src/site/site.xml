@@ -73,7 +73,7 @@
       <item name="Goals"               href="plugin-info.html"/>
       <item name="Usage"               href="usage.html"/>
       <item name="FAQ"                 href="faq.html"/>
-      <item name="Accessing Artifacts" href="${webroot-projects}/accessing-artifacts"/>
+      <item name="Homepage"            href="${homepage}"/>
       <item name="All Versions"        href="${webroot}/${project.groupId}/${project.artifactId}/"/>
     </menu>
 
