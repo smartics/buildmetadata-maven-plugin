@@ -19,6 +19,7 @@ import de.smartics.maven.plugin.buildmetadata.common.RevisionHelper;
 import de.smartics.maven.plugin.buildmetadata.common.ScmControl;
 import de.smartics.maven.plugin.buildmetadata.common.ScmCredentials;
 import de.smartics.maven.plugin.buildmetadata.common.ScmInfo;
+import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
 import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmAccessInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.maven.ScmConnectionInfo;
 
@@ -96,11 +97,11 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider {
                 scmAccessInfo, scmInfo.getBuildDatePattern());
         helper.provideScmBuildInfo(buildMetaDataProperties, scmControl);
       } catch (final ScmRepositoryException e) {
-        throw new IllegalStateException(
-            "Cannot fetch SCM revision information.", e);
+         throw new ScmNoRevisionException(
+            "Unable to determine SCM revision information.", e);
       } catch (final NoSuchScmProviderException e) {
-        throw new IllegalStateException(
-            "Cannot fetch SCM revision information.", e);
+          throw new ScmNoRevisionException(
+            "Unable to determine SCM revision information.", e);
       }
     } else {
       LOG.debug("Skipping SCM data since addScmInfo="
