@@ -99,7 +99,13 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider {
       } catch (final ScmRepositoryException e) {
          throw new ScmNoRevisionException(
             "Unable to determine SCM revision information.", e);
-      } catch (final NoSuchScmProviderException e) {
+      }
+      catch (final IllegalArgumentException e)
+      {
+        throw new ScmNoRevisionException(
+                "Unable to determine SCM revision information.", e );
+      }
+      catch (final NoSuchScmProviderException e) {
           throw new ScmNoRevisionException(
             "Unable to determine SCM revision information.", e);
       }
@@ -115,15 +121,13 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider {
    * properties.
    *
    * @return the connection information to connect to the SCM system.
-   * @throws IllegalStateException if the connection string to the SCM cannot be
-   *         fetched.
+
    * @throws ScmRepositoryException if the repository information is not
    *         sufficient to build the repository instance.
    * @throws NoSuchScmProviderException if there is no provider for the SCM
    *         connection URL.
    */
-  private ScmConnectionInfo loadConnectionInfo() throws IllegalStateException,
-      ScmRepositoryException, NoSuchScmProviderException {
+  private ScmConnectionInfo loadConnectionInfo() throws ScmRepositoryException, NoSuchScmProviderException {
     final String scmConnection = getConnection();
     final ScmCredentials credentials = scmInfo.getScmCrendentials();
     if (credentials.getUserName() == null
@@ -154,13 +158,13 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider {
    *
    * @return the result of the call to
    *         {@link org.apache.maven.model.Scm#getConnection()}.
-   * @throws IllegalStateException when there is insufficient information to
+   * @throws ScmRepositoryException when there is insufficient information to
    *         return the SCM connection string.
    * @see org.apache.maven.model.Scm#getConnection()
    */
-  protected final String getConnection() throws IllegalStateException {
+  protected final String getConnection() throws ScmRepositoryException {
     if (project.getScm() == null) {
-      throw new IllegalStateException("SCM Connection is not set.");
+      throw new ScmRepositoryException("SCM Connection is not set.");
     }
 
     final String scmConnection = project.getScm().getConnection();
@@ -176,7 +180,7 @@ public class ScmMetaDataProvider extends AbstractMetaDataProvider {
       return scmDeveloper;
     }
 
-    throw new IllegalStateException("SCM Connection is not set.");
+    throw new ScmRepositoryException ("SCM Connection is not set.");
   }
 
   /**
