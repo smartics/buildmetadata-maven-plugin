@@ -1,4 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    Copyright 2006-2015 smartics, Kronseder & Reiner GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations under
+    the License.
+
+-->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -60,12 +77,6 @@
     <url>${info.server.issues}/BMMP</url>
   </issueManagement>
 
-  <!--
-  <ciManagement>
-    <system>hudson</system>
-    <url>${ci-url}</url>
-  </ciManagement> -->
-
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
@@ -115,31 +126,12 @@
      -->
 
     <webroot-projects>http://www.smartics.de/projects</webroot-projects>
-
     <maven-fluido-smartics-skin_version>2.1.0</maven-fluido-smartics-skin_version>
-    <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
-    <version.maven-source-plugin>2.2.1</version.maven-source-plugin>
-    <version.maven-javadoc-plugin>2.10.3</version.maven-javadoc-plugin>
-    <version.maven-clean-plugin>2.5</version.maven-clean-plugin>
-    <version.maven-dependency-plugin>2.8</version.maven-dependency-plugin>
-    <version.maven-resources-plugin>2.6</version.maven-resources-plugin>
-    <version.maven-deploy-plugin>2.8.1</version.maven-deploy-plugin>
-    <version.maven-jar-plugin>2.4</version.maven-jar-plugin>
-    <version.maven-release-plugin>2.5.2</version.maven-release-plugin>
-    <version.maven-install-plugin>2.5.1</version.maven-install-plugin>
-    <version.maven-scm-plugin>1.8.1</version.maven-scm-plugin>
-    <version.maven-project-info-reports-plugin>2.7</version.maven-project-info-reports-plugin>
-    <version.versions-maven-plugin>2.1</version.versions-maven-plugin>
-    <version.maven-site-plugin>3.3</version.maven-site-plugin>
-    <version.maven-license-plugin>1.9.0</version.maven-license-plugin>
-    <version.maven-surefire-plugin>2.16</version.maven-surefire-plugin>
-    <version.maven-surefire-report-plugin>2.16</version.maven-surefire-report-plugin>
-    <version.maven-plugin-plugin>3.4</version.maven-plugin-plugin>
-    <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
 
-    <version.prev.buildmetadata-maven-plugin>1.5.1</version.prev.buildmetadata-maven-plugin>
+    <maven-scm.version>1.9</maven-scm.version>
 
-    <version.maven-scm>1.9</version.maven-scm>
+    <!-- We need the previous version so that metadata can be generated for this build -->
+    <version.prev.buildmetadata-maven-plugin>1.6.1</version.prev.buildmetadata-maven-plugin>
   </properties>
 
   <dependencies>
@@ -181,100 +173,89 @@
       <artifactId>maven-reporting-impl</artifactId>
       <version>2.0.4.1</version>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-descriptor</artifactId>
-      <version>2.0.10</version>
-    </dependency> -->
-
 
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-api</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-manager-plexus</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
     </dependency>
-    <!--
+
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-bazaar</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-clearcase</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
-    -->
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-gitexe</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
-    <!--
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-hg</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-cvsexe</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-cvsjava</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-local</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-perforce</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-starteam</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
-    </dependency> -->
+    </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-svnexe</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
     </dependency>
-    <!--
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-synergy</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-vss</artifactId>
-      <version>${version.maven-scm}</version>
+      <version>${maven-scm.version}</version>
       <optional>true</optional>
     </dependency>
-    -->
 
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
@@ -295,24 +276,35 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>2.11</version>
+        </plugin>
+
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>${version.maven-clean-plugin}</version>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
+          <configuration>
+            <debug>true</debug>
+            <source>1.6</source>
+            <target>1.6</target>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>${version.maven-dependency-plugin}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>${version.maven-resources-plugin}</version>
+          <version>2.8</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>${version.maven-deploy-plugin}</version>
+          <version>2.8.1</version>
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.wagon</groupId>
@@ -323,13 +315,51 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>${version.maven-source-plugin}</version>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.6</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-invoker-plugin</artifactId>
+          <version>2.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+          <configuration>
+            <index>true</index>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+              <manifestEntries>
+                <Implementation-SCM-Revision-Number>${build.scmRevision.id}</Implementation-SCM-Revision-Number>
+                <Implementation-SCM-Revision-Date>${build.scmRevision.date}</Implementation-SCM-Revision-Date>
+                <Implementation-URL>${project.url}</Implementation-URL>
+                <Implementation-Date>${build.date}</Implementation-Date>
+                <Implementation-Timestamp>${build.timestamp.millis}</Implementation-Timestamp>
+                <Implementation-DatePattern>${build.date.pattern}</Implementation-DatePattern>
+                <Implementation-Full-Version>${build.version.full}</Implementation-Full-Version>
+                <Built-OS>${os.name} / ${os.arch} / ${os.version}</Built-OS>
+                <Built-By>${build.user}</Built-By>
+                <Maven-Version>${build.maven.version}</Maven-Version>
+                <Java-Version>${java.version}</Java-Version>
+                <Java-Vendor>${java.vendor}</Java-Vendor>
+              </manifestEntries>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${version.maven-javadoc-plugin}</version>
+          <version>2.10.3</version>
           <configuration>
             <!-- <detectLinks>true</detectLinks> -->
             <bottom>
@@ -402,60 +432,36 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>${version.maven-jar-plugin}</version>
-          <configuration>
-            <index>true</index>
-            <archive>
-              <manifest>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              </manifest>
-              <manifestEntries>
-                <Implementation-SCM-Revision-Number>${build.scmRevision.id}</Implementation-SCM-Revision-Number>
-                <Implementation-SCM-Revision-Date>${build.scmRevision.date}</Implementation-SCM-Revision-Date>
-                <Implementation-URL>${project.url}</Implementation-URL>
-                <Implementation-Date>${build.date}</Implementation-Date>
-                <Implementation-Timestamp>${build.timestamp.millis}</Implementation-Timestamp>
-                <Implementation-DatePattern>${build.date.pattern}</Implementation-DatePattern>
-                <Implementation-Full-Version>${build.version.full}</Implementation-Full-Version>
-                <Built-OS>${os.name} / ${os.arch} / ${os.version}</Built-OS>
-                <Built-By>${build.user}</Built-By>
-                <Maven-Version>${build.maven.version}</Maven-Version>
-                <Java-Version>${java.version}</Java-Version>
-                <Java-Vendor>${java.vendor}</Java-Vendor>
-              </manifestEntries>
-            </archive>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>${version.maven-install-plugin}</version>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>${version.maven-release-plugin}</version>
+          <version>2.5</version>
           <configuration>
             <useReleaseProfile>false</useReleaseProfile>
             <releaseProfiles>release</releaseProfiles>
             <goals>deploy site-deploy</goals>
           </configuration>
-          </plugin>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>${version.maven-scm-plugin}</version>
+          <version>1.8.1</version>
           <configuration>
             <connectionType>developerConnection</connectionType>
           </configuration>
         </plugin>
-
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>${version.maven-site-plugin}</version>
+          <version>3.3</version>
           <dependencies>
             <dependency>
               <!-- add support for ssh/scp -->
@@ -478,9 +484,15 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.16</version>
+        </plugin>
+
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
-          <version>${version.versions-maven-plugin}</version>
+          <version>2.1</version>
         </plugin>
 
         <!--
@@ -497,19 +509,6 @@
           <configuration>
             <lifecycleMappingMetadata>
               <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>com.redhat.rcm.maven.plugin</groupId>
-                    <artifactId>buildmetadata-maven-plugin</artifactId>
-                    <versionRange>[0.0.0,)</versionRange>
-                    <goals>
-                      <goal>provide-buildmetadata</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -532,7 +531,7 @@
 
     <plugins>
       <plugin>
-        <groupId>com.redhat.rcm.maven.plugin</groupId>
+        <groupId>de.smartics.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
         <version>${version.prev.buildmetadata-maven-plugin}</version>
         <executions>
@@ -548,26 +547,20 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${version.maven-compiler-plugin}</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${version.maven-surefire-plugin}</version>
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
         </configuration>
       </plugin>
 
       <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>${version.maven-license-plugin}</version>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
         <executions>
           <execution>
             <goals>
@@ -585,6 +578,10 @@
             <year>${build.copyright.year}</year>
           </properties>
           <excludes>
+            <!-- TODO : Fix up tests.... -->
+            <exclude>src/**</exclude>
+
+            <exclude>.idea/**</exclude>
             <exclude>**/*.bsh</exclude>
             <exclude>**/.externalToolBuilders/**</exclude>
             <exclude>**/.factorypath</exclude>
@@ -646,7 +643,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>${version.maven-project-info-reports-plugin}</version>
+        <version>2.7</version>
         <reportSets>
           <reportSet>
             <reports>
@@ -654,11 +651,9 @@
               <report>dependencies</report>
               <report>dependency-convergence</report>
               <report>dependency-management</report>
-              <!-- <report>distribution-management</report> -->
               <report>index</report>
               <report>issue-tracking</report>
               <report>license</report>
-              <!-- <report>mailing-list</report> -->
               <report>modules</report>
               <report>plugin-management</report>
               <report>project-team</report>
@@ -670,14 +665,14 @@
       </plugin>
 
       <plugin>
-        <groupId>com.redhat.rcm.maven.plugin</groupId>
+        <groupId>de.smartics.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
-        <version>${version.prev.buildmetadata-maven-plugin}</version>
+        <version>${project.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>${version.maven-plugin-plugin}</version>
+        <version>3.4</version>
       </plugin>
     </plugins>
   </reporting>
@@ -698,7 +693,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>${version.maven-source-plugin}</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
@@ -722,8 +716,8 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-deploy-plugin</artifactId>
-            <version>${version.maven-deploy-plugin}</version>
             <configuration>
               <updateReleaseInfo>true</updateReleaseInfo>
             </configuration>
@@ -731,7 +725,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>${version.maven-gpg-plugin}</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -751,30 +744,10 @@
       <!-- mvn -Pit integration-test
                -Dinvoker.test=bmd-it-xxx  (selected tests to run)-->
       <build>
-        <defaultGoal>install</defaultGoal>
         <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>1.8</version>
-            <configuration>
-              <debug>false</debug>
-              <projectsDirectory>src/it</projectsDirectory>
-              <settingsFile>src/it/settings.xml</settingsFile>
-
-              <pomIncludes>
-                <pomInclude>*/pom.xml</pomInclude>
-              </pomIncludes>
-
-              <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-              <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-              <preBuildHookScript>setup</preBuildHookScript>
-              <postBuildHookScript>verify</postBuildHookScript>
-
-              <goals>
-                <goal>clean</goal>
-                <goal>package</goal>
-              </goals>
-            </configuration>
             <executions>
               <execution>
                 <id>integration-test</id>
@@ -782,6 +755,25 @@
                   <goal>install</goal>
                   <goal>run</goal>
                 </goals>
+                <configuration>
+                  <debug>true</debug>
+                  <projectsDirectory>src/it</projectsDirectory>
+                  <settingsFile>src/it/settings.xml</settingsFile>
+
+                  <pomIncludes>
+                    <pomInclude>*/pom.xml</pomInclude>
+                  </pomIncludes>
+
+                  <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                  <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+                  <preBuildHookScript>setup</preBuildHookScript>
+                  <postBuildHookScript>verify</postBuildHookScript>
+
+                  <goals>
+                    <goal>clean</goal>
+                    <goal>package</goal>
+                  </goals>
+                </configuration>
               </execution>
             </executions>
           </plugin>
