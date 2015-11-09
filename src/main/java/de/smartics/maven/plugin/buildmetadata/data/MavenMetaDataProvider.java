@@ -327,8 +327,11 @@ public final class MavenMetaDataProvider extends AbstractMetaDataProvider {
   }
 
   private String calcCommandLine(final Properties executionProperties) {
-    final String commandLine =
-        executionProperties.getProperty("env.MAVEN_CMD_LINE_ARGS");
+    String commandLine = executionProperties.getProperty("sun.java.command");
+    if (commandLine != null)
+    {
+      commandLine = commandLine.replace("org.codehaus.plexus.classworlds.launcher.Launcher ", "");
+    }
     return commandLine;
   }
 
