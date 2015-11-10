@@ -799,6 +799,14 @@
                 </configuration>
               </execution>
             </executions>
+            <dependencies>
+              <dependency>
+                <!-- this is to support use of @grab (Groovy jars don't include) -->
+                <groupId>org.apache.ivy</groupId>
+                <artifactId>ivy</artifactId>
+                <version>2.4.0</version>
+              </dependency>
+            </dependencies>
           </plugin>
         </plugins>
       </build>

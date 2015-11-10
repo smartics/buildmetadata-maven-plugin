@@ -154,7 +154,7 @@ public final class MavenScmRevisionNumberFetcher
 
     Revision revision = null;
 
-    if (result != null)
+    if (result != null && result.getChangeLog() != null)
     {
       final List<ChangeSet> changeLogSets = result.getChangeLog().getChangeSets();
 
