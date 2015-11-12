@@ -13,12 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package test.de.smartics.maven.plugin.buildmetadata;
+package de.smartics.maven.plugin.buildmetadata;
 
-import de.smartics.maven.plugin.buildmetadata.BuildMetaDataMojo;
 import de.smartics.maven.plugin.buildmetadata.common.Constant;
 import de.smartics.maven.plugin.buildmetadata.stub.BuildMetaDataProjectStub;
-
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -127,8 +125,6 @@ public class BuildMetaDataMojoTest extends AbstractMojoTestCase {
 
     testPomFile = new File(baseDir, TEST_ID + ".xml");
 
-    // uut = (BuildMetaDataMojo) lookupMojo("provide-buildmetadata",
-    // testPomFile);
     uut = new BuildMetaDataMojo();
     uut.setProject(createProject());
   }
