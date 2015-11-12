@@ -19,17 +19,14 @@ import de.smartics.maven.plugin.buildmetadata.scm.LocallyModifiedInfo;
 import de.smartics.maven.plugin.buildmetadata.scm.Revision;
 import de.smartics.maven.plugin.buildmetadata.scm.RevisionNumberFetcher;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.maven.scm.ChangeFile;
 import org.apache.maven.scm.ChangeSet;
 import org.apache.maven.scm.ScmFile;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.ScmResult;
 import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.command.changelog.ChangeLogScmResult;
-import org.apache.maven.scm.command.changelog.ChangeLogSet;
 import org.apache.maven.scm.command.diff.DiffScmResult;
 import org.apache.maven.scm.command.status.StatusScmResult;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
@@ -143,37 +140,39 @@ public final class MavenScmRevisionNumberFetcher
   // --- business -------------------------------------------------------------
 
   @Override
-  public Revision fetchLatestRevisionNumber() throws ScmException {
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("  Fetching latest revision number.\n    "
-          + this.scmConnectionInfo + "\n    " + this.scmAccessInfo);
+  public Revision fetchLatestRevisionNumber() throws ScmException
+  {
+    if (LOG.isDebugEnabled())
+    {
+      LOG.debug("  Fetching latest revision number.\n    " + this.scmConnectionInfo + "\n    " + this.scmAccessInfo);
     }
 
-    final ScmRepository repository =
-        scmConnectionInfo.createRepository(scmManager);
+    final ScmRepository repository = scmConnectionInfo.createRepository(scmManager);
 
-    final ScmVersion remoteVersion = scmConnectionInfo.getRemoteVersion();
-    if (remoteVersion != null && "git".equals(repository.getProvider())) {
-      final Revision revision =
-          scmAccessInfo.fetchRemoteGitVersion(repository, remoteVersion);
-      return revision;
-    } else {
-      final ScmProvider provider = createScmProvider(repository);
-      final ChangeLogScmResult result =
-          scmAccessInfo.fetchChangeLog(repository, provider);
+    final ScmProvider provider = createScmProvider(repository);
+    final ChangeLogScmResult result = scmAccessInfo.fetchChangeLog(repository, provider);
 
-      if (result != null) {
-        final ChangeLogSet changeLogSet = result.getChangeLog();
-        final Revision revision = findEndVersion(changeLogSet);
-        if (LOG.isDebugEnabled()) {
+    Revision revision = null;
+
+    if (result != null && result.getChangeLog() != null)
+    {
+      final List<ChangeSet> changeLogSets = result.getChangeLog().getChangeSets();
+
+      if (changeLogSets.size() > 0)
+      {
+        revision = new StringRevision(changeLogSets.get(0).getRevision(), changeLogSets.get(0).getDate());
+
+        if (LOG.isDebugEnabled())
+        {
           LOG.debug("  Found revision '" + revision + "'.");
         }
-        return revision;
-      } else if (LOG.isDebugEnabled()) {
-        LOG.debug("  No revision information found.");
       }
-      return null;
     }
+    else if (LOG.isDebugEnabled())
+    {
+      LOG.debug("  No revision information found.");
+    }
+    return revision;
   }
 
   @Override
@@ -293,58 +292,6 @@ public final class MavenScmRevisionNumberFetcher
       buffer.append(item).append(' ');
     }
     return StringUtils.chomp(buffer.toString());
-  }
-
-  /**
-   * Finds the largest revision number.
-   *
-   * @impl Currently we assume the the largest revision is provided by the last
-   *       entry of the set.
-   * @param changeLogSet the set of change log entries to compare the revision
-   *        numbers to find the largest.
-   * @return the largest revision number from the set or <code>null</code> if no
-   *         end version can be found.
-   */
-  private Revision findEndVersion(final ChangeLogSet changeLogSet) {
-    if (changeLogSet != null) {
-      final ScmVersion endVersion = changeLogSet.getEndVersion();
-      if (endVersion != null) {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("End version found.");
-        }
-        return new MavenRevision(endVersion, changeLogSet.getEndDate());
-      }
-
-      final List<ChangeSet> changeSets = changeLogSet.getChangeSets();
-      if (!changeSets.isEmpty()) {
-        final int lastIndex = changeSets.size() - 1;
-        for (int index = lastIndex; index >= 0; index--) {
-          final ChangeSet set = changeSets.get(lastIndex);
-          final List<ChangeFile> changeFiles = set.getFiles();
-          if (!changeFiles.isEmpty()) {
-            final ChangeFile file = changeFiles.get(0);
-            final String revision = file.getRevision();
-            if (revision != null) {
-              return new StringRevision(revision, set.getDate());
-            }
-          } else {
-            if (LOG.isDebugEnabled()) {
-              LOG.debug("No change files found.");
-            }
-          }
-        }
-      } else {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("No change set found.");
-        }
-      }
-    } else {
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("No change log set found.");
-      }
-    }
-
-    return null;
   }
 
   /**

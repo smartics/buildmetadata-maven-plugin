@@ -15,6 +15,8 @@
  */
 package de.smartics.maven.plugin.buildmetadata.scm;
 
+import org.apache.maven.scm.repository.ScmRepositoryException;
+
 /**
  * Thrown on any problem fetching SCM revision information.
  */
@@ -46,6 +48,11 @@ public class ScmNoRevisionException extends ScmException {
    */
   public ScmNoRevisionException(final String message) {
     super(message);
+  }
+
+  public ScmNoRevisionException(String message, Throwable e)
+  {
+    super(message, e);
   }
 
   // ****************************** Inner Classes *****************************

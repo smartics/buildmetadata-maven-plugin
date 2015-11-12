@@ -583,15 +583,24 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
 
   private ScmInfo provideScmMetaData(final Properties buildMetaDataProperties)
       throws MojoFailureException {
+    final ScmInfo scmInfo = createScmInfo();
     try {
-      final ScmInfo scmInfo = createScmInfo();
       final ScmMetaDataProvider scmMetaDataProvider =
           new ScmMetaDataProvider(project, scmInfo);
       scmMetaDataProvider.provideBuildMetaData(buildMetaDataProperties);
-      return scmInfo;
     } catch (final ScmNoRevisionException e) {
-      throw new MojoFailureException(e.getMessage()); // NOPMD
+      if (failOnMissingRevision)
+      {
+        throw new MojoFailureException(e.getMessage()); // NOPMD
+      }
+      else
+      {
+        getLog().info( "Unable to determine SCM revision information " +
+                (e.getCause() == null ? "" : e.getCause().getMessage()));
+        getLog().info( "Unable to determine SCM revision information: ", e);
+      }
     }
+    return scmInfo;
   }
 
   private void provideHostMetaData(final Properties buildMetaDataProperties)
