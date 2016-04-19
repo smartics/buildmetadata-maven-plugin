@@ -105,7 +105,7 @@
     <build.server.repo.upload>dav:${info.server.repo.prefix}/repositories</build.server.repo.upload>
 
     <!-- The following properties are accessible from site documentation and therefore contain no dots. -->
-    <webroot>https://www.smartics.eu/</webroot>
+    <webroot>https://www.smartics.eu</webroot>
     <weburl>${webroot}/${project.groupId}/${project.artifactId}/${project.version}</weburl>
     <scm-weburl>https://${build.server.name}/svn/public</scm-weburl> <!-- No subdir ${info.project.visibility} currently. -->
     <!--
