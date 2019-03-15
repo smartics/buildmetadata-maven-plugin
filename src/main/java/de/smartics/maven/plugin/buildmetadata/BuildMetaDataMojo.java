@@ -30,6 +30,8 @@ import de.smartics.maven.plugin.buildmetadata.maven.MavenPluginProperties;
 import de.smartics.maven.plugin.buildmetadata.scm.ScmNoRevisionException;
 import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
 
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.scm.ScmBranch;
@@ -308,6 +310,18 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
   protected String buildDatePattern = Constant.DEFAULT_DATE_PATTERN; // NOPMD
 
   /**
+   * The pattern to use to format the timestamp dates. Please refer to the
+   * <a href =
+   * "http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html" >
+   * SimpleDateFormat</a> class for valid patterns.
+   *
+   * @parameter expression="${buildMetaData.timestamp.pattern}"
+   *            default-value="yyyyMMdd.HHmmss"
+   * @since 1.7
+   */
+  protected String buildTimestampPattern = Constant.DEFAULT_TIMESTAMP_PATTERN; // NOPMD
+
+  /**
    * The property to query for the build user.
    *
    * @parameter default-value="username"
@@ -513,7 +527,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
   private void createBuildProperties(final BuildPropertiesFileHelper helper,
       final Properties projectProperties,
       final Properties buildMetaDataProperties)
-          throws MojoExecutionException, MojoFailureException {
+      throws MojoExecutionException, MojoFailureException {
     final Date buildDate = session.getStartTime();
 
     provideBuildUser(projectProperties, buildMetaDataProperties);
@@ -678,6 +692,14 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_BUILD_TIMESTAMP,
         timestamp);
 
+    final DateFormat formatTs =
+        new SimpleDateFormat(buildTimestampPattern, Locale.ENGLISH);
+    buildMetaDataProperties.setProperty(
+        Constant.PROP_NAME_BUILD_TIMESTAMP_PATTERN, buildTimestampPattern);
+    final String buildTimestampString = formatTs.format(buildDate);
+    buildMetaDataProperties.setProperty(
+        Constant.PROP_NAME_BUILD_TIMESTAMP_CUSTOM, buildTimestampString);
+
     return buildDateString;
   }
 
@@ -720,6 +742,21 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_BUILD_DATE,
         buildDateString);
 
+    final ArtifactVersion artifactVersion = new DefaultArtifactVersion(version);
+    buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION_MAJOR,
+        String.valueOf(artifactVersion.getMajorVersion()));
+    buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION_MINOR,
+        String.valueOf(artifactVersion.getMinorVersion()));
+    buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION_MICRO,
+        String.valueOf(artifactVersion.getIncrementalVersion()));
+    buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION_BUILDNUMBER,
+        String.valueOf(artifactVersion.getBuildNumber()));
+    final String qualifier = artifactVersion.getQualifier();
+    if (qualifier != null) {
+      buildMetaDataProperties.setProperty(Constant.PROP_NAME_VERSION_QUALIFIER,
+          qualifier);
+    }
+
     final String fullVersion =
         createFullVersion(buildMetaDataProperties, buildDate);
     buildMetaDataProperties.setProperty(Constant.PROP_NAME_FULL_VERSION,
@@ -738,7 +775,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
       final Date buildDate) {
     final String version = project.getVersion();
 
-    final DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+    final DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH);
     final String datePart = format.format(buildDate);
     final String revisionId =
         buildMetaDataProperties.getProperty(Constant.PROP_NAME_SCM_REVISION_ID);
@@ -766,7 +803,7 @@ public final class BuildMetaDataMojo extends AbstractBuildMojo {
         versionPrefix + (addBuildDateToFullVersion ? '-' + datePart : "")
             + (addReleaseNumberToFullVersion
                 && StringUtils.isNotBlank(revisionId) ? "r" + revisionId : "")
-        + modified + versionSuffix;
+            + modified + versionSuffix;
 
     return fullVersion;
   }

@@ -167,6 +167,18 @@ public final class Constant {
       "build.timestamp.millis";
 
   /**
+   * The name of the project property that stores the custom format of the build
+   * timestamp.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String PROP_NAME_BUILD_TIMESTAMP_CUSTOM =
+      "build.timestamp.custom";
+
+  /**
    * The name of the project property that stores the pattern of the build date.
    * This way it is easy for the reading client to parse the build date.
    * <p>
@@ -175,6 +187,18 @@ public final class Constant {
    */
   public static final String PROP_NAME_BUILD_DATE_PATTERN =
       "build.date.pattern";
+
+  /**
+   * The name of the project property that stores the pattern of the timestamp
+   * date.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String PROP_NAME_BUILD_TIMESTAMP_PATTERN =
+      "build.timestamp.pattern";
 
   /**
    * The name of the project property that stores the group ID as read from the
@@ -202,6 +226,63 @@ public final class Constant {
    * </p>
    */
   public static final String PROP_NAME_VERSION = "build.version";
+
+  /**
+   * The name of the project property that stores the major version number
+   * determined from the version specified in the POM.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String PROP_NAME_VERSION_MAJOR = "build.version.major";
+
+  /**
+   * The name of the project property that stores the minor version number
+   * determined from the version specified in the POM.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String PROP_NAME_VERSION_MINOR = "build.version.minor";
+
+  /**
+   * The name of the project property that stores the micro or incremental
+   * version number determined from the version specified in the POM.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String PROP_NAME_VERSION_MICRO = "build.version.micro";
+
+  /**
+   * The name of the project property that stores the build number part
+   * determined from the version specified in the POM.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String PROP_NAME_VERSION_BUILDNUMBER =
+      "build.version.buildNumber";
+
+  /**
+   * The name of the project property that stores the qualifier part determined
+   * from the version specified in the POM.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String PROP_NAME_VERSION_QUALIFIER =
+      "build.version.qualifier";
 
   /**
    * The name of the project property that stores the full version that may
@@ -251,6 +332,16 @@ public final class Constant {
    * </p>
    */
   public static final String DEFAULT_DATE_PATTERN = "dd.MM.yyyy";
+
+  /**
+   * The default pattern for the (locale independent) timestamp.
+   * <p>
+   * The value of this constant is {@value}.
+   * </p>
+   *
+   * @since 1.7
+   */
+  public static final String DEFAULT_TIMESTAMP_PATTERN = "yyyyMMdd.HHmmss";
 
   /**
    * The name of the project property that stores the build user. This is the
@@ -539,8 +630,11 @@ public final class Constant {
         PROP_NAME_SCM_URL, PROP_NAME_SCM_LOCALLY_MODIFIED_FILES);
     sections.add(scm);
 
-    final Section artifact = new Section(SECTION_ARTIFACT, PROP_NAME_GROUP_ID,
-        PROP_NAME_ARTIFACT_ID, PROP_NAME_VERSION, PROP_NAME_FULL_VERSION);
+    final Section artifact =
+        new Section(SECTION_ARTIFACT, PROP_NAME_GROUP_ID, PROP_NAME_ARTIFACT_ID,
+            PROP_NAME_VERSION, PROP_NAME_FULL_VERSION, PROP_NAME_VERSION_MAJOR,
+            PROP_NAME_VERSION_MINOR, PROP_NAME_VERSION_MICRO,
+            PROP_NAME_VERSION_BUILDNUMBER, PROP_NAME_VERSION_QUALIFIER);
     sections.add(artifact);
 
     final Section dateAndVersion = new Section(SECTION_BUILD_DATE,

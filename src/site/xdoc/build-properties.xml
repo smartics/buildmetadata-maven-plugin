@@ -19,10 +19,10 @@
 <document xmlns="http://maven.apache.org/XDOC/2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-	<properties>
-		<title>Build Properties</title>
-	</properties>
-	<body>
+  <properties>
+    <title>Build Properties</title>
+  </properties>
+  <body>
     <section name="Build Properties">
       <p>
         The following properties can be used to refer to in the POM.
@@ -140,6 +140,28 @@
           </tr>
           <tr>
             <td>
+              <code>build.timestamp.custom</code>
+            </td>
+            <td>
+              A convenience value that stores the build time in
+              in a custom format.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.timestamp.pattern</code>
+            </td>
+            <td>
+              A pattern to format the timestamp for the custom format. The default pattern is
+              <code>yyyyMMdd.HHmmss</code>
+              if none is explicitly specified.
+              The formatted value is then stored in the
+              <code>build.timestamp.custom</code>
+              property.
+            </td>
+          </tr>
+          <tr>
+            <td>
               <code>build.year</code>
             </td>
             <td>
@@ -178,7 +200,7 @@
             <td>
               The name of the user/system that build the artifact. The
               plugin grabs the value of the property specified by
-              <code></code>. If no such property value is present, the Java
+              <code>user.name</code>. If no such property value is present, the Java
               system property <code>user.name</code> is returned.
             </td>
           </tr>
@@ -395,6 +417,46 @@
             </td>
             <td>
               This is the artifact version that is read from the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.version.major</code>
+            </td>
+            <td>
+              The major version number from the version specified in the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.version.minor</code>
+            </td>
+            <td>
+              The minor version number from the version specified in the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.version.micro</code>
+            </td>
+            <td>
+              The micro version number from the version specified in the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.version.buildNumber</code>
+            </td>
+            <td>
+              The build number from the version specified in the POM.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>build.version.qualifier</code>
+            </td>
+            <td>
+              The qualifier from the version specified in the POM.
             </td>
           </tr>
           <tr>
