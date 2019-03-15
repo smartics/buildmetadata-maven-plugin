@@ -602,6 +602,8 @@
             <exclude>**/goals.txt</exclude>
             <exclude>**/build.log</exclude>
             <exclude>**/*.md</exclude>
+            <exclude>**/pom.xml.releaseBackup</exclude>
+            <exclude>**/release.properties</exclude>
             <exclude>.gitignore</exclude>
           </excludes>
           <mapping>
