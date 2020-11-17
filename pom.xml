@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
+<!--suppress UnresolvedMavenProperty -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -286,7 +287,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -405,9 +406,9 @@
           <artifactId>maven-jar-plugin</artifactId>
           <version>${version.maven-jar-plugin}</version>
           <configuration>
-            <index>true</index>
             <archive>
               <manifest>
+                <index>true</index>
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
               </manifest>
@@ -489,7 +490,6 @@
 
           No plugin involved:
             http://dev.eclipse.org/mhonarc/lists/m2e-users/msg00657.html
-          -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
@@ -527,6 +527,7 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
+          -->
       </plugins>
     </pluginManagement>
 
