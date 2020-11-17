@@ -19,7 +19,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.13.1</version>
     </dependency>
   </dependencies>
 
@@ -46,8 +46,8 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.5</version>
         <configuration>
-          <index>true</index>
           <archive>
+            <index>true</index>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>

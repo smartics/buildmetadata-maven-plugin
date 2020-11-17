@@ -407,8 +407,8 @@
           <version>${version.maven-jar-plugin}</version>
           <configuration>
             <archive>
+              <index>true</index>
               <manifest>
-                <index>true</index>
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
               </manifest>
