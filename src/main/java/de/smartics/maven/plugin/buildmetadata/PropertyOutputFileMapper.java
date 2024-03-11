@@ -69,12 +69,12 @@ final class PropertyOutputFileMapper {
 
   // --- business -------------------------------------------------------------
 
-  List<FileMapping> initOutputFileMapping() {
+  List<FileMapping> initOutputFileMapping(final File rootFolderJar) {
     if (propertyOutputFileMapping == null) {
       propertyOutputFileMapping = new ArrayList<FileMapping>(10);
+      final File jarFile = new File(rootFolderJar, fileName);
+
       final Build build = project.getBuild();
-      final String classesDir = build.getOutputDirectory();
-      final File jarFile = new File(classesDir, "META-INF/" + fileName);
       final File targetDir = new File(build.getDirectory());
       final String finalName = build.getFinalName();
       final File deploymentUnitFile =

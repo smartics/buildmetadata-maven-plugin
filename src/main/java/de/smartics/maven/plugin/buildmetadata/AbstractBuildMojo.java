@@ -460,28 +460,37 @@ public abstract class AbstractBuildMojo extends AbstractMojo {
       final PropertyOutputFileMapper mapperProperties =
           new PropertyOutputFileMapper(project, propertyOutputFileMapping,
               propertiesFileName);
-      this.propertyOutputFileMapping = mapperProperties.initOutputFileMapping();
-      this.propertiesOutputFile = mapperProperties.getPropertiesOutputFile(
-          activateOutputFileMapping, propertiesOutputFile);
+      final File rootFolderJar = propertiesOutputFile.getParentFile();
+      this.propertyOutputFileMapping =
+          mapperProperties.initOutputFileMapping(rootFolderJar);
+      this.propertiesOutputFile =
+          mapperProperties.getPropertiesOutputFile(activateOutputFileMapping,
+              propertiesOutputFile);
     } else {
       // The properties file is required for project filtering even if only
       // the XML file is requested by the user.
       propertiesOutputFile =
           new File(project.getBuild().getDirectory(), propertiesFileName);
     }
+    MojoFileUtils.ensureExists(propertiesOutputFile.getParentFile());
 
     if (createXmlReport) {
       final String xmlFileName =
           calcFileName(xmlOutputFile, "buildmetadata.xml");
-      final PropertyOutputFileMapper mapperXml = new PropertyOutputFileMapper(
-          project, xmlOutputFileMapping, xmlFileName);
-      this.xmlOutputFileMapping = mapperXml.initOutputFileMapping();
-      this.xmlOutputFile = mapperXml
-          .getPropertiesOutputFile(activateOutputFileMapping, xmlOutputFile);
+      final PropertyOutputFileMapper mapperXml =
+          new PropertyOutputFileMapper(project, xmlOutputFileMapping,
+              xmlFileName);
+      final File rootFolderJar = xmlOutputFile.getParentFile();
+      this.xmlOutputFileMapping =
+          mapperXml.initOutputFileMapping(rootFolderJar);
+      this.xmlOutputFile =
+          mapperXml.getPropertiesOutputFile(activateOutputFileMapping,
+              xmlOutputFile);
+      MojoFileUtils.ensureExists(xmlOutputFile.getParentFile());
     }
   }
 
-  private static String calcFileName(final File file,
+  static String calcFileName(final File file,
       final String defaultName) {
     final String fileName;
     if (file != null) {

@@ -17,7 +17,7 @@ package de.smartics.maven.plugin.buildmetadata;
 
 import de.smartics.maven.plugin.buildmetadata.common.Property;
 import de.smartics.maven.plugin.buildmetadata.util.FilePathNormalizer;
-
+import de.smartics.maven.plugin.buildmetadata.util.MojoFileUtils;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.reporting.MavenReportException;
@@ -26,6 +26,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static de.smartics.maven.plugin.buildmetadata.AbstractBuildMojo.calcFileName;
 
 /**
  * Generates a report about the meta data provided to the build.
@@ -172,18 +174,26 @@ public final class BuildReportMojo extends AbstractReportMojo {
   /**
    * Initializes the Mojo.
    */
-  protected void init() {
+  void init() throws MojoExecutionException {
     if (propertiesOutputFile == null || !propertiesOutputFile.canRead()) {
-      final PropertyOutputFileMapper mapper = new PropertyOutputFileMapper(
-          project, propertyOutputFileMapping, "build.properties");
-      this.propertyOutputFileMapping = mapper.initOutputFileMapping();
+      final String propertiesFileName =
+          calcFileName(propertiesOutputFile, "build.properties");
+
+      final PropertyOutputFileMapper mapper =
+          new PropertyOutputFileMapper(project, propertyOutputFileMapping,
+              propertiesFileName);
+      final File rootFolderJar = propertiesOutputFile.getParentFile();
+      this.propertyOutputFileMapping =
+          mapper.initOutputFileMapping(rootFolderJar);
       if (createPropertiesReport) {
-        propertiesOutputFile = mapper.getPropertiesOutputFile(
-            activatePropertyOutputFileMapping, propertiesOutputFile);
+        propertiesOutputFile =
+            mapper.getPropertiesOutputFile(activatePropertyOutputFileMapping,
+                propertiesOutputFile);
       } else {
         propertiesOutputFile =
-            new File(project.getBuild().getDirectory(), "build.properties");
+            new File(project.getBuild().getDirectory(), propertiesFileName);
       }
+      MojoFileUtils.ensureExists(propertiesOutputFile.getParentFile());
     }
   }
 
@@ -211,8 +221,12 @@ public final class BuildReportMojo extends AbstractReportMojo {
    */
   @Override
   public boolean canGenerateReport() {
-    init();
-    return super.canGenerateReport() && propertiesOutputFile.canRead();
+    try {
+      init();
+      return super.canGenerateReport() && propertiesOutputFile.canRead();
+    } catch (final MojoExecutionException e) {
+      return false;
+    }
   }
 
   // --- object basics --------------------------------------------------------
