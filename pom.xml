@@ -604,6 +604,7 @@
             <exclude>**/build.log</exclude>
             <exclude>**/*.md</exclude>
             <exclude>.gitignore</exclude>
+            <exclude>**/.idea/**</exclude>
           </excludes>
           <mapping>
             <!--  Unfortunately we use xml.vm extensions to filter xdoc pages.
