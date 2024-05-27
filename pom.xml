@@ -67,6 +67,7 @@
     <url>${ci-url}</url>
   </ciManagement> -->
 
+  <!--
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
@@ -80,6 +81,27 @@
       <id>${info.project.visibility}-site</id>
       <name>documentation site</name>
       <url>${build.server.site.upload}/${project.groupId}/${project.artifactId}/${project.version}</url>
+    </site>
+  </distributionManagement>
+  -->
+  <distributionManagement>
+    <repository>
+      <id>${info.project.visibility}</id>
+      <name>internal smartics release repository</name>
+      <url>${build.server.repo.upload}/${info.project.visibility}</url>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>${info.project.visibility}-snapshot</id>
+      <name>internal smartics snapshot repository</name>
+      <url>${build.server.repo.upload}/${info.project.visibility}-snapshot</url>
+    </snapshotRepository>
+    <site>
+      <id>${info.project.visibility}-site</id>
+      <name>documentation site</name>
+      <url>
+        ${build.server.site.upload}/${project.groupId}/${project.artifactId}/${project.version}
+      </url>
     </site>
   </distributionManagement>
 
