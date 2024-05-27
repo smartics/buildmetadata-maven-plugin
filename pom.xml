@@ -6,7 +6,7 @@
 
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>buildmetadata-maven-plugin</artifactId>
-  <version>1.7.2-SNAPSHOT</version>
+  <version>1.7.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Buildmetadata Maven Plugin</name>
