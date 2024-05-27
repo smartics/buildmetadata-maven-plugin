@@ -96,6 +96,7 @@
       <name>internal smartics snapshot repository</name>
       <url>${build.server.repo.upload}/${info.project.visibility}-snapshot</url>
     </snapshotRepository>
+    <!--
     <site>
       <id>${info.project.visibility}-site</id>
       <name>documentation site</name>
@@ -103,12 +104,15 @@
         ${build.server.site.upload}/${project.groupId}/${project.artifactId}/${project.version}
       </url>
     </site>
+    -->
   </distributionManagement>
 
   <properties>
+    <!--
     <donationId>ZNFSBTAQJ49HA</donationId>
     <ohlohProjectId>485170</ohlohProjectId>
     <twitterId>smartics</twitterId>
+    -->
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -122,9 +126,10 @@
     <info.server.scm>https://www.smartics.eu/svn/public</info.server.scm>
 
     <info.server.repo.prefix>${info.server.repo}/content</info.server.repo.prefix>
+    <!--
     <info.server.repo.group>${info.server.repo.prefix}/groups/public-group</info.server.repo.group>
-
     <build.server.site.upload>scp://www.smartics.eu/home/smartics/public_html/${info.project.visibility}</build.server.site.upload>
+    -->
     <build.server.repo.upload>dav:${info.server.repo.prefix}/repositories</build.server.repo.upload>
 
     <!-- The following properties are accessible from site documentation and therefore contain no dots. -->
@@ -158,9 +163,11 @@
     <version.maven-surefire-plugin>2.16</version.maven-surefire-plugin>
     <version.maven-surefire-report-plugin>2.16</version.maven-surefire-report-plugin>
     <version.maven-plugin-plugin>3.4</version.maven-plugin-plugin>
+    <!--
     <version.maven-gpg-plugin>3.2.4</version.maven-gpg-plugin>
+    -->
 
-    <version.prev.buildmetadata-maven-plugin>1.5.1</version.prev.buildmetadata-maven-plugin>
+    <version.prev.buildmetadata-maven-plugin>1.7.0</version.prev.buildmetadata-maven-plugin>
 
     <version.maven-scm>1.9</version.maven-scm>
   </properties>
@@ -204,6 +211,7 @@
       <artifactId>maven-reporting-impl</artifactId>
       <version>2.0.4.1</version>
     </dependency>
+
     <!--
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -339,8 +347,8 @@
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.wagon</groupId>
-              <artifactId>wagon-webdav</artifactId>
-              <version>1.0-beta-2</version>
+              <artifactId>wagon-webdav-jackrabbit</artifactId>
+              <version>3.5.3</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -349,12 +357,12 @@
           <artifactId>maven-source-plugin</artifactId>
           <version>${version.maven-source-plugin}</version>
         </plugin>
+        <!--
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${version.maven-javadoc-plugin}</version>
           <configuration>
-            <!-- <detectLinks>true</detectLinks> -->
             <bottom>
               <![CDATA[Copyright &copy; ${build.copyright.year} <a href="http://www.smartics.de/">Kronseder &amp; Reiner GmbH - smartics</a>. All Rights Reserved.]]>
             </bottom>
@@ -422,7 +430,7 @@
               </tag>
             </tags>
           </configuration>
-        </plugin>
+        </plugin> -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
@@ -463,7 +471,8 @@
           <configuration>
             <useReleaseProfile>false</useReleaseProfile>
             <releaseProfiles>release</releaseProfiles>
-            <goals>deploy site-deploy</goals>
+            <!-- <goals>deploy site-deploy</goals> -->
+            <goals>deploy</goals>
           </configuration>
           </plugin>
         <plugin>
@@ -475,13 +484,13 @@
           </configuration>
         </plugin>
 
+        <!--
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${version.maven-site-plugin}</version>
           <dependencies>
             <dependency>
-              <!-- add support for ssh/scp -->
               <groupId>org.apache.maven.wagon</groupId>
               <artifactId>wagon-ssh</artifactId>
               <version>3.2.0</version>
@@ -498,13 +507,17 @@
           <configuration>
             <locales>en</locales>
             <relativizeDecorationLinks>false</relativizeDecorationLinks>
+            <skip>true</skip>
           </configuration>
         </plugin>
+        -->
+        <!--
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
           <version>${version.versions-maven-plugin}</version>
         </plugin>
+        -->
 
         <!--
           This configuration is for synchronizing Eclipse configuration only.
@@ -555,7 +568,7 @@
 
     <plugins>
       <plugin>
-        <groupId>com.redhat.rcm.maven.plugin</groupId>
+        <groupId>de.smartics.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
         <version>${version.prev.buildmetadata-maven-plugin}</version>
         <executions>
@@ -574,8 +587,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${version.maven-compiler-plugin}</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -665,6 +678,7 @@
     </plugins>
   </build>
 
+  <!--
   <reporting>
     <plugins>
       <plugin>
@@ -678,11 +692,9 @@
               <report>dependencies</report>
               <report>dependency-convergence</report>
               <report>dependency-management</report>
-              <!-- <report>distribution-management</report> -->
               <report>index</report>
               <report>issue-tracking</report>
               <report>license</report>
-              <!-- <report>mailing-list</report> -->
               <report>modules</report>
               <report>plugin-management</report>
               <report>project-team</report>
@@ -705,6 +717,7 @@
       </plugin>
     </plugins>
   </reporting>
+  -->
 
   <profiles>
     <profile>
@@ -732,6 +745,7 @@
               </execution>
             </executions>
           </plugin>
+          <!--
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
@@ -745,6 +759,8 @@
               </execution>
             </executions>
           </plugin>
+          -->
+          <!--
           <plugin>
             <artifactId>maven-deploy-plugin</artifactId>
             <version>${version.maven-deploy-plugin}</version>
@@ -752,6 +768,7 @@
               <updateReleaseInfo>true</updateReleaseInfo>
             </configuration>
           </plugin>
+          -->
           <!--
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
