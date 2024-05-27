@@ -6,7 +6,7 @@
 
   <groupId>de.smartics.maven.plugin</groupId>
   <artifactId>buildmetadata-maven-plugin</artifactId>
-  <version>1.7.1-SNAPSHOT</version>
+  <version>1.7.1</version>
   <packaging>maven-plugin</packaging>
 
   <name>Buildmetadata Maven Plugin</name>
@@ -53,7 +53,7 @@
     <connection>scm:git:git@github.com:smartics/buildmetadata-maven-plugin</connection>
     <developerConnection>scm:git:git@github.com:smartics/buildmetadata-maven-plugin</developerConnection>
     <url>https://github.com/smartics/buildmetadata-maven-plugin</url>
-    <tag>HEAD</tag>
+    <tag>buildmetadata-maven-plugin-1.7.1</tag>
   </scm>
 
   <issueManagement>
