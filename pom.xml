@@ -136,7 +136,7 @@
     <version.maven-surefire-plugin>2.16</version.maven-surefire-plugin>
     <version.maven-surefire-report-plugin>2.16</version.maven-surefire-report-plugin>
     <version.maven-plugin-plugin>3.4</version.maven-plugin-plugin>
-    <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
+    <version.maven-gpg-plugin>3.2.4</version.maven-gpg-plugin>
 
     <version.prev.buildmetadata-maven-plugin>1.5.1</version.prev.buildmetadata-maven-plugin>
 
@@ -730,6 +730,7 @@
               <updateReleaseInfo>true</updateReleaseInfo>
             </configuration>
           </plugin>
+          <!--
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
@@ -744,6 +745,7 @@
               </execution>
             </executions>
           </plugin>
+          -->
         </plugins>
       </build>
     </profile>
