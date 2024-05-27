@@ -167,7 +167,7 @@
     <version.maven-gpg-plugin>3.2.4</version.maven-gpg-plugin>
     -->
 
-    <version.prev.buildmetadata-maven-plugin>1.7.0</version.prev.buildmetadata-maven-plugin>
+    <version.prev.buildmetadata-maven-plugin>1.5.1</version.prev.buildmetadata-maven-plugin>
 
     <version.maven-scm>1.9</version.maven-scm>
   </properties>
@@ -568,7 +568,7 @@
 
     <plugins>
       <plugin>
-        <groupId>de.smartics.maven.plugin</groupId>
+        <groupId>com.redhat.rcm.maven.plugin</groupId>
         <artifactId>buildmetadata-maven-plugin</artifactId>
         <version>${version.prev.buildmetadata-maven-plugin}</version>
         <executions>
